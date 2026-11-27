@@ -44,7 +44,7 @@ Lean environment
 
 From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
 and lake-manifest.json. Run the following from the checkout root. Copy the
-eleven supplied proof sources and Audit687.lean to that root, using the replay
+supplied proof sources and Audit687.lean to that root, using the replay
 names. Generate CribleOAI687.lean using the command below and the path to
 the supplied Python script. Quoting below is for a POSIX shell.
 
@@ -63,6 +63,14 @@ the supplied Python script. Quoting below is for a POSIX shell.
   python /path/to/rejouer_crible_687.py CribleOAI687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/CribleOAI687.olean CribleOAI687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/CribleTransfert687.olean CribleTransfert687.lean
+  python /path/to/rejouer_mertens_687.py Mertens687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Mertens687.olean Mertens687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/InterfaceSource687.olean InterfaceSource687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/StockSource687.olean StockSource687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Extension687.olean Extension687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Roue687.olean Roue687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/DemiBande687.olean DemiBande687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Paires687.olean Paires687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -127,8 +135,18 @@ Scope and remaining inputs
   H2_from_index_sieve expresses that remaining upper estimate on an ordinary
   interval of floor(x^2/p)+1 consecutive indices with arbitrary residues.
 
-  Separate route to the quadratic variant's H2 (pencil-and-paper argument,
-  not checked in Lean here). Put z=floor(x/2). For p>z the index interval
+  DemiBande687.H2_proved discharges H2 of the research R2 reduction
+  unconditionally. For x>=1024 and x/2<p<=x, J=floor(x^2/p)+1 satisfies
+  x<=J<=2x and its integer eighth root is <=floor(x/2). The upstream
+  bound of 17 J/log J therefore applies directly. If d=floor(x/(log2(x)+1)),
+  where log2 is the integer base-two logarithm, the verified real comparison
+  x/log x <= (15/8)d gives at most 64d deletions per prime. Chebyshev gives
+  at most 15d primes, so the total is <=960 d^2, below the 1000 d^2 budget.
+  R2 is in this research fork. The public catalog's R1.H2 is the separate
+  Mertens statement.
+
+  An earlier paper-only route to the same dyadic H2 used five blocks:
+  put z=floor(x/2). For p>z the index interval
   of length floor(x^2/p)+1 fits in five blocks of length z for large x.
   Translate each block's residues, extend the last block to length z, and
   apply the proved 255*(1+z/log z) sieve bound to each. All primes in
@@ -151,6 +169,79 @@ Scope and remaining inputs
   Protection687.protect_band_product proves the finite survival-factor
   product underlying the simultaneous semiprime argument. The choice of
   semiprimes and the prime-number asymptotics in the TeX note are separate.
+
+Quantitative survivor theorem
+
+  Theorem 1.2 of the OpenAI preprint uses exactly the height, width and scale
+  in InterfaceSource687.statement. In StockSource687, shifting i to i+1
+  translates the authors' interval to the positive interval used for Y.
+  Write L=log z and w=L/(log L)^2. The accepted Mertens product proof gives
+  product(floor w) >= 1/(3 log w), and eventually log w >= (log L)/2.
+  Thus the coefficient c in Theorem 1.2 gives c/6 times N log L/L^2
+  at the real cutoff z, and c/12 in GainVariable687.stockBound at
+  z=x/(log x)^d for 0<d<=1/2. The absolute progression constant is 1275.
+  Hence one may take eta=2 min(1/2,c/91800) on paper. The coefficient c
+  is the positive constant of Theorem 1.2, not a numerical estimate.
+
+  On the Left to Solve toolchain, gain_of_interface takes the preprint's
+  quantitative input as an explicit argument. SourcePubliee687.lean is a
+  separate producer targeting the native upstream Lean 4.34.1 environment.
+  It applies source_root_survivor_lower and cutoff_lower_of_root_lower at
+  the same z, and unfolds their finite Euler product and survivor set.
+  The local 4.33.1 audit does not load that producer. The original proof
+  has over 800 transitive Jacobsthal source modules and additional packages.
+  For the producer in a built original checkout, copy InterfaceSource687.lean
+  and SourcePubliee687.lean into its lean directory, compile the interface to
+  .lake/build/lib/lean/InterfaceSource687.olean, then run
+  lake env lean SourcePubliee687.lean.
+  Original preprint and formalization at revision adc7f1241b42e322a6451854ab7e4b4c146bf78a:
+  https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026
+  Independent upstream rebuild:
+  https://github.com/30k30/scholia/tree/b072c89c3edac06521868e32cc15b2bc91bd8533/erdos-687
+
+  A further pencil-and-paper consequence concerns the general Jacobsthal
+  function h(k) for integers with at most k distinct prime divisors.
+  Take x=ceil(k log k), z=x/(log x)^d and N=height(z). Prescribe extra
+  arbitrary residues for all primes up to z not dividing the given integer.
+  Taking d small enough leaves an absolute positive fraction of the lower
+  stock after all primes in (z,x] are removed, even including nondivisors.
+  For each remaining divisor prime p>x, its progression of indices fits
+  in [0,floor(N/x)+1). Every q<=z still forbids one class of indices,
+  since p is invertible modulo q. Enlarge to that whole index interval;
+  its length is <=z, is asymptotic to N/x and has logarithm asymptotic to
+  log x. The uniform upper sieve bounds the loss by O(N/(x log x)) per
+  divisor. The k such losses total O(N/(log x)^2), negligible beside the
+  remaining stock of order N log log x/(log x)^2. This gives
+  h(k)=O(k^2/(log k)^(2d)) on the same published input. The local Lean
+  transfer concerns Y(x); this additional general-k consequence is on paper.
+
+Extending an optimal cover
+
+  Translate the old interval by J. Assign different fresh primes to each
+  point in the uncovered prefix of J positions. Extension687 proves this
+  finite construction and applies it to an optimal cover. When z >= k,
+  the existence of k survivors for some choice of old classes is exactly
+  the existence of an admissible k-element subset of [0,J). For p>k,
+  counting residues alone guarantees an omitted class. Consequently, if
+  there are r fresh primes, z>=r+1, and H(r+1) is the smallest diameter
+  of an admissible (r+1)-tuple, then Y(x)>=Y(z)+H(r+1). The interval
+  [0,H(r+1)) has diameter strictly less than H(r+1).
+
+  For r=7 a separate direct calculation needs only z>=7 and gives a gain
+  of 26. At length 27 the points 0,2,6,8,12,18,20,26 form an admissible
+  eight-tuple. This shows the limit of the uniform single-prime-per-point
+  test; it does not bound how far a particular optimal cover can extend.
+  More generally, any k primes in (k,m] give an admissible k-tuple in
+  [0,m+1), as certified by prime_tuple_barrier. By the prime number theorem,
+  m=(1+epsilon) k log k suffices for any fixed positive epsilon and large k.
+  Thus taking r of order x/log x yields at most an order-x increment from
+  the uniform singleton test alone. Beyond this scale one needs extra
+  information about the old cover or a fresh class capturing several points.
+  Paires687.covered_iff_pairs proves the exact condition used by the residual
+  pair search in recherche_687.py when no residue class hits more than two
+  remaining points. With point set S and prime set P, one needs at least
+  |S|-|P| disjoint congruent pairs, using a different prime for each pair.
+  The sufficient direction holds for classes of arbitrary size.
 
 Reproducible numerical checks
 

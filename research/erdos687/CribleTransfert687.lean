@@ -9,9 +9,8 @@ open Filter Transfert687 GainVariable687 Progressions687
 open scoped Asymptotics
 open OAI.Erdos970.NumberTheoryLean
 
-theorem index_upper (J z : ℕ) (b : ℕ → ℕ) (h : J ≤ z) :
-    ((siftedIndices z J b).card : ℝ) ≤ 255*(1+(J:ℝ)/Real.log J) := by
-  have eqn : siftedIndices z J b = LargePrimeDeletion.cutoffSurvivors J z b := by
+theorem index_eq_cutoff (J z : ℕ) (b : ℕ → ℕ) :
+    siftedIndices z J b = LargePrimeDeletion.cutoffSurvivors J z b := by
     ext i
     simp only [siftedIndices, Finset.mem_filter, Finset.mem_range, LargePrimeDeletion.mem_cutoffSurvivors]
     constructor
@@ -19,7 +18,10 @@ theorem index_upper (J z : ℕ) (b : ℕ → ℕ) (h : J ≤ z) :
       exact ⟨hi,fun p hp hpz => avoid p (Nat.mem_primesLE.mpr ⟨hpz,hp⟩)⟩
     · rintro ⟨hi,avoid⟩
       exact ⟨hi,fun p hp => avoid p (Nat.mem_primesLE.mp hp).2 (Nat.mem_primesLE.mp hp).1⟩
-  rw [eqn]
+
+theorem index_upper (J z : ℕ) (b : ℕ → ℕ) (h : J ≤ z) :
+    ((siftedIndices z J b).card : ℝ) ≤ 255*(1+(J:ℝ)/Real.log J) := by
+  rw [index_eq_cutoff]
   exact SquarefreeHarmonic.cutoffSurvivors_le_uniform_log J z b h
 
 /-- This separates the analytic sieve from all rounding questions. -/

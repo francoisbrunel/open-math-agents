@@ -1,6 +1,10 @@
 import Progressions687
 import Protection687
 import CribleTransfert687
+import StockSource687
+import Roue687
+import DemiBande687
+import Paires687
 
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
@@ -47,3 +51,17 @@ import CribleTransfert687
 #print axioms CribleTransfert687.index_upper
 #print axioms CribleTransfert687.uniform_progression
 #print axioms CribleTransfert687.gain_from_stock
+#print axioms OMA_M3.main
+#print axioms StockSource687.normalize_source
+#print axioms StockSource687.gain_of_interface
+#print axioms Extension687.extend_cover
+#print axioms Extension687.growth_from_fresh_primes
+#print axioms Extension687.capacity_iff_tuple
+#print axioms Extension687.growth_from_tuple_diameter
+#print axioms Roue687.seven_extend_by_26
+#print axioms Roue687.eight_can_survive_27
+#print axioms Roue687.prime_tuple_barrier
+#print axioms DemiBande687.dyadic_budget
+#print axioms DemiBande687.H2_proved
+#print axioms Paires687.covered_of_pairs
+#print axioms Paires687.covered_iff_pairs
