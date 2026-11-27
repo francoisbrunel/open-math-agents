@@ -24,6 +24,9 @@ Proof sources
   Harmonique687.lean         Finite von Mangoldt estimate and upper bound on
                             the reciprocal primes in the exact cutoff band.
   DeuxEstimations687.lean    Specializes the transfer to two sieve hypotheses.
+  GainVariable687.lean       Chooses the cutoff after the stock and progression
+                            constants are known. Proves the conditional result
+                            with some exponent strictly larger than 2.
 
 Lean environment
 
@@ -34,7 +37,7 @@ Lean environment
   0df444a360eaa60ab8c11dca51a86af692955474
 
 From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
-and lake-manifest.json. Run the following from the checkout root. Copy the nine
+and lake-manifest.json. Run the following from the checkout root. Copy the ten
 Lean sources listed above to that root, using the replay names. The other files
 are independent of the Lean build. Quoting below is for a POSIX shell.
 
@@ -49,6 +52,7 @@ are independent of the Lean build. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/Protection687.olean Protection687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Harmonique687.olean Harmonique687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/DeuxEstimations687.olean DeuxEstimations687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/GainVariable687.olean GainVariable687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -67,6 +71,14 @@ Scope and remaining inputs
   log(x) - log(z) + 10. The proof uses the factorial convolution for the
   von Mangoldt function and Chebyshev's upper bound for its partial sums.
 
+  For a qualitative saving, GainVariable687.exists_log_saving only needs
+  some positive stock constant c and progression constant K, uniform over
+  the cutoff exponents 0 < d <= 1/2. Each threshold in x may depend on d.
+  Its proof chooses d = min(1/2, c/(6*K)), bounds the reciprocal-prime sum
+  by 3*d*log(log x)/log x, and obtains exponent 2+2*d. The estimates
+  themselves remain hypotheses. The stronger fixed exponent 401/200 still
+  has the numerical hypotheses of log_saving_of_two_sieves.
+
   For the survivor input, the authors' separate Lean 4.34.1 development
   contains source_root_survivor_lower with an existential positive constant
   in its own normalization. The passage to cutoff survivors is used in
@@ -75,6 +87,15 @@ Scope and remaining inputs
   Lean 4.33.1 proofs do not assume or import that separate development.
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/SourceRootCompletion.lean
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/JacobsthalFromRootLower.lean
+
+  For the qualitative progression input, cutoffSurvivors_le_uniform_log
+  in the same release bounds the number of survivors of [0,J) by
+  255*(1+J/log J) whenever J <= z, with an arbitrary residue per prime
+  through z. To retain the required dependence on the individual prime p,
+  use Progressions687.charge_le_index_sieve with J = floor(N/p)+1.
+  A version-compatible proof, the equality of survivor conventions and the
+  uniform size estimates for J remain to be checked in this environment.
+  https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Estimates/SquarefreeHarmonic.lean
 
   For the quadratic Iwaniec variant, H1 and H2 are hypotheses with the same
   absolute threshold, separating survivors at x/2 from the sum of the further

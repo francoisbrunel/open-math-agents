@@ -1,6 +1,6 @@
 import Progressions687
 import Protection687
-import DeuxEstimations687
+import GainVariable687
 
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
@@ -39,3 +39,7 @@ import DeuxEstimations687
 #print axioms Harmonique687.band_bound
 #print axioms Harmonique687.harmonic_at_cutoff
 #print axioms DeuxEstimations687.log_saving_of_two_sieves
+#print axioms GainVariable687.reciprocal_band
+#print axioms GainVariable687.block_scale
+#print axioms GainVariable687.gain_from_sieve_constants
+#print axioms GainVariable687.exists_log_saving
