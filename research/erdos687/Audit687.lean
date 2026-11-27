@@ -1,6 +1,6 @@
 import Progressions687
 import Protection687
-import GainVariable687
+import CribleTransfert687
 
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
@@ -43,3 +43,7 @@ import GainVariable687
 #print axioms GainVariable687.block_scale
 #print axioms GainVariable687.gain_from_sieve_constants
 #print axioms GainVariable687.exists_log_saving
+#print axioms OAI.Erdos970.NumberTheoryLean.SquarefreeHarmonic.cutoffSurvivors_le_uniform_log
+#print axioms CribleTransfert687.index_upper
+#print axioms CribleTransfert687.uniform_progression
+#print axioms CribleTransfert687.gain_from_stock

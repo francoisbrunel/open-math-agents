@@ -27,6 +27,12 @@ Proof sources
   GainVariable687.lean       Chooses the cutoff after the stock and progression
                             constants are known. Proves the conditional result
                             with some exponent strictly larger than 2.
+  CribleOAI687.lean          Generated from four OpenAI files by
+                            rejouer_crible_687.py. This is the upstream Selberg
+                            upper sieve for intervals with arbitrary residues.
+  CribleTransfert687.lean    Reconciles the index conventions, gives the
+                            uniform progression constant 1275, and reduces
+                            the qualitative log saving to the survivor count.
 
 Lean environment
 
@@ -37,9 +43,10 @@ Lean environment
   0df444a360eaa60ab8c11dca51a86af692955474
 
 From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
-and lake-manifest.json. Run the following from the checkout root. Copy the ten
-Lean sources listed above to that root, using the replay names. The other files
-are independent of the Lean build. Quoting below is for a POSIX shell.
+and lake-manifest.json. Run the following from the checkout root. Copy the
+eleven supplied proof sources and Audit687.lean to that root, using the replay
+names. Generate CribleOAI687.lean using the command below and the path to
+the supplied Python script. Quoting below is for a POSIX shell.
 
   lake exe cache get
   lake build 'FormalConjectures.ErdosProblems.«687»'
@@ -53,6 +60,9 @@ are independent of the Lean build. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/Harmonique687.olean Harmonique687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/DeuxEstimations687.olean DeuxEstimations687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/GainVariable687.olean GainVariable687.lean
+  python /path/to/rejouer_crible_687.py CribleOAI687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/CribleOAI687.olean CribleOAI687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/CribleTransfert687.olean CribleTransfert687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -75,16 +85,16 @@ Scope and remaining inputs
   some positive stock constant c and progression constant K, uniform over
   the cutoff exponents 0 < d <= 1/2. Each threshold in x may depend on d.
   Its proof chooses d = min(1/2, c/(6*K)), bounds the reciprocal-prime sum
-  by 3*d*log(log x)/log x, and obtains exponent 2+2*d. The estimates
-  themselves remain hypotheses. The stronger fixed exponent 401/200 still
-  has the numerical hypotheses of log_saving_of_two_sieves.
+  by 3*d*log(log x)/log x, and obtains exponent 2+2*d. The later theorem
+  gain_from_stock supplies its progression hypothesis. The stronger fixed
+  exponent 401/200 still has the numerical hypotheses of log_saving_of_two_sieves.
 
   For the survivor input, the authors' separate Lean 4.34.1 development
   contains source_root_survivor_lower with an existential positive constant
   in its own normalization. The passage to cutoff survivors is used in
   jacobsthal_of_source_root_lower. Neither declaration supplies the numerical
-  coefficient 1/125 in this project's normalization as stated. The current
-  Lean 4.33.1 proofs do not assume or import that separate development.
+  coefficient 1/125 in this project's normalization as stated. A compatible
+  replay and normalization of the published lower-sieve proof remain open here.
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/SourceRootCompletion.lean
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/JacobsthalFromRootLower.lean
 
@@ -93,8 +103,18 @@ Scope and remaining inputs
   255*(1+J/log J) whenever J <= z, with an arbitrary residue per prime
   through z. To retain the required dependence on the individual prime p,
   use Progressions687.charge_le_index_sieve with J = floor(N/p)+1.
-  A version-compatible proof, the equality of survivor conventions and the
-  uniform size estimates for J remain to be checked in this environment.
+  The upstream interval sieve has now been replayed in Lean 4.33.1. Its
+  proof is due to OpenAI. The generator verifies each input's SHA-256,
+  extracts the necessary finite-set definitions with their proofs, and
+  replays both analytic modules. Two renamed Mathlib lemmas are substituted.
+  The generator also accepts --sources /path/to/lean/OAI/NumberTheory/Jacobsthal
+  for an offline rebuild from the pinned upstream checkout.
+  CribleTransfert687.uniform_progression gives the absolute constant 1275
+  for every 0 < d <= 1/2. It proves that J <= floor(z), log J >= log(x)/2,
+  and 1 <= (N/p)/log(x) eventually, uniformly for primes floor(z)<p<=x.
+  Thus gain_from_stock requires only the lower stock estimate for a
+  uniform positive c. This does not supply the sharper 5/2 progression
+  constant in the fixed exponent 401/200 argument.
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Estimates/SquarefreeHarmonic.lean
 
   For the quadratic Iwaniec variant, H1 and H2 are hypotheses with the same
@@ -106,6 +126,17 @@ Scope and remaining inputs
   suffices for H2. H1 remains a separate sieve input.
   H2_from_index_sieve expresses that remaining upper estimate on an ordinary
   interval of floor(x^2/p)+1 consecutive indices with arbitrary residues.
+
+  Separate route to the quadratic variant's H2 (pencil-and-paper argument,
+  not checked in Lean here). Put z=floor(x/2). For p>z the index interval
+  of length floor(x^2/p)+1 fits in five blocks of length z for large x.
+  Translate each block's residues, extend the last block to length z, and
+  apply the proved 255*(1+z/log z) sieve bound to each. All primes in
+  (ceil(x/2),x] divide binom(x,floor(x/2)), whose size is at most 2^x;
+  at most one endpoint prime was omitted. This gives asymptotic upper
+  coefficient (5*255/2)*log 2 for total deletions in units x^2/(log x)^2.
+  R2's threshold has coefficient 1000*(log 2)^2, strictly larger because
+  log 2 > 0.6375. This avoids needing the smaller per-prime constant 32.
 
   The universal exclusion of 184 positions with primes through 71 and one
   extra singleton is certified computationally by two independent Python
