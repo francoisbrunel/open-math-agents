@@ -1,0 +1,84 @@
+Erdős 687(i) | Research handoff from francoisbrunel with Codex
+
+The open target asks for the order of Y up to constant factors. The companion
+sources concern finite covers, one-sided bounds and obstacles to some methods.
+
+Proof sources
+
+  Couvertures687.lean        Finite witnesses for 47, 71 and 73, and the
+                            explicit double cover of the 22 admissible points.
+  Exclusion687.lean          Soundness of exhaustive rejection using a sum of
+                            prime capacities, with two bounded applications.
+  Comptage687.lean           Explicit bound on pi(x) in the integer
+                            normalization used by the progression estimate.
+  ReductionIwaniec.lean      Replay name of the R2 reduction source
+                            reductions/Erdos687.erdos_687.variants.iwaniec.R2.lean.
+  Transfert687.lean          Bridges to Green46.IsCoveredByResidues and
+                            Erdos687.Y, including Y(37) = 65, Y(47) >= 99,
+                            Y(73) >= 189, parity, counting and analytic transfer.
+
+Lean environment
+
+  Lean 4.33.1
+  google-deepmind/formal-conjectures at
+  9097e2f90e66d2f6244209cb1c07f7120d17ec53
+  leanprover-community/mathlib4 at
+  0df444a360eaa60ab8c11dca51a86af692955474
+
+From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
+and lake-manifest.json. Run the following from the checkout root. Copy the five
+Lean sources listed above to that root, using the replay names. The other files
+are independent of the Lean build. Quoting below is for a POSIX shell.
+
+  lake exe cache get
+  lake build 'FormalConjectures.ErdosProblems.«687»'
+  lake env lean -j 1 -o .lake/build/lib/lean/Couvertures687.olean Couvertures687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Exclusion687.olean Exclusion687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Comptage687.olean Comptage687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/ReductionIwaniec.olean ReductionIwaniec.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Transfert687.olean Transfert687.lean
+  lake env lean Audit687.lean
+
+Audit687.lean should be copied to the same directory before the final command.
+The declarations are suitable for a #print axioms audit. The computational
+proofs use the kernel's decide. The final assertions must be read with all
+their hypotheses, even if the audit reports only standard axioms.
+
+Scope and remaining inputs
+
+  The proposed O(x² / (log x)^(401/200)) estimate is one-sided. Its general
+  transfer takes a lower bound on survivors, an upper bound per progression
+  and a bound on a positive prime harmonic sum. The TeX note explains the
+  source theorems and constants. These analytic estimates need formal proofs
+  in the same environment to make the bound unconditional in Lean.
+
+  For the quadratic Iwaniec variant, H1 and H2 are hypotheses with the same
+  absolute threshold, separating survivors at x/2 from the sum of the further
+  deletions on [1,x²]. The old R1 split instead uses a shifted gap theorem and
+  Mertens' product. The two splits are separate contributions.
+  H2_from_progression discharges prime counting using normalized_prime_count.
+  A uniform bound on the survivors in one large prime's progression still
+  suffices for H2. H1 remains a separate sieve input.
+
+  The universal exclusion of 184 positions with primes through 71 and one
+  extra singleton is certified computationally by two independent Python
+  searches. The Lean witnesses at 183 and 189 and the implication forcing
+  distance 146 between two still-uncovered points are separate results.
+
+  The restricted one-singleton model, the cyclic gap formula, block estimates,
+  semiprime loss construction in a thin or fixed-power band, grouped-capacity
+  obstruction and common-representative obstruction are documented in the
+  report and TeX note. The Lean sources give the finite or conditional pieces
+  explicitly named there; the prose arguments retain their own proof status.
+
+Reproducible numerical checks
+
+  python -B certificat_183.py
+  python -B recherche_687.py 71 --holes 1
+  python -B recherche_687.py 47 73
+  python -B intervalles_687.py 23 8 9
+  python -B capacites_687.py 853 857 10000
+
+The segmented cyclic-gap checker uses NumPy. The other Python commands use the
+standard library. Bilan_Erdos_687.pdf and borne_687.tex are the original working
+documents of November 26, prior to the Lean verifications.
