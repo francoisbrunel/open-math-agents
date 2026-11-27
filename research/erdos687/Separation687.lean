@@ -9,13 +9,13 @@ open scoped Asymptotics
 def SubpowerUpper : Prop := ∀ δ > (0:ℝ), (fun x : ℕ => (Erdos687.Y x:ℝ)) =O[atTop]
   (fun x : ℕ => (x:ℝ)^(1+δ))
 
-private theorem eventual_lower : ∀ᶠ x : ℕ in atTop, x ≤ Erdos687.Y x := by
+theorem eventual_lower : ∀ᶠ x : ℕ in atTop, x ≤ Erdos687.Y x := by
   filter_upwards [Croissance687.superlinear.eventually_ge_atTop 1,eventually_ge_atTop (1:ℕ)]
     with x h hx
   change 1 ≤ (Erdos687.Y x:ℝ)/x at h
   exact_mod_cast (one_le_div (by positivity)).mp h
 
-private theorem excess (upper : SubpowerUpper) :
+theorem excess (upper : SubpowerUpper) :
     (fun x : ℕ => Real.log (Erdos687.Y x)-Real.log x) =o[atTop] (fun x : ℕ => Real.log x) := by
   apply Asymptotics.isLittleO_iff.mpr
   intro ε he
@@ -40,7 +40,7 @@ private theorem excess (upper : SubpowerUpper) :
 noncomputable def factor (x : ℕ) : ℕ := ⌊Real.log (x:ℝ)⌋₊+1
 noncomputable def long (x : ℕ) : ℕ := Erdos687.Y x*factor x
 
-private theorem log_factor :
+theorem log_factor :
     (fun x : ℕ => Real.log (factor x)) =o[atTop] (fun x : ℕ => Real.log x) := by
   apply Asymptotics.isLittleO_iff.mpr
   intro ε he

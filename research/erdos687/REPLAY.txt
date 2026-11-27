@@ -439,6 +439,18 @@ Almost-covered intervals
   SousPuissance687 and Separation687 after BorneRankin687 and before
   Audit687. The named conclusions passed the integrated axiom audit.
 
+  Profil687.explicit optimizes the intermediate cutoff in the finite
+  two-divisor estimate. Accroissements687.gain_log extends any optimal
+  interval when r fresh primes are available by floor(r log(r)/17)
+  positions (r no larger than the old cutoff). Its doubling theorem
+  gives E(x,Bx) <= 1088 Bx/(log(Bx) log B) if Bx <= Y(2x) and
+  255 <= B <= x. Inverse687.full_le_iff identifies the least cutoff
+  for complete coverage. Inverse687.inverse_separation proves, under
+  part (iii), that dividing this least cutoff by 1+floor(log f) still
+  gives o(H/log H) exceptions, for every length H tending to infinity.
+  Build Profil687 after Restes687, Accroissements687 after Presque687,
+  and Inverse687 after Separation687, before the audit.
+
 Numerical commands
 
   python -B certificat_183.py
