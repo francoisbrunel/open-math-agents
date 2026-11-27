@@ -19,12 +19,11 @@ theorem assign_images (S P : Finset ℕ) (f : ℕ → ℕ) (h : S.card ≤ P.car
 
 def Completes (S P : Finset ℕ) := ∃ a : ℕ → ℕ, ∀ i ∈ S, ∃ p ∈ P, i%p = a p%p
 
-theorem extend_cover_after_sieve {x z y J : ℕ} (hzx : z ≤ x)
-    (covered : Green46.IsCoveredByResidues z y)
-    (close : ∀ b : ℕ → ℕ, Completes (siftedIndices z J b) (x.primesLE \ z.primesLE)) :
+theorem extend_given_cover_left {x z y J : ℕ} (hzx : z ≤ x) (a : ℕ → ℕ)
+    (ha : ∀ n ∈ Finset.Icc 1 y, ∃ p ≤ z, p.Prime ∧ n ≡ a p [MOD p])
+    (close : Completes (siftedIndices z J (fun p => a p+J-1)) (x.primesLE \ z.primesLE)) :
     Green46.IsCoveredByResidues x (y+J) := by
   classical
-  obtain ⟨a,ha⟩ := covered
   by_cases h0 : J = 0
   · subst J
     refine ⟨a,?_⟩
@@ -32,7 +31,7 @@ theorem extend_cover_after_sieve {x z y J : ℕ} (hzx : z ≤ x)
     obtain ⟨p,hp,prime,he⟩ := ha n (by simpa using hn)
     exact ⟨p,hp.trans hzx,prime,he⟩
   let b (p : ℕ) := a p + J - 1
-  obtain ⟨r,hr⟩ := close b
+  obtain ⟨r,hr⟩ := close
   let v (p : ℕ) := if p ≤ z then a p+J else r p+1
   refine ⟨v,?_⟩
   intro n hn
@@ -58,6 +57,13 @@ theorem extend_cover_after_sieve {x z y J : ℕ} (hzx : z ≤ x)
       have eqn : b p+1 = a p+J := by dsimp [b]; omega
       refine ⟨p,le.trans hzx,prime,?_⟩
       simpa only [v,if_pos le,hin,eqn] using (show i ≡ b p [MOD p] from he).add_right 1
+
+theorem extend_cover_after_sieve {x z y J : ℕ} (hzx : z ≤ x)
+    (covered : Green46.IsCoveredByResidues z y)
+    (close : ∀ b : ℕ → ℕ, Completes (siftedIndices z J b) (x.primesLE \ z.primesLE)) :
+    Green46.IsCoveredByResidues x (y+J) := by
+  obtain ⟨a,ha⟩ := covered
+  exact extend_given_cover_left hzx a ha (close _)
 
 theorem completes_of_card {S P : Finset ℕ} (h : S.card ≤ P.card) : Completes S P := by
   obtain ⟨r,hr⟩ := assign_images S P id h

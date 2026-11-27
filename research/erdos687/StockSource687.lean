@@ -167,10 +167,7 @@ theorem gain_of_published (h : sourceStatement) :
       (fun x : ℕ => (x:ℝ)^2/(Real.log x)^(2+η)) :=
   CribleTransfert687.gain_from_stock (stock_of_published h)
 
-theorem gain_of_interface (h : InterfaceSource687.statement) :
-    ∃ η : ℝ, 0 < η ∧ (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop]
-      (fun x : ℕ => (x:ℝ)^2/(Real.log x)^(2+η)) := by
-  apply gain_of_published
+theorem source_of_interface (h : InterfaceSource687.statement) : sourceStatement := by
   have agree (N z : ℕ) (a : ℕ → ℕ) : InterfaceSource687.remaining N z a =
       LargePrimeDeletion.cutoffSurvivors N z a := by
     classical
@@ -181,5 +178,10 @@ theorem gain_of_interface (h : InterfaceSource687.statement) :
   simpa only [sourceStatement,height,width,scale,OMA_M3.Qm,
     InterfaceSource687.statement,InterfaceSource687.height,InterfaceSource687.width,
     InterfaceSource687.scale,InterfaceSource687.product,InterfaceSource687.primes,agree] using h
+
+theorem gain_of_interface (h : InterfaceSource687.statement) :
+    ∃ η : ℝ, 0 < η ∧ (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop]
+      (fun x : ℕ => (x:ℝ)^2/(Real.log x)^(2+η)) :=
+  gain_of_published (source_of_interface h)
 
 end StockSource687

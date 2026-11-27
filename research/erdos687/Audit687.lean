@@ -7,6 +7,11 @@ import DemiBande687
 import Paires687
 import Extremites687
 import Recouvrements687
+import Blocs687
+import CapaciteParite687
+import SurvieTotale687
+import JacobsthalExtension687
+import Bords687
 
 /-! Axiom audit for the Erdős 687 research modules on the catalog toolchain. -/
 #print axioms Couvertures687.witness47
@@ -73,7 +78,23 @@ import Recouvrements687
 #print axioms Paires687.pairs_for_prefix
 #print axioms Extremites687.endpoint_gain
 #print axioms Extremites687.Y_odd
+#print axioms Extremites687.cover_iff_odd_primes
 #print axioms Extremites687.seven_with_13_extend_by_28
 #print axioms Recouvrements687.third_order
 #print axioms Recouvrements687.upper_from_overlaps
 #print axioms Recouvrements687.pair_capacity
+#print axioms Blocs687.blocks
+#print axioms Blocs687.H1_of_interface
+#print axioms CapaciteParite687.singletons_through_two
+#print axioms CapaciteParite687.sharp_uniform_26
+#print axioms CapaciteParite687.pairs_through_six
+#print axioms CapaciteParite687.seven_per_class
+#print axioms CribleTransfert687.progression_at_reference
+#print axioms SurvieTotale687.robust_stock
+#print axioms SurvieTotale687.arbitrary_primes
+#print axioms JacobsthalExtension687.interval_bound
+#print axioms JacobsthalExtension687.gain
+#print axioms CapaciteParite687.large_class_iff
+#print axioms CapaciteParite687.class_iff_tuple
+#print axioms Bords687.growth_if_not_divisible_by_three
+#print axioms Bords687.growth_outside_nine

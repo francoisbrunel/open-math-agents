@@ -109,6 +109,49 @@ theorem Y_odd {z : ℕ} (hz : 2 ≤ z) : Odd (Erdos687.Y z) := by
   have impossible : y+1 ≤ y := le_Y_of_covered longer
   omega
 
+/-- An exact parity reduction for computational covers. The odd primes
+    must cover the zero-based interval with half as many positions. -/
+theorem cover_iff_odd_primes {x y : ℕ} (hx : 2 ≤ x) :
+    Green46.IsCoveredByResidues x y ↔
+      ∃ b : ℕ → ℕ, ∀ i < y/2, ∃ p ∈ x.primesLE, p ≠ 2 ∧ i%p = b p%p := by
+  classical
+  constructor
+  · rintro ⟨a,ha⟩
+    let t := if a 2%2=0 then 1 else 2
+    let f (i : ℕ) := 2*i+t
+    let b (p : ℕ) := if h : ∃ j, f j%p=a p%p then Classical.choose h else 0
+    refine ⟨b,?_⟩
+    intro i hi
+    have ht : t=1 ∨ t=2 := by by_cases h : a 2%2=0 <;> simp [t,h]
+    obtain ⟨p,hpx,prime,hit⟩ := ha (f i) (Finset.mem_Icc.mpr
+      ⟨by dsimp [f]; omega,by dsimp [f]; omega⟩)
+    have odd : p ≠ 2 := by
+      rintro rfl
+      change (2*i+t)%2 = a 2%2 at hit
+      dsimp [t] at hit
+      split at hit <;> omega
+    have ex : ∃ j, f j%p=a p%p := ⟨i,hit⟩
+    have congruence : f i ≡ f (b p) [MOD p] := by
+      change f i%p = f (b p)%p
+      rw [hit]
+      simpa [b,ex] using (Classical.choose_spec ex).symm
+    have cop := (Nat.coprime_primes prime Nat.prime_two).2 odd
+    exact ⟨p,Nat.mem_primesLE.mpr ⟨hpx,prime⟩,odd,
+      Nat.ModEq.cancel_left_of_coprime cop (Nat.ModEq.add_right_cancel' t congruence)⟩
+  · rintro ⟨b,hb⟩
+    let a (p : ℕ) := if p=2 then 1 else 2*(b p+1)
+    refine ⟨a,?_⟩
+    intro n hn
+    obtain ⟨lo,hi⟩ := Finset.mem_Icc.mp hn
+    by_cases h : n%2=1
+    · exact ⟨2,hx,Nat.prime_two,by simpa [Nat.ModEq,a] using h⟩
+    · let i := n/2-1
+      obtain ⟨p,hp,odd,he⟩ := hb i (by dsimp [i]; omega)
+      have eqn : 2*(i+1)=n := by dsimp [i]; omega
+      obtain ⟨le,prime⟩ := Nat.mem_primesLE.mp hp
+      exact ⟨p,le,prime,by simpa only [a,if_neg odd,eqn] using
+        ((show i ≡ b p [MOD p] from he).add_right 1).mul_left 2⟩
+
 /-- With 13 among seven fresh primes the sharp singleton gain of 26 becomes
     at least 28. The two extra positions use pairing and parity. -/
 theorem seven_with_13_extend_by_28 {x z : ℕ} (hz : 7 ≤ z) (hzx : z ≤ x)

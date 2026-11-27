@@ -69,13 +69,16 @@ private theorem length_lower {x : ℕ} {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2)
     one_le_mul_of_one_le_of_one_le (by exact_mod_cast hx) hM
   linarith [big.trans cmp]
 
-theorem uniform_progression_35 {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
-    progressionBound 35 d := by
+/-- A class modulo q can be estimated using any smaller reference modulus p
+    between the real cutoff and x. This includes primes q above x. -/
+theorem progression_at_reference {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
+    ∀ᶠ x : ℕ in atTop, ∀ (a : ℕ → ℕ) (p q : ℕ), p ≤ x → top d x ≤ (p:ℝ) →
+      p ≤ q → q.Prime → ⌊top d x⌋₊ < q →
+      (charge (survivors ⌊top d x⌋₊ (length d x) a) a q : ℝ) ≤ 35*(classUnit d x/p) := by
   have hinf : Tendsto (fun x : ℕ => Real.log (x:ℝ)) atTop atTop :=
     Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
   have small := (isLittleO_log_rpow_atTop (show 0 < (1/10:ℝ) by norm_num)).bound
     (show (0:ℝ) < 1 by norm_num)
-  unfold progressionBound
   filter_upwards [hinf.eventually_ge_atTop 4, eventually_ge_atTop (1:ℕ),
     (tendsto_natCast_atTop_atTop : Tendsto (fun x : ℕ => (x:ℝ)) atTop atTop).eventually small]
     with x hL hx hslow
@@ -117,19 +120,14 @@ theorem uniform_progression_35 {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
   have hz : 2 ≤ z := by linarith [Real.log_le_sub_one_of_pos hzpos]
   have hN : (x:ℝ)*Real.sqrt x ≤ (N:ℝ) := length_lower hd hh hx hL hpow (by linarith)
   have hNup : (N:ℝ) ≤ z^2 / (Real.log z)^2 := Nat.floor_le (by positivity)
-  intro a p pmem
-  obtain ⟨hpx,hout⟩ := Finset.mem_sdiff.mp pmem
-  obtain ⟨px,prime⟩ := Nat.mem_primesLE.mp hpx
-  have hzp : ⌊z⌋₊ < p := by
-    by_contra! h
-    exact hout (Nat.mem_primesLE.mpr ⟨h,prime⟩)
-  have hzpr : z ≤ (p:ℝ) := (Nat.lt_floor_add_one z).le.trans
-    (by exact_mod_cast (show ⌊z⌋₊+1 ≤ p by omega))
-  have hpr : (0:ℝ) < p := by exact_mod_cast prime.pos
+  intro a p q px hzpr hpq prime hzp
+  change z ≤ (p:ℝ) at hzpr
+  have hpr := hzpos.trans_le hzpr
+  have ppos : 0 < p := by exact_mod_cast hpr
   let M := (N:ℝ)/p
   let J := N/p+1
   have hMJ : M ≤ (J:ℝ) := (div_le_iff₀ hpr).2 (by
-    exact_mod_cast ((Nat.div_lt_iff_lt_mul prime.pos).1 (Nat.lt_succ_self (N/p))).le)
+    exact_mod_cast ((Nat.div_lt_iff_lt_mul ppos).1 (Nat.lt_succ_self (N/p))).le)
   have hJM : (J:ℝ) ≤ M+1 := by
     dsimp [J,M]; push_cast
     exact add_le_add Nat.cast_div_le (le_refl (1:ℝ))
@@ -150,17 +148,34 @@ theorem uniform_progression_35 {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
     linarith
   have hJ256 : 256 ≤ J := by exact_mod_cast (show (256:ℝ) ≤ J by linarith)
   have hquot : (J:ℝ)/Real.log J ≤ (35/17)*(M/L) := calc
-    _ ≤ ((35/34)*M)/(L/2) := by gcongr <;> linarith
+    _ ≤ ((35/34)*M)/(L/2) := by gcongr; linarith
     _ = _ := by ring
   obtain ⟨b,hb⟩ := charge_le_index_sieve (N := N) prime hzp a
-  rw [index_eq_cutoff] at hb
+  have incl : siftedIndices ⌊z⌋₊ (N/q+1) b ⊆ siftedIndices ⌊z⌋₊ J b := by
+    intro i hi
+    obtain ⟨hI,avoid⟩ := Finset.mem_filter.mp hi
+    exact Finset.mem_filter.mpr ⟨Finset.mem_range.mpr
+      ((Finset.mem_range.mp hI).trans_le (Nat.add_le_add_right (Nat.div_le_div_left hpq ppos) 1)),avoid⟩
+  have embedded := hb.trans (Finset.card_le_card incl)
+  rw [index_eq_cutoff] at embedded
   have found := SquarefreeHarmonic.cutoffSurvivors_le_seventeen_of_le_cutoff J ⌊z⌋₊ b hJ256 hJz
   calc
-    _ ≤ ((LargePrimeDeletion.cutoffSurvivors J ⌊z⌋₊ b).card:ℝ) := by exact_mod_cast hb
+    _ ≤ ((LargePrimeDeletion.cutoffSurvivors J ⌊z⌋₊ b).card:ℝ) := by exact_mod_cast embedded
     _ ≤ 17*((J:ℝ)/Real.log J) := by simpa only [mul_div_assoc] using found
     _ ≤ 17*((35/17)*(M/L)) := mul_le_mul_of_nonneg_left hquot (by norm_num)
     _ = 35*(M/L) := by ring
     _ = _ := by unfold classUnit; dsimp [M,N,L]; ring
+
+theorem uniform_progression_35 {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
+    progressionBound 35 d := by
+  filter_upwards [progression_at_reference hd hh] with x estimate
+  intro a p hp
+  obtain ⟨hin,hout⟩ := Finset.mem_sdiff.mp hp
+  obtain ⟨le,prime⟩ := Nat.mem_primesLE.mp hin
+  have large : ⌊top d x⌋₊ < p := lt_of_not_ge fun h => hout (Nat.mem_primesLE.mpr ⟨h,prime⟩)
+  have ref : top d x ≤ (p:ℝ) := (Nat.lt_floor_add_one _).le.trans
+    (by exact_mod_cast (show ⌊top d x⌋₊+1 ≤ p by omega))
+  exact estimate a p p le ref le_rfl prime large
 
 theorem uniform_progression {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
     progressionBound 1275 d := by

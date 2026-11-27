@@ -49,6 +49,16 @@ Proof sources
                             left after a small-prime sieve.
   Extremites687.lean         Endpoint pairing and the parity of a maximal cover.
   Recouvrements687.lean      Third-order inclusion-exclusion criterion.
+  Blocs687.lean              Translates local counts to complete blocks and
+                            derives the dyadic H1 from Theorem 1.2.
+  CapaciteParite687.lean     Bounds the number a fresh class can capture and
+                            certifies the obstruction at 27 for old cutoff >=13.
+  SurvieTotale687.lean       A positive stock survives even after adding
+                            up to x/log x arbitrarily large prime classes.
+  JacobsthalExtension687.lean General Jacobsthal consequence with a fixed
+                            logarithmic power saving, in signed intervals.
+  Bords687.lean              Two-ended extension by 28 outside nine old
+                            lengths modulo 210.
 
 Lean environment
 
@@ -66,6 +76,7 @@ the supplied Python script. Quoting below is for a POSIX shell.
 
   lake exe cache get
   lake build 'FormalConjectures.ErdosProblems.«687»'
+  lake build 'FormalConjectures.ErdosProblems.«970»'
   lake env lean -j 1 -o .lake/build/lib/lean/Couvertures687.olean Couvertures687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Exclusion687.olean Exclusion687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Comptage687.olean Comptage687.lean
@@ -89,6 +100,11 @@ the supplied Python script. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/Paires687.olean Paires687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Extremites687.olean Extremites687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Recouvrements687.olean Recouvrements687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Blocs687.olean Blocs687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/CapaciteParite687.olean CapaciteParite687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/SurvieTotale687.olean SurvieTotale687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/JacobsthalExtension687.olean JacobsthalExtension687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Bords687.olean Bords687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -165,13 +181,13 @@ Scope and remaining inputs
   R2 is in this research fork. The public catalog's R1.H2 is the separate
   Mertens statement.
 
-  On paper R2.H1 follows from the same quantitative survivor input. At
+  Blocs687.H1_of_interface proves R2.H1 from the same quantitative survivor input. At
   z=floor(x/2), partition [1,x^2] into full blocks of length N=height(z)
   and a remainder. Translate the residues independently in each full block.
   Each contributes at least c' N log log z/(log z)^2, and the full blocks
   contain at least x^2/2 points for large x since N=o(x^2). Consequently
   the total exceeds 1000 floor(x/(log2(x)+1))^2 eventually. The block
-  summation for this separate H1 was not needed by gain_of_interface.
+  summation is the reusable lemma Blocs687.blocks.
 
   An earlier paper-only route to the same dyadic H2 used five blocks:
   put z=floor(x/2). For p>z the index interval
@@ -224,6 +240,8 @@ Quantitative survivor theorem
   lake env lean -o .lake/build/lib/lean/SourcePubliee687.olean SourcePubliee687.lean
   python /path/to/rejouer_borne_native_687.py BorneNative687.lean --formal-conjectures /path/to/formal-conjectures
   lake env lean BorneNative687.lean
+  Add --general when generating BorneNative687.lean to include the bound on
+  the general Jacobsthal function. SHA-256 checks pin the copied catalog definitions.
   The generator assembles the transfer, the original definitions of the catalog
   target, and the application to SourcePubliee687.source_bound. The complete
   4.34.1 chain still awaits a kernel check. All 42 dependency revisions were
@@ -239,9 +257,9 @@ Quantitative survivor theorem
   Cache documentation and trust assumptions:
   https://github.com/nealmcb/openai-math-lean-tooling/tree/main/results/lake-cache-test
 
-  A further pencil-and-paper consequence concerns the general Jacobsthal
+  JacobsthalExtension687.gain concerns the general Jacobsthal
   function h(k) for integers with at most k distinct prime divisors.
-  Take x=ceil(k log k), z=x/(log x)^d and N=height(z). Prescribe extra
+  Take x=ceil(2 k log k), z=x/(log x)^d and N=height(z). Prescribe extra
   arbitrary residues for all primes up to z not dividing the given integer.
   Taking d small enough leaves an absolute positive fraction of the lower
   stock after all primes in (z,x] are removed, even including nondivisors.
@@ -252,8 +270,11 @@ Quantitative survivor theorem
   log x. The uniform upper sieve bounds the loss by O(N/(x log x)) per
   divisor. The k such losses total O(N/(log x)^2), negligible beside the
   remaining stock of order N log log x/(log x)^2. This gives
-  h(k)=O(k^2/(log k)^(2d)) on the same published input. The local Lean
-  transfer concerns Y(x); this additional general-k consequence is on paper.
+  h(k)=O(k^2/(log k)^(2d)) on the same published input. The checked
+  transfer uses the catalog definition with arbitrary integer starting
+  points and at most k distinct prime divisors. In SurvieTotale687.robust_stock
+  the count after the full sieve and the extra primes still exceeds or equals
+  (c/4) N log log x/(log x)^2, where c is the normalized cutoff stock constant.
 
 Extending an optimal cover
 
@@ -291,6 +312,21 @@ Extending an optimal cover
   |S|-|P| disjoint congruent pairs, using a different prime for each pair.
   The sufficient direction holds for classes of arbitrary size.
 
+  The quotient indices of any single fresh prime residue class again avoid
+  a prescribed residue for each old prime. CapaciteParite687.class_indices
+  proves this for J <= p*k, with quotient indices in [0,k). The wheel for
+  primes 2 and 3 bounds the number of such indices among six by two. Thus
+  J <= 6(z+1) suffices for the disjoint-pair criterion when z>=3. At
+  J <= 2(z+1), z>=2, each fresh prime covers at most one survivor, and
+  coverage is equivalent to the cardinality bound. For z>=13, the length-27
+  eight-point witness therefore defeats every seven-prime assignment for
+  some choice of old residues. This concerns the uniform prefix test.
+  The two sides of a given maximal old cover can have different profiles.
+  Conversely each admissible m-tuple in the quotient interval can already
+  be realized in one class of a fresh prime when z>=m. Theorem class_iff_tuple
+  gives the exact existential equivalence. An improvement to the worst-case
+  load of a single class must therefore also bound admissible prime tuples.
+
   The endpoint refinement uses an additional fresh prime dividing J.
   Suppose every length-J prefix has at most r survivors, uniformly over
   residues. Among the survivors in a prefix of length J+1, erasing either
@@ -304,6 +340,25 @@ Extending an optimal cover
   Independently enumerating the 210 residue choices at 2,3,5,7 on [0,27)
   gives respectively 4,32,102,68,4 assignments with 4,5,6,7,8 survivors.
   In all four eight-survivor cases, 0 and 26 occur together.
+
+  For an actual old cover, its left and right 27-position extensions use
+  translated versions of the same four residues. Bords687.growth_outside_nine
+  proves Y(x)>=Y(z)+28 whenever z>=7, there are seven or more new primes,
+  and Y(z) modulo 210 lies outside {21,27,33,123,129,135,177,183,189}.
+  In particular every old maximal length indivisible by 3 qualifies.
+  The kernel checks the complete four-profile list and its translations.
+  This uses information about the old cover that the uniform 26 test discards.
+
+  bords_687.py checks all 29 splits of 28 positions between the two ends.
+  Maximality forces both old boundary points to survive. For the 2304 eligible
+  small-prime profiles, the best split leaves 4,5,6,7,8 survivors in respectively
+  51,596,1173,473,11 cases. The eleven cases have lengths modulo 210 in
+  {21,27,33,123,177,183}. In each, the two one-sided extensions have eight
+  survivors apiece. An old prime must avoid all sixteen positions to preserve
+  the obstruction. Incorporating 11 and 13 leaves 683 exceptional odd lengths
+  modulo 30030 out of 15015. Each prime >=17 can individually miss the union
+  of the sixteen positions. These enumerations concern the boundary model;
+  realization as a maximal old cover is an additional condition.
 
   Recouvrements687.lean gives a different finite upper test. On the old
   survivor set S let t(n) be the number of fresh classes hitting n and put
@@ -332,6 +387,7 @@ Reproducible numerical checks
   python -B recherche_687.py 47 73
   python -B intervalles_687.py 23 8 9
   python -B capacites_687.py 853 857 10000
+  python -B bords_687.py
 
 The segmented cyclic-gap checker uses NumPy. The other Python commands use the
 standard library. Bilan_Erdos_687.pdf and borne_687.tex are the original working
