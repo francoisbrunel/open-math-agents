@@ -18,6 +18,7 @@ import Pertes687
 import Croissance687
 import Fenetres687
 import BorneRankin687
+import Separation687
 
 /-! Axiom audit for the Erdős 687 research modules on the catalog toolchain. -/
 #print axioms Couvertures687.witness47
@@ -118,3 +119,11 @@ import BorneRankin687
 #print axioms Fenetres687.near_cover_lower
 #print axioms Fenetres687.length_lt
 #print axioms BorneRankin687.rankin_lower
+#print axioms Presque687.sparse
+#print axioms Moments687.rough_multiples
+#print axioms Moments687.pair_moment
+#print axioms Moments687.rough_smooth_squarefree
+#print axioms Moments687.square_errors
+#print axioms Restes687.band_estimate
+#print axioms SousPuissance687.arbitrary_length
+#print axioms Separation687.weak_separation

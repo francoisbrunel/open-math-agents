@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\usepackage[margin=27mm]{geometry}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\holes}{E}
+\newcommand{\N}{\mathbb N}
+\title{Almost-covered intervals in Erd\H{o}s problem 687}
+\author{Research notes for Left to Solve}
+\date{27 November 2026}
+\begin{document}
+\maketitle
+
+For positive integers \(x,H\), let \(\holes(x,H)\) be the minimum number of
+positions in \([1,H]\) left uncovered by a choice of one residue class for
+each prime \(p\le x\). The original question asks for the order of
+\(Y(x)=\max\{H:\holes(x,H)=0\}\). Erd\H{o}s also asked how the answer
+changes when \(o(H/\log H)\) exceptions are allowed \cite{erdos}.
+
+\begin{theorem}\label{th:near}
+For every integer-valued \(H=H(x)\) with \(H\ge x\) eventually and
+\(\log H-\log x=o(\log x)\), there are choices of residue classes leaving
+\[
+                 \holes(x,H)=o\!\left(\frac H{\log H}\right).
+\]
+\end{theorem}
+
+\begin{corollary}\label{cor:separate}
+If the upper bound \(Y(x)=O_\delta(x^{1+\delta})\) holds for every
+\(\delta>0\), then \(H(x)=Y(x)(1+\lfloor\log x\rfloor)\) satisfies
+Theorem~\ref{th:near}, and \(Y(x)=o(H(x))\).
+\end{corollary}
+
+The hypothesis of Corollary~\ref{cor:separate} is precisely part (iii) of
+the catalog problem. The order of \(Y(x)\) in part (i) remains open.
+Theorem~\ref{th:near} is a lower bound for lengths admitting an almost-cover.
+
+\begin{lemma}\label{lem:finite}
+Let \(H=Bx\ge2\) with integers \(B\le W\le Z\le x\), \(W\ge4\).
+Suppose \(Z^2W^5\le H\), \(\log Z\le\frac14\log H\), and \(\log H\le W\).
+Then
+\[
+  \holes(x,H)\le 400e^6\frac H{\log H}
+       \left(\frac{\log W}{\log Z}+\frac{\log Z}{\log H}\right).
+\]
+\end{lemma}
+
+\begin{proof}
+Choose the zero class for the primes outside \((W,Z]\). Every remaining
+integer is free of prime factors at most \(W\). Every composite survivor
+has all its prime factors at most \(Z\). Indeed, a prime factor \(q>Z\)
+would have to exceed \(x\), and its cofactor would then lie between
+\(2\) and \(B\), providing a prime divisor at most \(W\).
+
+At most \(\sqrt H\) positions lie below or at \(\sqrt H\). The remaining
+non-squarefree survivors have a square divisor \(d^2\) with \(d>W\).
+There are at most \(H\sum_{d>W}d^{-2}\le 2H/(W+1)\) such positions.
+Denote by \(S\) the squarefree, \(W\)-rough, \(Z\)-smooth integers in
+\((\sqrt H,H]\). For each \(n\in S\), the sum of \(\log p\) over its
+prime divisors equals \(\log n\ge\frac12\log H\). Removing any one of
+them leaves total logarithm at least \(\frac14\log H\). Thus
+\[
+ \frac18(\log H)^2 |S|
+ \le \sum_{n\in S}\;\sum_{\substack{p,q\mid n\\p,q\ {\rm prime}\\p\ne q}}
+                      (\log p)(\log q).
+\]
+The sum uses ordered pairs. For fixed \(p,q\le Z\), put \(d=pq\). A
+multiple of \(d\) counted on the right gives a distinct \(W\)-rough
+cofactor in \([0,J)\), where \(J=1+\lfloor H/d\rfloor\). The upper sieve
+estimate \(\#\{\text{survivors in }[0,J)\}\le
+2J/\log(W+1)+W^4\) applies \cite{sieve}. Since \(H/d\ge W^5\), this is
+at most \(5H/(d\log W)\). It follows from
+\(\sum_{p\le Z}(\log p)/p\le\log Z+\log4\le2\log Z\) that
+\[
+ |S|\le 160\,\frac H{\log W}
+                     \left(\frac{\log Z}{\log H}\right)^2.
+\]
+The remaining possible prime survivors number at most \(8H/\log H\).
+Also \(\sqrt H\le2H/\log H\) and \(2H/(W+1)\le2H/\log H\).
+At each reserved prime, choosing the most populous class leaves at most
+a \(1-1/p\) fraction of the current set. The finite Euler-product
+bound \cite{longgaps} gives
+\[
+ \prod_{W<p\le Z}(1-1/p)\le e^6\,\frac{1+\log W}{\log Z}
+                           \le 2e^6\,\frac{\log W}{\log Z}.
+\]
+Multiplying the preceding bounds gives the claimed constant.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{th:near}]
+First take \(H=Bx\), where \(B\ge1\) and \(\log B=o(\log x)\).
+Fix \(0<a\le 1/8\) and set \(W=\lfloor H^{a^2}\rfloor\),
+\(Z=\lfloor H^a\rfloor\). Eventually \(B\le W\), \(\log H\le W\) and
+\(Z\le x\). The room condition follows from \(5a^2+2a\le1\).
+For fixed \(b>0\), eventually
+\(\frac12 b\log H\le\log\lfloor H^b\rfloor\le b\log H\).
+Lemma~\ref{lem:finite} therefore bounds the normalized exceptional count
+by \(1200e^6a\). The parameter \(a\) can be arbitrarily small.
+For general \(H\), take \(B=1+\lfloor H/x\rfloor\). Then \(H\le Bx\le2H\)
+eventually and \(\log B=o(\log x)\). Restrict the classes obtained on
+\([1,Bx]\) to \([1,H]\).
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:separate}]
+The classical lower bound gives \(Y(x)\ge x\) eventually. Taking logarithms
+in the assumed upper bounds yields \(\log Y(x)-\log x=o(\log x)\).
+The additional multiplier contributes \(O(\log\log x)\) to \(\log H(x)\)
+and tends to infinity.
+\end{proof}
+
+\paragraph{Lean declarations.}
+The finite estimate is \texttt{Restes687.band\_estimate}.
+Theorems~\ref{th:near} and~\ref{cor:separate} are
+\texttt{SousPuissance687.arbitrary\_length} and
+\texttt{Separation687.weak\_separation}. Their statements use the
+catalog definitions on Lean 4.33.1. The axiom reports contain
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+
+\begin{thebibliography}{9}
+\bibitem{erdos} P. Erd\H{o}s, \emph{A survey of problems in combinatorial
+number theory}, Annals of Discrete Mathematics 6 (1980), 89--115,
+p.~106. \href{https://combinatorica.hu/~p_erdos/1980-03.pdf}{Original article}.
+\bibitem{sieve} OpenAI, \emph{A quadratic bound for Jacobsthal's
+function} (2026). The finite upper sieve used here is
+\texttt{SquarefreeHarmonic.cutoffSurvivors\_le\_log\_bound}.
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Estimates/SquarefreeHarmonic.lean}{Source}.
+\bibitem{longgaps} OpenAI, \emph{Improved Long Gaps Between Primes}
+(2026). The elementary Euler-product and prime logarithm estimates used
+here are \texttt{greedy\_product\_le} and \texttt{sum\_prime\_log\_div\_le}.
+\href{https://github.com/openai/LongGapsBetweenPrimes/blob/03a1190d0bc5502d9f54eeb60ad3e45e22b0df0b/LongGapsBetweenPrimes.lean}{Source}.
+\end{thebibliography}
+\end{document}

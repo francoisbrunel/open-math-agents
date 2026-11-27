@@ -145,6 +145,23 @@ theorem smooth_or_prime {B t y n : ℕ} {Q : Finset ℕ} (hBt : B ≤ t)
       (fun H => (bounds _ H).1.not_ge small) (hm ▸ dvd_mul_of_dvd_right (Nat.minFac_dvd m) q)
   exact Finset.mem_union_right _ (Nat.mem_primesLE.mpr ⟨hN,by simpa [hm,one] using prime⟩)
 
+/-- After zero classes outside Q and arbitrary classes inside Q, the
+    only possible survivors are the thinned smooth numbers and primes. -/
+theorem candidates {B t y : ℕ} (hBt : B ≤ t) (Q : Finset ℕ)
+    (hQ : ∀ p ∈ Q, p.Prime ∧ B < p ∧ p < y ∧ p ≤ t) (a : ℕ → ℕ) :
+    Transfert687.survivors t (B*t) (fun p => if p ∈ Q then a p else 0) ⊆
+      remainder ((B*t).smoothNumbersUpTo y ∪ (B*t).primesLE) Q a := by
+  intro n hn
+  obtain ⟨hi,avoid⟩ := Finset.mem_filter.mp hn
+  obtain ⟨lo,up⟩ := Finset.mem_Icc.mp hi
+  apply Finset.mem_filter.mpr
+  constructor
+  · apply smooth_or_prime hBt (fun p h => ⟨(hQ p h).2.1,(hQ p h).2.2.1⟩) lo up
+    intro p hp out dvd
+    exact avoid p hp (by simp [out,Nat.mod_eq_zero_of_dvd dvd])
+  · intro p hp
+    simpa [hp] using avoid p (Nat.mem_primesLE.mpr ⟨(hQ p hp).2.2.2,(hQ p hp).1⟩)
+
 theorem prime_supply {t : ℕ} (ht : 128 ≤ t) :
     8*(t:ℝ)/Real.log t ≤ (((128*t).primesLE \ t.primesLE).card:ℝ) := by
   let n := 128*t
@@ -252,18 +269,9 @@ theorem fixed_multiplier (B : ℕ) (hB : 1 ≤ B) :
   obtain ⟨a,ha⟩ := thin Q T (fun p h => (hQ p h).1.pos)
   let b := fun p => if p ∈ Q then a p else 0
   apply Bords687.finish_singletons (show t ≤ 128*t by omega) b
-  have sub : Transfert687.survivors t (B*t) b ⊆ remainder T Q a := by
-    intro n hn
-    obtain ⟨hi,avoid⟩ := Finset.mem_filter.mp hn
-    obtain ⟨lo,up⟩ := Finset.mem_Icc.mp hi
-    apply Finset.mem_filter.mpr
-    constructor
-    · apply smooth_or_prime htB (fun p h => ⟨(hQ p h).2,Qbound p h⟩) lo up
-      intro p hp out dvd
-      exact avoid p hp (by simp [b,out,Nat.mod_eq_zero_of_dvd dvd])
-    · intro p hp
-      have le := Qbound p hp
-      simpa [b,hp] using avoid p (Nat.mem_primesLE.mpr ⟨by omega,(hQ p hp).1⟩)
+  have sub : Transfert687.survivors t (B*t) b ⊆ remainder T Q a :=
+    candidates htB Q (fun p h => ⟨(hQ p h).1,(hQ p h).2,Qbound p h,by
+      have le := Qbound p h; omega⟩) a
   have hd : 0 ≤ density Q := Finset.prod_nonneg fun p h => factor_nonneg (hQ p h).1.pos
   have c := mul_le_mul_of_nonneg_right cost hd
   have lim : 9*((B:ℝ)*t)/Real.log t*density Q ≤ 8*t/Real.log t := by

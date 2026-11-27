@@ -422,6 +422,23 @@ Unconditional lower bounds and the near-cover criterion (Lean 4.33.1)
   conclusions were checked as declarations in an integrated Lean session;
   their axiom lists contain propext, Classical.choice and Quot.sound.
 
+Almost-covered intervals
+
+  Let E(x,H) be the minimum number of exceptions. For every H >= x
+  with log H - log x = o(log x), SousPuissance687.arbitrary_length
+  produces actual residue classes with E(x,H) = o(H/log H).
+  Separation687.weak_separation shows that the upper bound asked in
+  part (iii) would allow H = Y(x)(1+floor(log x)), with Y(x) = o(H)
+  and the same exceptional-count conclusion. The exact growth of Y
+  remains open. No priority claim is made for the almost-cover results.
+
+  The argument in presque_687.tex counts large, squarefree, smooth
+  survivors using two distinct prime divisors and a rough cofactor.
+  Restes687.band_estimate gives the explicit finite bound before
+  passage to the limit. Compile Presque687, Moments687, Restes687,
+  SousPuissance687 and Separation687 after BorneRankin687 and before
+  Audit687. The named conclusions passed the integrated axiom audit.
+
 Numerical commands
 
   python -B certificat_183.py
