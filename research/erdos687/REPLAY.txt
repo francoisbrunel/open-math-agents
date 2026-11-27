@@ -31,8 +31,24 @@ Proof sources
                             rejouer_crible_687.py. This is the upstream Selberg
                             upper sieve for intervals with arbitrary residues.
   CribleTransfert687.lean    Reconciles the index conventions, gives the
-                            uniform progression constant 1275, and reduces
+                            uniform progression constant 35, and reduces
                             the qualitative log saving to the survivor count.
+  InterfaceSource687.lean    Common quantitative survivor statement for the
+                            upstream and catalog versions of Lean.
+  StockSource687.lean        Deduces a fixed logarithmic exponent gain for
+                            the official Y from that interface.
+  SourcePubliee687.lean      Connects the interface to the upstream root
+                            theorem in the authors' original project.
+  DemiBande687.lean          Unconditional dyadic deletion estimate with
+                            coefficient 960 for every x >= 1024.
+  Extension687.lean          Extends maximal covers using fresh primes and
+                            relates residual capacity to admissible tuples.
+  Roue687.lean               Seven-prime extension by 26 positions, sharp
+                            for the uniform singleton capacity test.
+  Paires687.lean             Disjoint-pair criterion for covering the points
+                            left after a small-prime sieve.
+  Extremites687.lean         Endpoint pairing and the parity of a maximal cover.
+  Recouvrements687.lean      Third-order inclusion-exclusion criterion.
 
 Lean environment
 
@@ -71,6 +87,8 @@ the supplied Python script. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/Roue687.olean Roue687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/DemiBande687.olean DemiBande687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Paires687.olean Paires687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Extremites687.olean Extremites687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Recouvrements687.olean Recouvrements687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -101,8 +119,9 @@ Scope and remaining inputs
   contains source_root_survivor_lower with an existential positive constant
   in its own normalization. The passage to cutoff survivors is used in
   jacobsthal_of_source_root_lower. Neither declaration supplies the numerical
-  coefficient 1/125 in this project's normalization as stated. A compatible
-  replay and normalization of the published lower-sieve proof remain open here.
+  coefficient 1/125 in this project's normalization as stated. The qualitative
+  normalization is provided in StockSource687; the native replay of the full
+  chain is a separate verification described below.
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/SourceRootCompletion.lean
   https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/JacobsthalFromRootLower.lean
 
@@ -117,9 +136,10 @@ Scope and remaining inputs
   replays both analytic modules. Two renamed Mathlib lemmas are substituted.
   The generator also accepts --sources /path/to/lean/OAI/NumberTheory/Jacobsthal
   for an offline rebuild from the pinned upstream checkout.
-  CribleTransfert687.uniform_progression gives the absolute constant 1275
-  for every 0 < d <= 1/2. It proves that J <= floor(z), log J >= log(x)/2,
-  and 1 <= (N/p)/log(x) eventually, uniformly for primes floor(z)<p<=x.
+  CribleTransfert687.uniform_progression_35 gives the absolute constant 35
+  for every 0 < d <= 1/2. Eventually 256 <= J <= floor(z), log J >= log(x)/2,
+  and J <= (35/34)(N/p) uniformly for primes floor(z)<p<=x. Applying the
+  upstream bound 17 J/log J gives the claimed coefficient.
   Thus gain_from_stock requires only the lower stock estimate for a
   uniform positive c. This does not supply the sharper 5/2 progression
   constant in the fixed exponent 401/200 argument.
@@ -144,6 +164,14 @@ Scope and remaining inputs
   at most 15d primes, so the total is <=960 d^2, below the 1000 d^2 budget.
   R2 is in this research fork. The public catalog's R1.H2 is the separate
   Mertens statement.
+
+  On paper R2.H1 follows from the same quantitative survivor input. At
+  z=floor(x/2), partition [1,x^2] into full blocks of length N=height(z)
+  and a remainder. Translate the residues independently in each full block.
+  Each contributes at least c' N log log z/(log z)^2, and the full blocks
+  contain at least x^2/2 points for large x since N=o(x^2). Consequently
+  the total exceeds 1000 floor(x/(log2(x)+1))^2 eventually. The block
+  summation for this separate H1 was not needed by gain_of_interface.
 
   An earlier paper-only route to the same dyadic H2 used five blocks:
   put z=floor(x/2). For p>z the index interval
@@ -179,8 +207,8 @@ Quantitative survivor theorem
   product(floor w) >= 1/(3 log w), and eventually log w >= (log L)/2.
   Thus the coefficient c in Theorem 1.2 gives c/6 times N log L/L^2
   at the real cutoff z, and c/12 in GainVariable687.stockBound at
-  z=x/(log x)^d for 0<d<=1/2. The absolute progression constant is 1275.
-  Hence one may take eta=2 min(1/2,c/91800) on paper. The coefficient c
+  z=x/(log x)^d for 0<d<=1/2. The absolute progression constant is 35.
+  Hence one may take eta=2 min(1/2,c/2520) on paper. The coefficient c
   is the positive constant of Theorem 1.2, not a numerical estimate.
 
   On the Left to Solve toolchain, gain_of_interface takes the preprint's
@@ -193,11 +221,23 @@ Quantitative survivor theorem
   For the producer in a built original checkout, copy InterfaceSource687.lean
   and SourcePubliee687.lean into its lean directory, compile the interface to
   .lake/build/lib/lean/InterfaceSource687.olean, then run
-  lake env lean SourcePubliee687.lean.
+  lake env lean -o .lake/build/lib/lean/SourcePubliee687.olean SourcePubliee687.lean
+  python /path/to/rejouer_borne_native_687.py BorneNative687.lean --formal-conjectures /path/to/formal-conjectures
+  lake env lean BorneNative687.lean
+  The generator assembles the transfer, the original definitions of the catalog
+  target, and the application to SourcePubliee687.source_bound. The complete
+  4.34.1 chain still awaits a kernel check. All 42 dependency revisions were
+  checked before the native Linux run was stopped.
   Original preprint and formalization at revision adc7f1241b42e322a6451854ab7e4b4c146bf78a:
   https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026
   Independent upstream rebuild:
   https://github.com/30k30/scholia/tree/b072c89c3edac06521868e32cc15b2bc91bd8533/erdos-687
+  The public Linux x86-64 Lake cache includes upstream commit
+  fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb. Its Jacobsthal source tree
+  88b1b6fe3198556da3359aa1d89494d7f5122073, lean-toolchain, lakefile,
+  manifest and dependency patches are identical to the manuscript commit.
+  Cache documentation and trust assumptions:
+  https://github.com/nealmcb/openai-math-lean-tooling/tree/main/results/lake-cache-test
 
   A further pencil-and-paper consequence concerns the general Jacobsthal
   function h(k) for integers with at most k distinct prime divisors.
@@ -227,6 +267,14 @@ Extending an optimal cover
   of an admissible (r+1)-tuple, then Y(x)>=Y(z)+H(r+1). The interval
   [0,H(r+1)) has diameter strictly less than H(r+1).
 
+  For example the prime number theorem gives, on paper, the unconditional
+  increment Y(x)>=Y(floor(x/2))+floor(x/40) for all sufficiently large x.
+  With J=floor(x/40) the verified 17 J/log J sieve applies since
+  256<=J<=floor(x/2). Its upper coefficient 17/40 is strictly below
+  the asymptotic coefficient 1/2 for the number of primes in (x/2,x].
+  Apply growth_from_capacity. The invocation of the prime number theorem
+  in this dyadic asymptotic corollary is outside the local Lean audit.
+
   For r=7 a separate direct calculation needs only z>=7 and gives a gain
   of 26. At length 27 the points 0,2,6,8,12,18,20,26 form an admissible
   eight-tuple. This shows the limit of the uniform single-prime-per-point
@@ -242,6 +290,40 @@ Extending an optimal cover
   remaining points. With point set S and prime set P, one needs at least
   |S|-|P| disjoint congruent pairs, using a different prime for each pair.
   The sufficient direction holds for classes of arbitrary size.
+
+  The endpoint refinement uses an additional fresh prime dividing J.
+  Suppose every length-J prefix has at most r survivors, uniformly over
+  residues. Among the survivors in a prefix of length J+1, erasing either
+  endpoint leaves at most r points (translate the interval for the left
+  endpoint). If more than r survive, both endpoints must be present and
+  there are exactly r+1 points. A fresh prime dividing J takes both; the
+  other r-1 primes suffice. This gives Y(x)>=Y(z)+J+1. For z>=2 a maximal
+  cover has odd length: an even-length cover could be extended on one side
+  by its existing class of 2. For J=26 and 13 among seven fresh primes,
+  the resulting increment is at least 28. Source: Extremites687.lean.
+  Independently enumerating the 210 residue choices at 2,3,5,7 on [0,27)
+  gives respectively 4,32,102,68,4 assignments with 4,5,6,7,8 survivors.
+  In all four eight-survivor cases, 0 and 26 occur together.
+
+  Recouvrements687.lean gives a different finite upper test. On the old
+  survivor set S let t(n) be the number of fresh classes hitting n and put
+  M_j=sum_{n in S} binom(t(n),j). If M_1+M_3<|S|+M_2 for every assignment,
+  then at least one point avoids all classes and Y(x)<=N. For coprime p,q
+  and N<pq their prescribed pair of classes meets [1,N] at most once.
+  At a power cutoff z=x^(1-delta), the harmonic mass of (z,x] approaches a
+  positive constant. The present first-order upper bound for losses is then
+  O(N/log x), whereas the guaranteed stock is of order N log log x/log^2 x.
+  Thus the current comparison cannot give a fixed power saving in x.
+  Controlling the excess M_2-M_3 from below would be one way forward;
+  the pairwise upper bound alone does not provide this.
+
+  Repeating a first-order deletion bound over adjacent bands also has a
+  limitation. For cutoffs x/(log x)^d with fixed d, every increment in d
+  incurs a loss in the guaranteed coefficient of N log log x/(log x)^2.
+  Adding the bounds for contiguous bands adds those losses. Dividing the
+  same band into more pieces cannot replenish its original survivor count.
+  Any iteration seeking a power saving in x needs additional information
+  on the surviving points or on intersections of the deleted classes.
 
 Reproducible numerical checks
 

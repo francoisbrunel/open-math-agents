@@ -17,9 +17,11 @@ theorem assign_images (S P : Finset ℕ) (f : ℕ → ℕ) (h : S.card ≤ P.car
   have eqn : Classical.choose ex = j := e.injective (Subtype.ext (Classical.choose_spec ex))
   exact ⟨(e j).val,(e j).property,by simp only [r,dif_pos ex,eqn]; rfl⟩
 
-theorem extend_cover {x z y J : ℕ} (hzx : z ≤ x)
+def Completes (S P : Finset ℕ) := ∃ a : ℕ → ℕ, ∀ i ∈ S, ∃ p ∈ P, i%p = a p%p
+
+theorem extend_cover_after_sieve {x z y J : ℕ} (hzx : z ≤ x)
     (covered : Green46.IsCoveredByResidues z y)
-    (budget : ∀ b : ℕ → ℕ, (siftedIndices z J b).card ≤ (x.primesLE \ z.primesLE).card) :
+    (close : ∀ b : ℕ → ℕ, Completes (siftedIndices z J b) (x.primesLE \ z.primesLE)) :
     Green46.IsCoveredByResidues x (y+J) := by
   classical
   obtain ⟨a,ha⟩ := covered
@@ -30,8 +32,8 @@ theorem extend_cover {x z y J : ℕ} (hzx : z ≤ x)
     obtain ⟨p,hp,prime,he⟩ := ha n (by simpa using hn)
     exact ⟨p,hp.trans hzx,prime,he⟩
   let b (p : ℕ) := a p + J - 1
-  obtain ⟨r,hr⟩ := assign_images _ _ (fun i => i+1) (budget b)
-  let v (p : ℕ) := if p ≤ z then a p+J else r p
+  obtain ⟨r,hr⟩ := close b
+  let v (p : ℕ) := if p ≤ z then a p+J else r p+1
   refine ⟨v,?_⟩
   intro n hn
   obtain ⟨lo,hi⟩ := Finset.mem_Icc.mp hn
@@ -46,7 +48,8 @@ theorem extend_cover {x z y J : ℕ} (hzx : z ≤ x)
       obtain ⟨hpx,hnot⟩ := Finset.mem_sdiff.mp hp
       obtain ⟨le,prime⟩ := Nat.mem_primesLE.mp hpx
       have hlarge : ¬p ≤ z := fun h => hnot (Nat.mem_primesLE.mpr ⟨h,prime⟩)
-      exact ⟨p,le,prime,by simp only [v,if_neg hlarge,he,hin]; rfl⟩
+      exact ⟨p,le,prime,by simpa only [v,if_neg hlarge,hin] using
+        (show i ≡ r p [MOD p] from he).add_right 1⟩
     · have clash : ¬∀ p ∈ z.primesLE, i%p ≠ b p%p := fun h => hsurv
         (Finset.mem_filter.mpr ⟨Finset.mem_range.mpr (by dsimp [i]; omega),h⟩)
       push Not at clash
@@ -56,15 +59,34 @@ theorem extend_cover {x z y J : ℕ} (hzx : z ≤ x)
       refine ⟨p,le.trans hzx,prime,?_⟩
       simpa only [v,if_pos le,hin,eqn] using (show i ≡ b p [MOD p] from he).add_right 1
 
-theorem growth_from_capacity {x z J : ℕ} (hzx : z ≤ x)
-    (h : ∀ b : ℕ → ℕ, (siftedIndices z J b).card ≤ (x.primesLE \ z.primesLE).card) :
-    Erdos687.Y z + J ≤ Erdos687.Y x := by
+theorem completes_of_card {S P : Finset ℕ} (h : S.card ≤ P.card) : Completes S P := by
+  obtain ⟨r,hr⟩ := assign_images S P id h
+  refine ⟨r,?_⟩
+  intro i hi
+  obtain ⟨p,hp,eqn⟩ := hr i hi
+  exact ⟨p,hp,by simp [eqn]⟩
+
+theorem extend_cover {x z y J : ℕ} (hzx : z ≤ x) (h : Green46.IsCoveredByResidues z y)
+    (budget : ∀ b : ℕ → ℕ, (siftedIndices z J b).card ≤ (x.primesLE \ z.primesLE).card) :
+    Green46.IsCoveredByResidues x (y+J) :=
+  extend_cover_after_sieve hzx h (fun b => completes_of_card (budget b))
+
+theorem optimal_cover (z : ℕ) : Green46.IsCoveredByResidues z (Erdos687.Y z) := by
   have nonempty : {n : ℕ | Green46.IsCoveredByResidues z n}.Nonempty :=
     ⟨0,fun _ => 0,by simp⟩
   have bounded : BddAbove {n : ℕ | Green46.IsCoveredByResidues z n} :=
     ⟨primorial z,fun _ hn => (Erdos687.lt_primorial_of_isCoveredByResidues hn).le⟩
-  have cov : Green46.IsCoveredByResidues z (Erdos687.Y z) := Nat.sSup_mem nonempty bounded
-  exact le_Y_of_covered (extend_cover hzx cov h)
+  exact Nat.sSup_mem nonempty bounded
+
+theorem growth_from_completion {x z J : ℕ} (hzx : z ≤ x)
+    (h : ∀ b, Completes (siftedIndices z J b) (x.primesLE \ z.primesLE)) :
+    Erdos687.Y z + J ≤ Erdos687.Y x :=
+  le_Y_of_covered (extend_cover_after_sieve hzx (optimal_cover z) h)
+
+theorem growth_from_capacity {x z J : ℕ} (hzx : z ≤ x)
+    (h : ∀ b : ℕ → ℕ, (siftedIndices z J b).card ≤ (x.primesLE \ z.primesLE).card) :
+    Erdos687.Y z + J ≤ Erdos687.Y x :=
+  growth_from_completion hzx (fun b => completes_of_card (h b))
 
 /-- A lower bound for an increment of Y, from the number of fresh primes. -/
 theorem growth_from_fresh_primes {x z J : ℕ} (hzx : z ≤ x) (hJz : J ≤ z)

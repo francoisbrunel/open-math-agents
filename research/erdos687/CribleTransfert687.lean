@@ -69,8 +69,8 @@ private theorem length_lower {x : ℕ} {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2)
     one_le_mul_of_one_le_of_one_le (by exact_mod_cast hx) hM
   linarith [big.trans cmp]
 
-theorem uniform_progression {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
-    progressionBound 1275 d := by
+theorem uniform_progression_35 {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
+    progressionBound 35 d := by
   have hinf : Tendsto (fun x : ℕ => Real.log (x:ℝ)) atTop atTop :=
     Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
   have small := (isLittleO_log_rpow_atTop (show 0 < (1/10:ℝ) by norm_num)).bound
@@ -144,25 +144,37 @@ theorem uniform_progression {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
   have hJz : J ≤ ⌊z⌋₊ := (Nat.le_floor_iff hzpos.le).2 (by linarith)
   have hlogJ : L/2 ≤ Real.log (J:ℝ) := by
     simpa only [Real.log_sqrt hxpos.le] using Real.log_le_log (Real.sqrt_pos.2 hxpos) (hMlow.trans hMJ)
-  have hM1 : 1 ≤ M := by linarith
-  have hquot : (J:ℝ)/Real.log J ≤ 4*M/L := calc
-    _ ≤ (2*M)/(L/2) := by gcongr <;> linarith
+  have h256 : (256:ℝ) ≤ M := by
+    have hfour := pow_le_pow_left₀ (by norm_num : (0:ℝ) ≤ 4) hL' 5
+    norm_num at hfour
+    linarith
+  have hJ256 : 256 ≤ J := by exact_mod_cast (show (256:ℝ) ≤ J by linarith)
+  have hquot : (J:ℝ)/Real.log J ≤ (35/17)*(M/L) := calc
+    _ ≤ ((35/34)*M)/(L/2) := by gcongr <;> linarith
     _ = _ := by ring
-  have hunit : 1 ≤ M/L := (le_div_iff₀ hl).2 (by linarith)
-  have hquot' : (J:ℝ)/Real.log J ≤ 4*(M/L) := by simpa only [mul_div_assoc] using hquot
-  have found := charge_upper (N := N) prime hzp a hJz
-  change (charge (survivors ⌊z⌋₊ N a) a p:ℝ) ≤ 255*(1+(J:ℝ)/Real.log (J:ℝ)) at found
+  obtain ⟨b,hb⟩ := charge_le_index_sieve (N := N) prime hzp a
+  rw [index_eq_cutoff] at hb
+  have found := SquarefreeHarmonic.cutoffSurvivors_le_seventeen_of_le_cutoff J ⌊z⌋₊ b hJ256 hJz
   calc
-    _ ≤ _ := found
-    _ ≤ 255*((M/L)+4*(M/L)) := mul_le_mul_of_nonneg_left (add_le_add hunit hquot') (by norm_num)
-    _ = 1275*(M/L) := by ring
+    _ ≤ ((LargePrimeDeletion.cutoffSurvivors J ⌊z⌋₊ b).card:ℝ) := by exact_mod_cast hb
+    _ ≤ 17*((J:ℝ)/Real.log J) := by simpa only [mul_div_assoc] using found
+    _ ≤ 17*((35/17)*(M/L)) := mul_le_mul_of_nonneg_left hquot (by norm_num)
+    _ = 35*(M/L) := by ring
     _ = _ := by unfold classUnit; dsimp [M,N,L]; ring
+
+theorem uniform_progression {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
+    progressionBound 1275 d := by
+  filter_upwards [uniform_progression_35 hd hh] with x h
+  intro a p hp
+  have nn : 0 ≤ classUnit d x/(p:ℝ) :=
+    div_nonneg (div_nonneg (Nat.cast_nonneg _) (Real.log_natCast_nonneg _)) (Nat.cast_nonneg _)
+  exact (h a p hp).trans (mul_le_mul_of_nonneg_right (by norm_num) nn)
 
 /-- Only the uniform lower-sieve stock estimate remains. -/
 theorem gain_from_stock
     (stock : ∃ c : ℝ, 0 < c ∧ ∀ d : ℝ, 0 < d → d ≤ 1/2 → stockBound c d) :
     ∃ η : ℝ, 0 < η ∧ (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop]
       (fun x : ℕ => (x:ℝ)^2/(Real.log x)^(2+η)) :=
-  exists_log_saving stock ⟨1275, by norm_num, fun _ hd hh => uniform_progression hd hh⟩
+  exists_log_saving stock ⟨35, by norm_num, fun _ hd hh => uniform_progression_35 hd hh⟩
 
 end CribleTransfert687

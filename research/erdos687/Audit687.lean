@@ -5,7 +5,10 @@ import StockSource687
 import Roue687
 import DemiBande687
 import Paires687
+import Extremites687
+import Recouvrements687
 
+/-! Axiom audit for the Erdős 687 research modules on the catalog toolchain. -/
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
 #print axioms Couvertures687.witness71
@@ -65,3 +68,12 @@ import Paires687
 #print axioms DemiBande687.H2_proved
 #print axioms Paires687.covered_of_pairs
 #print axioms Paires687.covered_iff_pairs
+#print axioms CribleTransfert687.uniform_progression_35
+#print axioms Extension687.growth_from_completion
+#print axioms Paires687.pairs_for_prefix
+#print axioms Extremites687.endpoint_gain
+#print axioms Extremites687.Y_odd
+#print axioms Extremites687.seven_with_13_extend_by_28
+#print axioms Recouvrements687.third_order
+#print axioms Recouvrements687.upper_from_overlaps
+#print axioms Recouvrements687.pair_capacity

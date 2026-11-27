@@ -13,17 +13,12 @@ set_option maxHeartbeats 4000000 in
 private theorem wheel_bound : ∀ a : Fin 2, ∀ b : Fin 3, ∀ c : Fin 5, ∀ d : Fin 7,
     (wheel a b c d).card ≤ 7 := by decide
 
-/-- Seven fresh primes extend any optimal cover by at least 26 positions,
-    regardless of where the old cover lies or how large its length is. -/
-theorem seven_extend_by_26 {x z : ℕ} (hz : 7 ≤ z) (hzx : z ≤ x)
-    (hfresh : 7 ≤ (x.primesLE \ z.primesLE).card) :
-    Erdos687.Y z + 26 ≤ Erdos687.Y x := by
-  apply growth_from_capacity hzx
-  intro a
+theorem capacity_26 {z : ℕ} (hz : 7 ≤ z) (a : ℕ → ℕ) :
+    (siftedIndices z 26 a).card ≤ 7 := by
   let r (p : ℕ) (hp : 0 < p) : Fin p := ⟨a p%p,Nat.mod_lt _ hp⟩
   have bound := wheel_bound (r 2 (by decide)) (r 3 (by decide))
     (r 5 (by decide)) (r 7 (by decide))
-  apply (Finset.card_le_card ?_).trans (bound.trans hfresh)
+  apply (Finset.card_le_card ?_).trans bound
   intro i hi
   obtain ⟨hJ,h⟩ := Finset.mem_filter.mp hi
   refine Finset.mem_filter.mpr ⟨hJ,?_⟩
@@ -31,6 +26,13 @@ theorem seven_extend_by_26 {x z : ℕ} (hz : 7 ≤ z) (hzx : z ≤ x)
     h 3 (Nat.mem_primesLE.mpr ⟨by omega,by decide⟩),
     h 5 (Nat.mem_primesLE.mpr ⟨by omega,by decide⟩),
     h 7 (Nat.mem_primesLE.mpr ⟨hz,by decide⟩)⟩
+
+/-- Seven fresh primes extend any optimal cover by at least 26 positions,
+    regardless of where the old cover lies or how large its length is. -/
+theorem seven_extend_by_26 {x z : ℕ} (hz : 7 ≤ z) (hzx : z ≤ x)
+    (hfresh : 7 ≤ (x.primesLE \ z.primesLE).card) :
+    Erdos687.Y z + 26 ≤ Erdos687.Y x :=
+  growth_from_capacity hzx (fun b => (capacity_26 hz b).trans hfresh)
 
 /-- The uniform capacity test with seven available primes is sharp at
     length 26. Eight admissible points do fit in [0,27). -/

@@ -4,7 +4,7 @@ import Extension687
     uncovered points. Colours are the primes available for the final stage. -/
 namespace Paires687
 
-def Covered (S P : Finset ℕ) := ∃ a : ℕ → ℕ, ∀ i ∈ S, ∃ p ∈ P, i%p = a p%p
+abbrev Covered := Extension687.Completes
 
 /-- A family of disjoint two-point sets, each lying in one class of its
     own modulus. The last inequality reserves a fresh modulus per singleton. -/
@@ -68,5 +68,30 @@ theorem covered_iff_pairs {S P : Finset ℕ}
                Finset.mem_filter.mpr (eqn p i hi))).trans (cap p hp (a p))
            split <;> omega
          _ = _ := by simp [Finset.sum_add_distrib,Q]
+
+/-- For a prefix of length at most two periods of the smallest new prime,
+    the exact pair criterion applies without any residue-capacity hypothesis. -/
+theorem pairs_for_prefix {x z J : ℕ} (hJ : J ≤ 2*(z+1)) (b : ℕ → ℕ) :
+    let S := Progressions687.siftedIndices z J b
+    let P := x.primesLE \ z.primesLE
+    Covered S P ↔ PairBudget S P := by
+  apply covered_iff_pairs
+  intro p hp r
+  obtain ⟨hin,hout⟩ := Finset.mem_sdiff.mp hp
+  have prime := (Nat.mem_primesLE.mp hin).2
+  have large : z < p := lt_of_not_ge fun h => hout (Nat.mem_primesLE.mpr ⟨h,prime⟩)
+  rw [← Finset.card_range 2]
+  apply Finset.card_le_card_of_injOn (fun i : ℕ => i/p)
+  · intro i hi
+    obtain ⟨hS,_⟩ := Finset.mem_filter.mp hi
+    have hiJ := Finset.mem_range.mp (Finset.mem_filter.mp hS).1
+    exact Finset.mem_range.mpr ((Nat.div_lt_iff_lt_mul prime.pos).2 (by omega))
+  · intro i hi j hj hq
+    have ir := (Finset.mem_filter.mp hi).2
+    have jr := (Finset.mem_filter.mp hj).2
+    change i/p = j/p at hq
+    calc i = i%p+p*(i/p) := (Nat.mod_add_div _ _).symm
+         _ = j%p+p*(j/p) := by rw [ir.trans jr.symm,hq]
+         _ = j := Nat.mod_add_div _ _
 
 end Paires687
