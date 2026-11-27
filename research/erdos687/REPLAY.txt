@@ -16,6 +16,8 @@ Proof sources
   Transfert687.lean          Bridges to Green46.IsCoveredByResidues and
                             Erdos687.Y, including Y(37) = 65, Y(47) >= 99,
                             Y(73) >= 189, parity, counting and analytic transfer.
+  Progressions687.lean       Uses the Chinese remainder theorem to embed the
+                            survivors of one progression in a sifted interval.
 
 Lean environment
 
@@ -26,7 +28,7 @@ Lean environment
   0df444a360eaa60ab8c11dca51a86af692955474
 
 From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
-and lake-manifest.json. Run the following from the checkout root. Copy the five
+and lake-manifest.json. Run the following from the checkout root. Copy the six
 Lean sources listed above to that root, using the replay names. The other files
 are independent of the Lean build. Quoting below is for a POSIX shell.
 
@@ -37,6 +39,7 @@ are independent of the Lean build. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/Comptage687.olean Comptage687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/ReductionIwaniec.olean ReductionIwaniec.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Transfert687.olean Transfert687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Progressions687.olean Progressions687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -51,6 +54,8 @@ Scope and remaining inputs
   and a bound on a positive prime harmonic sum. The TeX note explains the
   source theorems and constants. These analytic estimates need formal proofs
   in the same environment to make the bound unconditional in Lean.
+  log_saving_at_cutoff specializes to exactly the stock and class scales in
+  the note, proving positivity and the conversion of the floored block length.
 
   For the quadratic Iwaniec variant, H1 and H2 are hypotheses with the same
   absolute threshold, separating survivors at x/2 from the sum of the further
@@ -59,6 +64,8 @@ Scope and remaining inputs
   H2_from_progression discharges prime counting using normalized_prime_count.
   A uniform bound on the survivors in one large prime's progression still
   suffices for H2. H1 remains a separate sieve input.
+  H2_from_index_sieve expresses that remaining upper estimate on an ordinary
+  interval of floor(x^2/p)+1 consecutive indices with arbitrary residues.
 
   The universal exclusion of 184 positions with primes through 71 and one
   extra singleton is certified computationally by two independent Python

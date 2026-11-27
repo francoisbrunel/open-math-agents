@@ -1,4 +1,4 @@
-import Transfert687
+import Progressions687
 
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
@@ -28,3 +28,6 @@ import Transfert687
 #print axioms Transfert687.H2_from_progression
 #print axioms Transfert687.log_saving_of_inputs
 #print axioms Transfert687.explicit_block_scale
+#print axioms Transfert687.log_saving_at_cutoff
+#print axioms Progressions687.charge_le_index_sieve
+#print axioms Progressions687.H2_from_index_sieve

@@ -299,4 +299,47 @@ theorem explicit_block_scale :
   simpa only [Real.norm_eq_abs, abs_of_nonneg (show (0 : ℝ) ≤ (blockLength x : ℝ) by positivity),
     abs_of_nonneg (show (0 : ℝ) ≤ (x : ℝ)^2 / L ^ (401/200 : ℝ) by positivity)] using h
 
+noncomputable def stockScale (x : ℕ) : ℝ :=
+  (blockLength x : ℝ) * Real.log (Real.log x) / (Real.log x)^2
+
+noncomputable def classScale (x : ℕ) : ℝ := (blockLength x : ℝ) / Real.log x
+
+private theorem stockScale_pos : ∀ᶠ x : ℕ in atTop, 0 < stockScale x := by
+  filter_upwards [eventually_ge_atTop (4 : ℕ)] with x hx
+  let L := Real.log (x:ℝ)
+  have h4 : Real.log 4 ≤ L := Real.log_le_log (by norm_num)
+    (by exact_mod_cast hx : (4:ℝ) ≤ x)
+  have hlog4 : Real.log 4 = 2 * Real.log 2 := by
+    rw [show (4:ℝ) = 2^2 by norm_num, Real.log_pow]; norm_num
+  have hL : 1 < L := by linarith [Real.log_two_gt_d9]
+  have hL0 : 0 < L := by linarith
+  have hD : 0 < L^(1/400:ℝ) := Real.rpow_pos_of_pos hL0 _
+  have hlogz : 0 < Real.log (cutoff x) := by
+    rw [cutoff, Real.log_div (by positivity) hD.ne', Real.log_rpow hL0]
+    change 0 < L - _ * Real.log L
+    linarith [Real.log_le_sub_one_of_pos hL0]
+  have hz : 0 < cutoff x := by unfold cutoff; positivity
+  have hbound : Real.log (cutoff x) ≤ cutoff x := by
+    linarith [Real.log_le_sub_one_of_pos hz]
+  have hratio : 1 ≤ (cutoff x)^2 / (Real.log (cutoff x))^2 := by
+    apply (le_div_iff₀ (sq_pos_of_pos hlogz)).2
+    simpa using pow_le_pow_left₀ hlogz.le hbound 2
+  have hN : 1 ≤ blockLength x := (Nat.le_floor_iff (by positivity)).2 (by simpa using hratio)
+  have hNr : (0:ℝ) < blockLength x := by exact_mod_cast (show 0 < blockLength x by omega)
+  exact div_pos (mul_pos hNr (Real.log_pos hL)) (sq_pos_of_pos hL0)
+
+/-- At the exact scales in the research note, only the three sieve and
+    prime-distribution inequalities remain. The other inputs are discharged. -/
+theorem log_saving_at_cutoff
+    (stock : ∀ᶠ x : ℕ in atTop, ∀ a, stockScale x / 125 ≤
+      ((survivors ⌊cutoff x⌋₊ (blockLength x) a).card : ℝ))
+    (progression : ∀ᶠ x : ℕ in atTop, ∀ a p, p ∈ x.primesLE \ (⌊cutoff x⌋₊).primesLE →
+      (charge (survivors ⌊cutoff x⌋₊ (blockLength x) a) a p : ℝ) ≤ (5/2 : ℝ) * (classScale x / p))
+    (harmonic : ∀ᶠ x : ℕ in atTop,
+      (∑ p ∈ x.primesLE \ (⌊cutoff x⌋₊).primesLE, classScale x / (p : ℝ)) ≤ 3/1000 * stockScale x) :
+    (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop]
+      (fun x : ℕ => (x : ℝ)^2 / (Real.log x) ^ (401/200 : ℝ)) :=
+  log_saving_of_inputs blockLength (fun x => ⌊cutoff x⌋₊) stockScale classScale
+    stockScale_pos stock progression harmonic explicit_block_scale
+
 end Transfert687
