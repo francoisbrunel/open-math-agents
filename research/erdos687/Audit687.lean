@@ -1,5 +1,6 @@
 import Progressions687
 import Protection687
+import DeuxEstimations687
 
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
@@ -34,3 +35,7 @@ import Protection687
 #print axioms Progressions687.H2_from_index_sieve
 #print axioms Protection687.protect_band
 #print axioms Protection687.protect_band_product
+#print axioms Harmonique687.first_mertens
+#print axioms Harmonique687.band_bound
+#print axioms Harmonique687.harmonic_at_cutoff
+#print axioms DeuxEstimations687.log_saving_of_two_sieves

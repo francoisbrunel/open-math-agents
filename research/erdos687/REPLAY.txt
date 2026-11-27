@@ -21,6 +21,9 @@ Proof sources
   Protection687.lean         For any protected set and any band of moduli,
                             proves additive and multiplicative guarantees
                             for simultaneously avoiding nonzero residues.
+  Harmonique687.lean         Finite von Mangoldt estimate and upper bound on
+                            the reciprocal primes in the exact cutoff band.
+  DeuxEstimations687.lean    Specializes the transfer to two sieve hypotheses.
 
 Lean environment
 
@@ -31,7 +34,7 @@ Lean environment
   0df444a360eaa60ab8c11dca51a86af692955474
 
 From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
-and lake-manifest.json. Run the following from the checkout root. Copy the seven
+and lake-manifest.json. Run the following from the checkout root. Copy the nine
 Lean sources listed above to that root, using the replay names. The other files
 are independent of the Lean build. Quoting below is for a POSIX shell.
 
@@ -44,6 +47,8 @@ are independent of the Lean build. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/Transfert687.olean Transfert687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Progressions687.olean Progressions687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Protection687.olean Protection687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Harmonique687.olean Harmonique687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/DeuxEstimations687.olean DeuxEstimations687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -53,13 +58,23 @@ their hypotheses, even if the audit reports only standard axioms.
 
 Scope and remaining inputs
 
-  The proposed O(x² / (log x)^(401/200)) estimate is one-sided. Its general
-  transfer takes a lower bound on survivors, an upper bound per progression
-  and a bound on a positive prime harmonic sum. The TeX note explains the
-  source theorems and constants. These analytic estimates need formal proofs
-  in the same environment to make the bound unconditional in Lean.
-  log_saving_at_cutoff specializes to exactly the stock and class scales in
-  the note, proving positivity and the conversion of the floored block length.
+  For the proposed O(x² / (log x)^(401/200)) upper bound,
+  log_saving_of_two_sieves requires a lower bound on the number of survivors
+  and a uniform upper bound per progression. The TeX note gives the intended
+  sources and normalizations. Both sieve inequalities still require proofs.
+  The former harmonic hypothesis follows from Harmonique687.band_bound:
+  for 2 <= z <= x, log(z) times the sum of 1/p over z < p <= x is at most
+  log(x) - log(z) + 10. The proof uses the factorial convolution for the
+  von Mangoldt function and Chebyshev's upper bound for its partial sums.
+
+  For the survivor input, the authors' separate Lean 4.34.1 development
+  contains source_root_survivor_lower with an existential positive constant
+  in its own normalization. The passage to cutoff survivors is used in
+  jacobsthal_of_source_root_lower. Neither declaration supplies the numerical
+  coefficient 1/125 in this project's normalization as stated. The current
+  Lean 4.33.1 proofs do not assume or import that separate development.
+  https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/SourceRootCompletion.lean
+  https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/NumberTheory/Jacobsthal/Conclusions/JacobsthalFromRootLower.lean
 
   For the quadratic Iwaniec variant, H1 and H2 are hypotheses with the same
   absolute threshold, separating survivors at x/2 from the sum of the further
