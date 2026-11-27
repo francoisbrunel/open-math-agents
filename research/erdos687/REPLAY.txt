@@ -451,6 +451,18 @@ Almost-covered intervals
   Build Profil687 after Restes687, Accroissements687 after Presque687,
   and Inverse687 after Separation687, before the audit.
 
+  Troncature687.truncate bounds the holes after discarding an entire
+  prime band from a full cover. Its remove_band theorem proves the
+  normalized exceptional count tends to zero throughout that band
+  when the cutoffs have asymptotically equal logarithms and H <= x^8.
+  Theorem general_inverse applies this to the least full cutoff under
+  the classical eventual cubic upper bound. The logarithmic choice in
+  inverse_of_quadratic has exactly the published quadratic bound of
+  Iwaniec as an explicit hypothesis. All these implications passed
+  Lean's standard-axiom audit. The human proof in presque_687.tex
+  gives the strict-endpoint indexing used by Erdos. Build Troncature687
+  after Accroissements687 and Inverse687.
+
 Numerical commands
 
   python -B certificat_183.py

@@ -37,6 +37,26 @@ The hypothesis of Corollary~\ref{cor:separate} is precisely part (iii) of
 the catalog problem. The order of \(Y(x)\) in part (i) remains open.
 Theorem~\ref{th:near} is a lower bound for lengths admitting an almost-cover.
 
+\begin{theorem}\label{th:inverse}
+Let \(f(H)=\min\{y:H\le Y(y)\}\), the least cutoff for a full cover.
+For every positive integer function \(X=X(H)\le f(H)\) with
+\(\log X\sim\log f(H)\), one can choose classes for the primes
+\(p\le X\) leaving \(o(H/\log H)\) exceptions. In particular one may take
+\[
+  X(H)=\left\lfloor\frac{f(H)}{1+\lfloor\log f(H)\rfloor}\right\rfloor
+  =o(f(H)).
+\]
+The conclusion uses the classical upper bound \(Y(y)\ll y^2\)
+of Iwaniec \cite{iwaniec,fgkmt}.
+\end{theorem}
+
+Theorem~\ref{th:inverse} answers the comparison of the two cutoffs on
+page 106 of \cite{erdos} in the sense of a ratio tending to zero.
+For the strict cutoffs and interval endpoint there, apply it at \(H=n-1\).
+The least strict prime cutoff for covering all positive integers below
+\(n\) is \(f(n-1)+1\) for large \(n\). The cutoff \(X(n-1)+1\) leaves
+at most one additional exception when the endpoint \(n\) is included.
+
 \begin{lemma}\label{lem:finite}
 Let \(H=Bx\ge2\) with integers \(B\le W\le Z\le x\), \(W\ge4\).
 Suppose \(Z^2W^5\le H\), \(\log Z\le\frac14\log H\), and \(\log H\le W\).
@@ -110,6 +130,36 @@ The additional multiplier contributes \(O(\log\log x)\) to \(\log H(x)\)
 and tends to infinity.
 \end{proof}
 
+\begin{proof}[Proof of Theorem~\ref{th:inverse}]
+Write \(y=f(H)\), \(x=X(H)\), and \(S=\log y-\log x+10\). Then \(y\to\infty\).
+Eventually \(x\le y\le H\), by \(Y(H)\ge H\), and \(H\le Y(y)\le y^3\le x^8\).
+Fix classes that cover the interval using all primes up to \(y\);
+retain the classes for primes up to \(x\). If \(H\ge256y\), consider
+each removed prime \(p\in(x,y]\). The indices in its progression that
+avoid the smaller classes obey a sieve on \(J=1+\lfloor H/p\rfloor\)
+indices, because \(p\) is invertible modulo every prime at most \(x\).
+Here \(256\le J\le x^8\), and the elementary interval sieve
+\cite{sieve} bounds their number by \(17J/\log J\).
+Since \(H/y\le J\le 2H/p\), summing over the removed primes gives
+\[
+ E(x,H)\le\frac{34H}{\log(H/y)}
+       \sum_{x<p\le y}\frac1p
+ \le\frac{34H S}{\log x\,\log(H/y)}.
+\]
+The last inequality is the elementary first Mertens estimate applied
+to the band \((x,y]\), with its additive error bounded by 10.
+
+Fix \(\varepsilon>0\). On any subsequence with
+\(E(x,H)\ge\varepsilon H/\log H\), the displayed inequality and
+\(\log H\le8\log x\) imply
+\(\log H-\log y\le272 S/\varepsilon\) whenever \(H\ge256y\).
+For \(H<256y\) this logarithmic difference is at most \(\log 256\).
+As \(S=o(\log x)\), every such subsequence therefore has
+\(\log H-\log x=o(\log x)\). The proof of Theorem~\ref{th:near}
+applies along arbitrary sequences \(x\to\infty\) and gives
+\(E(x,H)=o(H/\log H)\), a contradiction on an infinite subsequence.
+\end{proof}
+
 \paragraph{Lean declarations.}
 The finite estimate is \texttt{Restes687.band\_estimate}.
 Theorems~\ref{th:near} and~\ref{cor:separate} are
@@ -117,8 +167,20 @@ Theorems~\ref{th:near} and~\ref{cor:separate} are
 \texttt{Separation687.weak\_separation}. Their statements use the
 catalog definitions on Lean 4.33.1. The axiom reports contain
 \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+\texttt{Troncature687.truncate} and \texttt{Troncature687.remove\_band}
+give the finite and limiting truncation estimates.
+\texttt{Troncature687.general\_inverse} takes the eventual cubic bound
+as an explicit input. \texttt{Troncature687.inverse\_of\_quadratic}
+specializes the result to the stated logarithmic cutoff with Iwaniec's
+quadratic estimate as its explicit Lean hypothesis.
 
 \begin{thebibliography}{9}
+\bibitem{iwaniec} H. Iwaniec, \emph{On the problem of Jacobsthal},
+Demonstratio Mathematica 11 (1978), 225--232.
+\href{https://doi.org/10.1515/dema-1978-0121}{Article}.
+\bibitem{fgkmt} K. Ford, B. Green, S. Konyagin, J. Maynard and T. Tao,
+\emph{Long gaps between primes}, J. Amer. Math. Soc. 31 (2018), 65--105.
+\href{https://arxiv.org/pdf/1412.5029}{Equation (1.3) and the paragraph following it}.
 \bibitem{erdos} P. Erd\H{o}s, \emph{A survey of problems in combinatorial
 number theory}, Annals of Discrete Mathematics 6 (1980), 89--115,
 p.~106. \href{https://combinatorica.hu/~p_erdos/1980-03.pdf}{Original article}.

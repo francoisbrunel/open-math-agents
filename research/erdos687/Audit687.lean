@@ -22,6 +22,7 @@ import Separation687
 import Profil687
 import Accroissements687
 import Inverse687
+import Troncature687
 
 /-! Axiom audit for the Erdős 687 research modules on the catalog toolchain. -/
 #print axioms Couvertures687.witness47
@@ -137,3 +138,7 @@ import Inverse687
 #print axioms SousPuissance687.arbitrary_length_along
 #print axioms Inverse687.full_le_iff
 #print axioms Inverse687.inverse_separation
+#print axioms Troncature687.truncate
+#print axioms Troncature687.remove_band
+#print axioms Troncature687.general_inverse
+#print axioms Troncature687.inverse_of_quadratic

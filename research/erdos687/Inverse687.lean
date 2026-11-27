@@ -32,7 +32,7 @@ theorem full_inf : Tendsto full atTop atTop := by
   by_contra! no
   exact (by omega : ¬H ≤ Erdos687.Y k) (full_le_iff.mp no.le)
 
-private theorem full_small : ∀ᶠ H : ℕ in atTop, full H ≤ H :=
+theorem full_small : ∀ᶠ H : ℕ in atTop, full H ≤ H :=
   eventual_lower.mono (fun _ h => full_le_iff.mpr h)
 
 noncomputable def reduced (x : ℕ) : ℕ := x / factor x
@@ -77,7 +77,7 @@ theorem reduced_loss :
   rw [Real.norm_eq_abs,Real.norm_eq_abs,abs_of_nonneg (sub_nonneg.mpr le),abs_of_nonneg lx.le]
   linarith
 
-private theorem half_log : ∀ᶠ x : ℕ in atTop, Real.log (x:ℝ) ≤ 2*Real.log (reduced x) := by
+theorem half_log : ∀ᶠ x : ℕ in atTop, Real.log (x:ℝ) ≤ 2*Real.log (reduced x) := by
   filter_upwards [reduced_loss.bound (by norm_num : (0:ℝ)<1/2),bounds,eventually_ge_atTop (2:ℕ)]
     with x h hb hx
   have le := Real.log_le_log (by exact_mod_cast hb.1 : (0:ℝ)<reduced x)
