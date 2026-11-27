@@ -133,8 +133,12 @@ def search(path,k,H,s,library,seconds):
     with path.open("a",encoding="utf-8") as dest:
         while b<=end and monotonic()<deadline:
             found=None
-            for slack,extra,iters in [(240,False,650),(150,False,1000),(70,False,1400),
-                                      (220,True,560),(100,True,800),(20,True,1500),(0,True,2800)]:
+            attempts=[(240,False,650),(150,False,1000),(70,False,1400),
+                      (220,True,560),(100,True,800),(20,True,1500),(0,True,2800),
+                      (70,True,5000),(0,True,5000)]
+            for slack,extra,iters in attempts:
+                if iters==5000:
+                    engine.cache.clear()
                 rows=[]
                 last=b+H
                 for skip in range(ps[s]) if extra else [None]:

@@ -557,3 +557,27 @@ Finite upper and lower certificates for Erdős 687(i)
   Wheel863H6890.lean, Wheel863H6890Group*.lean and Wheel863H6890Full.lean.
   Each group has its own axiom report. The numeric records and all phases
   have already been checked by the independent Python integer verifier.
+
+Additional two-sided interval information and the counting threshold
+
+  python -B verifier_majoration_687.py Majorant863_6700.jsonl.gz --length 6700 --cutoff 863
+
+  Independent full replays establish Y(863) <= 6699. There are 2127 core
+  records. Of these, 1522 work for all residues of 19 at once and 605
+  verify each of its 19 choices separately. The explicit phase replay
+  covered all 510510 starts, with least integer margin 1. This stronger
+  bound uses an integer certificate. The grouped Lean generator above
+  currently accepts certificates that do not branch on a residue of 19.
+
+  ReferenceWeeks863.lean checks Weeks's published cover of 3557 positions.
+  Couverture1223_5181.lean checks the improved cover of 5181 positions.
+  Compile either in the same directory as the updated TemoinIntervalle687
+  module with LEAN_PATH=. under Lean 4.33.1. The kernel reports propext
+  and Quot.sound for both. Couverture1223_5181.json contains the residues.
+
+  Distribution687.threshold_comparison and Distribution687.twice_from_moment
+  relate the scale of Y to counts of assignments or a finite central
+  moment. SautsRankin687.arbitrarily_large derives a prime-jump consequence
+  of Rankin's lower bound. GroupesPonderes687.concentration restricts the
+  use of separate weighted capacities for blocks of primes. The short
+  mathematical arguments and the prior moment literature are in compter_687.tex.

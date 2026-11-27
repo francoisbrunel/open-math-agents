@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\title{Counting full covers in Erd\H{o}s problem 687(i)}
+\author{Research notes for the Left to Solve submission}
+\date{November 2026}
+\begin{document}
+\maketitle
+
+For $P=\{p\text{ prime}:p\le x\}$, write $a=(a_p)_{p\in P}$ for a choice of
+one residue modulo each prime. Given a finite set $S$ of integers, let
+$U(a)$ be the set of its elements missed by all the chosen classes. For
+$S=[1,H]$, let $N_x(H)$ count the assignments with $U(a)=\varnothing$.
+The maximum in the problem satisfies $H\le Y(x)$ exactly when $N_x(H)>0$.
+Thus a candidate scale $F(x)$ can be established by proving positivity at
+$H=\lfloor cF(x)\rfloor$ and vanishing at $H=\lceil CF(x)\rceil$ for fixed
+$c,C>0$ and every sufficiently large $x$, provided $F(x)\to\infty$.
+
+\section*{An exact reduction to residue counts}
+Write $\nu_p(T)=|\{n\bmod p:n\in T\}|$. For any integer $t$,
+\[
+ \sum_a(1+t)^{|U(a)|}
+ =\sum_{T\subseteq S}t^{|T|}\prod_{p\in P}\bigl(p-\nu_p(T)\bigr).
+\]
+Indeed the summand on the left expands as
+$\sum_{T\subseteq U(a)}t^{|T|}$. For prescribed $T$, the number of
+assignments missing all its elements is exactly the displayed product,
+since the residues at different primes are chosen independently. Taking
+$t=-1$ and $S=[1,H]$ gives an integer formula for $N_x(H)$. Restricting
+the same double count to $|T|=k$ gives every factorial moment,
+\[
+ \sum_a \binom{|U(a)|}{k}
+ =\sum_{\substack{T\subseteq S\\ |T|=k}}\prod_{p\in P}\bigl(p-\nu_p(T)\bigr).
+\]
+The alternating sum at $t=-1$ must be controlled with its sign.
+The following sufficient upper test instead uses nonnegative terms. For
+positive integers $m,r$, if
+\[
+ \sum_a \bigl||U(a)|-m\bigr|^{2r}<m^{2r},
+\]
+then no assignment covers $S$, since a covering assignment contributes
+$m^{2r}$ by itself. The sums here are over all assignments, without
+probability normalization. These finite identities leave open the estimates
+needed for all large $x$.
+
+The connection between moments of reduced residues and the Jacobsthal
+function has an established literature. See Montgomery and Vaughan,
+\emph{On the distribution of reduced residues} (1986),
+\url{https://annals.math.princeton.edu/1986/123-2/p04}, and Arnaud
+Chadozeau, \emph{Sur la répartition des entiers premiers à un entier
+donné} (2006), especially the discussion of bounds uniform in the order
+of the moment, \url{https://oskar-bordeaux.fr/handle/20.500.12278/25339}.
+
+For the order-of-growth question the upper test can be weakened further.
+If an assignment covers $[1,y]$ with $y\ge H$, each of its $y-H+1$
+subintervals of length $H$ translates to a cover of $[1,H]$. The resulting
+assignments are distinct. Two equal shifts would differ by a multiple
+of every prime up to $x$, hence by a multiple of their product, whereas
+their positive difference is at most $y$, strictly below that product.
+Consequently $Y(x)<H+N_x(H)$. In particular $N_x(H)\le H$ suffices for
+$Y(x)<2H$. The moment test for this conclusion is
+$\sum_a\bigl||U(a)|-m\bigr|^{2r}\le Hm^{2r}$, since each full cover
+contributes exactly $m^{2r}$ to this nonnegative sum.
+Define $T(x)$ as the first $H$ with $N_x(H)\le H$. Since
+$N_x(Y(x)+1)=0$, we have $T(x)\le Y(x)+1$, and the preceding bound
+gives $Y(x)<2T(x)$. Thus an estimate for the growth of this counting
+threshold would give the order of $Y(x)$ itself. The finite formulas do
+not yet determine the growth of $T(x)$.
+
+\section*{Two limits of weighted interval estimates}
+Suppose small-prime classes have already been fixed. Put nonnegative
+weights on the remaining positions, with total $W>0$. For a remaining
+prime $p$, at least one class has weight at least $W/p$. Therefore a
+certificate in which the sum of individual prime capacities is strictly
+less than $W$ requires $\sum_p1/p<1$. With a fixed small-prime cutoff,
+this condition eventually fails by divergence of the prime reciprocal sum.
+
+If the remaining primes are grouped in blocks $P_j$, put
+$v_j=\prod_{p\in P_j}(1-1/p)$. Independent uniform choices inside one
+block remove expected weight $W(1-v_j)$, so its maximum removal has
+at least that size. A certificate obtained by summing the block maxima
+therefore requires $\sum_j(1-v_j)<1$. In the regime
+$V=\prod_jv_j\le e^{-2}$ this forces one block $i$ to satisfy
+\[
+ v_i<\tfrac12,\qquad \sum_{j\ne i}(1-v_j)<2V.
+\]
+If all $v_j\ge1/2$, the inequality $e^{-2(1-v_j)}\le v_j$ gives
+$V>e^{-2}$, a contradiction. Choose $i$ with $v_i<1/2$. The sum of
+the other deficits is less than $v_i$, so
+$\prod_{j\ne i}v_j\ge1-\sum_{j\ne i}(1-v_j)>1/2$. It follows that
+$v_i<2V$. This restricts a particular method of proving upper bounds.
+
+\section*{A consequence for prime increments}
+Write $J(p)=Y(p)-Y(p-1)$. Since only a prime cutoff introduces a new
+class, $Y(x)-Y(z)=\sum_{z<p\le x}J(p)$. The classical Rankin lower
+bound gives $Y(x)\gg x\log x\log_3x/(\log_2x)^2$, where
+$\log_j$ is the $j$-fold iterated logarithm. Using
+$\pi(x)\ll x/\log x$ in the sum shows that, for every $C>0$, there
+are arbitrarily large primes $p$ for which
+\[
+ J(p)>C\left(\frac{\log p}{\log\log p}\right)^2.
+\]
+Indeed, for any fixed $z$, eventually $2Y(z)\le Y(x)$. Some prime
+between $z$ and $x$ then has jump at least $Y(x)/(2\pi(x))$.
+The factor $\log_3x$ tends to infinity and $\log t/\log\log t$
+is increasing for all sufficiently large $t$. This corollary gives an
+unbounded sequence of jumps. Determining the order of their sum remains
+the original question.
+
+The Lean declarations are in \texttt{Distribution687}, \texttt{LimitePonderation687},
+\texttt{GroupesPonderes687} and \texttt{SautsRankin687}. The Rankin input is
+\texttt{BorneRankin687.rankin\_lower}. The underlying problem is recorded
+at \url{https://www.erdosproblems.com/687}.
+\end{document}
