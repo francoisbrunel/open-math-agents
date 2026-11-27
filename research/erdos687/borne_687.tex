@@ -1,0 +1,269 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,hyperref}
+\usepackage[margin=27mm]{geometry}
+\newtheorem{proposition}{Proposition}
+\title{Une conséquence de la borne quantitative de crible pour le problème d'Erdős 687}
+\author{Note de travail de la session de recherche de francoisbrunel avec Codex}
+\date{26 novembre 2026}
+\begin{document}
+\maketitle
+
+Pour chaque premier $p\le x$, on choisit une classe $a_p\bmod p$.
+On note $Y(x)$ la plus grande longueur d'un intervalle $[1,y]$ que l'union
+des classes peut recouvrir. L'objet de cette note est une borne supérieure.
+L'ordre de grandeur demandé dans la partie (i) reste à déterminer.
+
+\begin{proposition}
+Le théorème 1.2 de \cite{survivors} entraîne l'existence de constantes
+absolues $\eta>0$ et $C>0$ telles que, pour tout $x$ suffisamment grand,
+\[
+                  Y(x) \le C\,\frac{x^2}{(\log x)^{2+\eta}} .
+\]
+Les constantes de la preuve du théorème permettent de prendre $\eta=1/200$.
+\end{proposition}
+
+\begin{proof}
+\emph{Entrée quantitative.}
+Écrivons $N(z)=\lfloor z^2/(\log z)^2\rfloor$. Le théorème 1.2 de
+\cite{survivors} et la formule de Mertens donnent, pour une constante
+absolue $a>0$, pour tout $z$ suffisamment grand et pour tous les choix de
+classes aux premiers $r\le z$,
+\[
+ |S| \ge a N(z) \frac{\log\log z}{(\log z)^2},
+ \qquad S=\{1\le n\le N(z): n\not\equiv a_r\bmod r
+                                      \ \text{pour tout premier }r\le z\}.
+\]
+En effet, la borne du théorème est $cN(z)V_0/B^2$, avec
+$w=(\log z)/(\log\log z)^2$, $B=(\log z)/\log w$ et
+$V_0=\prod_{r\le w}(1-1/r)\sim e^{-\gamma}/\log w$.
+Ainsi $V_0/B^2\asymp(\log\log z)/(\log z)^2$.
+
+\emph{Choix de l'échelle.}
+Posons $L=\log x$, $z=x/L^\delta$ et $N=N(z)$, où $0<\delta\le 1$
+sera fixé à la fin. Uniformément pour ces $\delta$, on a
+$L-\log L\le\log z\le L$. Il existe donc $a_0>0$ absolue telle que
+\begin{equation}\label{eq:stock}
+                 |S| \ge a_0 N\frac{\log L}{L^2}.
+\end{equation}
+
+\emph{Contribution d'un premier supplémentaire.}
+Pour $z<p\le x$, les entiers de $[1,N]$ congrus à $a_p\bmod p$
+forment une progression de raison $p$, dont les indices forment un
+intervalle de $M$ entiers, avec $|M-N/p|\le1$. Pour $x$ assez grand,
+$x^{1/2}\le M\le x$ uniformément en $p$ et $\delta$.
+En effet $N/x\gg x/L^4$ et $N/z\le z/(\log z)^2$.
+Pour chaque premier $r\le M^{1/4}$, on a $r\le z<p$ et $p$ est
+inversible modulo $r$. La condition $n\not\equiv a_r\bmod r$ exclut
+donc une classe des indices modulo $r$.
+Le crible linéaire supérieur appliqué à ces $M$ indices au paramètre
+$u=4$ donne au plus $C_1 M/\log M$ survivants, uniformément dans
+les classes. Pour retrouver la formulation par divisibilité, on utilise
+le théorème chinois sur les classes d'indices puis on translate
+l'intervalle. Voir \cite[formule (1)]{granville}. En particulier,
+avec $C_2$ absolue,
+\begin{equation}\label{eq:class}
+        |\{n\in S:n\equiv a_p\bmod p\}|
+                      \le C_2\,\frac{N}{pL}.
+\end{equation}
+
+\emph{Somme sur les premiers.}
+Le majorant de Tchebychev $\pi(t)\ll t/\log t$ implique
+$\sum_{u<p\le 2u}p^{-1}\ll1/\log u$.
+On découpe $(z,x]$ en au plus $1+\log(x/z)/\log 2$ intervalles
+de ce type, le dernier pouvant être tronqué. Comme
+$\log(x/z)=\delta\log L$ et $\log z\ge L/2$, on obtient, avec une
+constante absolue indépendante de $\delta$,
+\begin{equation}\label{eq:harmonic}
+            \sum_{z<p\le x}\frac1p \ll \frac{1+\delta\log L}{L}.
+\end{equation}
+Par la borne de l'union, \eqref{eq:class} et \eqref{eq:harmonic},
+les classes supplémentaires retirent de $S$ au plus
+$D N(1+\delta\log L)/L^2$ entiers, avec $D>0$ absolue.
+Prenons $\delta=\min(1/2,a_0/(4D))$. Dès que
+$D\le(a_0/4)\log L$, elles retirent au plus la moitié du minorant
+\eqref{eq:stock}. Il reste un entier dans $[1,N]$, quels que soient
+les restes initiaux. Par restriction de tout intervalle recouvert,
+$Y(x)<N$. Or $N\asymp x^2/L^{2+2\delta}$. On conclut avec
+$\eta=2\delta$.
+\end{proof}
+
+\paragraph{Vérification de l'échelle par une deuxième sommation.}
+Pour $\delta$ fixé, la version du théorème des nombres premiers avec
+reste classique, suivie d'une sommation partielle, donne
+\[
+ \sum_{x/L^\delta<p\le x} \frac1p
+   = \log\!\left(\frac{L}{L-\delta\log L}\right)+o(1/L)
+   \sim \delta\,\frac{\log L}{L}.
+\]
+Cette vérification retrouve le facteur $\delta$ indispensable dans la
+comparaison des constantes.
+
+\paragraph{Justification du choix explicite $\eta=1/200$.}
+La proposition « Positive reference margin » de \cite{survivors}
+donne $\lim B^2 P_{\rm e}/e^\gamma>0.02$ à la racine. On peut donc
+utiliser $c_L=0.02 e^\gamma$ dans la comparaison de la section finale
+de cette prépublication. Elle établit $|S|\ge(c_L/2)NV_0/B^2$.
+Comme $\log w\sim\log L$ et $\log z\sim L$, ceci donne, uniformément
+dans les classes pour $\delta$ fixé,
+\[
+   |S|\ge (0.01-o(1))N\log L/L^2 .
+\]
+La majoration de progression de Banks, Ford et Tao
+\cite[section 2.3]{bft} s'applique déjà après le crible aux premiers
+$r\le\sqrt{N/\log N}$, tous inférieurs à $z$. Pour chaque premier
+$z<p\le x$ elle donne au plus $2(N/p)/\log(2N/p)$ entiers dans la
+classe considérée, en utilisant l'intervalle $[0,N]$ qui contient
+$[1,N]$. Les classes aux petits premiers sont arbitraires. Ici
+$\log(2N/p)=L+O(\log L)$ uniformément en $p$, ce qui majore la somme
+des pertes par $(2\delta+o(1))N\log L/L^2$. La même constante suit
+du crible linéaire supérieur au paramètre $2$ sur les indices de
+chaque progression, par $F(2)=e^\gamma$ et la formule de Mertens.
+Avec $\delta=1/400$ le coefficient des pertes tend au plus vers
+$0.005$, strictement inférieur à $0.01$. La conclusion suit avec
+$2\delta=1/200$. La constante multiplicative et le seuil en $x$ ne
+sont pas explicités.
+
+\paragraph{Une limite de la majoration par progression.}
+Pour un entier $M$ et $t$ premiers distincts $p_1,\ldots,p_t>z\ge M$,
+posons $u=t\pi(M)<M$. Dans l'intervalle $[1,M\max_i p_i]$, il existe
+des classes aux premiers $r\le z$ qui épargnent simultanément tous
+les éléments de
+\[
+ T=\{p_iq:\ 1\le i\le t,\quad q\text{ premier},\quad u<q\le M\}.
+\]
+En effet, pour $r\le u$, prescrire la classe $0$ épargne tout $T$.
+Pour $u<r\le z$, on a $|T|\le t\pi(M)=u<r$. Il existe donc une classe
+modulo $r$ évitant $T$. L'unicité de la factorisation et $p_i>M$
+rendent les $t$ sous-ensembles disjoints. En prenant ensuite la classe
+$0$ pour chacun des $p_i$, ils retirent ensemble au moins
+$t(\pi(M)-\pi(u))$ survivants. Si $t=o(\log M)$, alors $u=o(M)$
+et $\pi(u)=o(\pi(M))$, par monotonie et le théorème des nombres
+premiers. Lorsque les $p_i$ sont de tailles comparables, cette perte
+est du même ordre $tM/\log M$ que la somme des majorants individuels.
+Ce constat s'applique aussi à chacune des classes d'un groupe fixe,
+avec le même choix de classes pour tous les petits premiers.
+
+\paragraph{Pertes simultanées sur toute la bande.}
+Écrivons $D(N;z,x)$ pour le maximum de $|S_z\setminus S_x|$ sur les choix
+de classes, où $S_t$ est l'ensemble qui échappe aux premiers jusqu'à $t$
+dans $[1,N]$. Pour $N=N(z)$, $z=x/L^\delta$ et $\delta>0$ fixé, posons
+\[
+ A=\frac{N}{L}\sum_{z<p\le x}\frac1p
+   \sim \delta N\frac{\log L}{L^2}.
+\]
+Alors $(1-o(1))A\le D(N;z,x)\le(2+o(1))A$. La majoration est celle
+déjà établie par le crible supérieur. Pour la minoration, prenons
+$U=N/(xL)$, $V=N/z$ et protégeons les produits $n=pq\le N$ où
+$z<p\le x$ et $U<q\le N/p$ sont premiers. Ces produits sont tous
+distincts car $q\le V<z$. Le théorème des nombres premiers et
+$U\le(N/p)/L$ donnent
+\[
+ |T|=\sum_{z<p\le x}\bigl(\pi(N/p)-\pi(U)\bigr)=(1+o(1))A,
+\]
+puisque $\log(N/p)\sim L$ uniformément. Jusqu'à $z$, fixons le reste
+$0$ pour les premiers en dehors de $(U,V]$. Aucun ne divise un
+élément de $T$. Pour chaque premier $r$ dans $(U,V]$, choisissons
+indépendamment un reste uniforme \emph{non nul}. Un $n\in T$ survit
+avec probabilité au moins
+\[
+       \prod_{U<r\le V}\left(1-\frac1{r-1}\right)=1-o(1).
+\]
+En effet, $\log U\sim L$ et $V/U=L^{1+\delta}$, et la somme des
+$1/(r-1)$ sur cette bande est $O(\log L/L)$. Par moyenne, un choix
+épargne au moins $(1-o(1))|T|$ de ces produits. Attribuer ensuite
+le reste $0$ à tous les $p$ de $(z,x]$ les retire ensemble.
+
+Pour $z=x^\beta$ avec $1/2<\beta<1$ fixé, le même argument donne
+\[
+              D(N;z,x)\asymp_\beta N/\log x .
+\]
+En effet, $\log U\sim(2\beta-1)L$, $\log V\sim\beta L$, et le
+produit de survie tend vers $(2\beta-1)/\beta>0$ par la formule de
+Mertens (remplacer $1/r$ par $1/(r-1)$ coûte $O(1/U)$).
+L'estimation uniforme $\log(N/p)\asymp_\beta L$ et
+$\sum_{z<p\le x}1/p\to\log(1/\beta)>0$ suffisent pour le comptage.
+La majoration par progression fournit l'autre inégalité. Ainsi les
+pertes maximales peuvent réellement dépasser d'un facteur divergent le
+minorant garanti par le théorème 1.2 lorsque la bande a cette largeur.
+Les configurations réalisant les deux extrêmes peuvent être différentes.
+Une estimation reliant la perte à l'effectif initial pourrait encore
+améliorer le résultat.
+
+\paragraph{Quand les petits premiers partagent un représentant proche.}
+Soient $a>0$, $K>0$, $C>0$ fixés et
+$H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
+infinité de $x$ des classes recouvrant $[1,H]$ et un entier $b$ avec
+$|b|\le CH$ tel que $a_p\equiv b\bmod p$ pour tout premier
+$p\le x/(\log x)^K$. Alors
+\[
+                 a\le \frac{K}{\sqrt e-1}.
+\]
+En effet, comptons les $n\in[1,H]$ tels que $|n-b|$ soit un premier
+supérieur à $x$. Leur nombre est $(1+o(1))H/\log x$, uniformément pour
+ces $b$. Cela suit du théorème des nombres premiers aux extrémités
+des deux intervalles de distances positives, toutes comprises entre
+$0$ et $(C+1)H$. Plus précisément $\pi(t)=t/\log H+o(H/\log H)$
+uniformément sur cette plage, en séparant $t\le H/(\log H)^2$.
+Les distances au plus $x$ coûtent au plus $2\pi(x)=o(H/\log H)$.
+
+Aucun petit premier dans l'hypothèse ne couvre un tel $n$. Pour
+$x/(\log x)^K<p\le x$, la progression $n\equiv a_p\bmod p$
+a $M=H/p+O(1)$ termes. Sur ses indices, les conditions
+$r\nmid n-b$ pour $r\le\sqrt M$ interdisent chacune une classe,
+puisque $r<p$. Elles sont nécessaires pour tout entier compté.
+Le crible supérieur au paramètre $2$ donne au plus
+$(2+o(1))H/[p\log(H/p)]$ tels entiers. L'erreur est uniforme puisque
+$M\ge (1+o(1))(\log x)^a\to\infty$. Une sommation partielle du théorème
+des nombres premiers donne
+\[
+ \sum_{x/L^K<p\le x}\frac1{p\log(H/p)}
+ \sim \int_{x/L^K}^x\frac{dt}{t\log t\log(H/t)}
+ \sim \frac{\log(1+K/a)}{L}.
+\]
+La dernière équivalence utilise $\log t\sim L$ et la substitution
+$v=\log(H/t)$. La couverture exige donc
+$1\le 2\log(1+K/a)$, ce qui prouve l'affirmation.
+En particulier, une construction de couverture à l'échelle
+$x(\log x)^{1+o(1)}$ ne peut fixer tous ces petits restes à zéro
+avec $K<\sqrt e-1$. On applique le résultat sur un sous-intervalle
+$[1,\lfloor x(\log x)^a\rfloor]$ avec un $a<1$ fixé suffisamment
+proche de $1$, en gardant $b=0$.
+
+\paragraph{Portée.}
+La substitution $k=\pi(x)$ dans le théorème 1.1 de \cite{survivors}
+donne directement $Y(x)\ll x^2/[(\log x)^2(\log\log x)^2]$.
+La proposition utilise aussi le comptage de survivants du théorème 1.2
+et la répartition des premiers entre $z$ et $x$. Elle améliore
+asymptotiquement cette conséquence directe. L'idée de sommer les
+pertes classe par classe figure dans \cite[section 2.3]{bft}.
+La note n'établit
+ni une priorité bibliographique ni un minorant comparable.
+Les constructions de Ford et al. \cite{fgkmt} et du crible incliné
+\cite{tilted} demeurent d'une échelle différente. La seconde établit
+$Y(x)\gg x\log x/\log_3 x$, où $\log_j$ désigne le logarithme itéré
+$j$ fois. L'argument de la présente note n'a pas été vérifié en Lean.
+
+\begin{thebibliography}{9}
+\bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's
+function}, prépublication, 25 septembre 2026, théorèmes 1.1 et 1.2.
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026/paper.pdf}{Manuscrit et preuve.}
+\bibitem{granville} A. Granville, \emph{Sieving intervals and Siegel zeros},
+Acta Arithmetica 205 (2022), 1--19, formule (1), crible
+linéaire de Jurkat et Richert.
+\href{https://arxiv.org/abs/2010.01211}{Texte.}
+\bibitem{bft} W. Banks, K. Ford et T. Tao, \emph{Large prime gaps and
+probabilistic models}, section 2.3.
+\href{https://ford126.web.illinois.edu/wwwpapers/gaps-model.pdf}{Texte.}
+\bibitem{fgkmt} K. Ford, B. Green, S. Konyagin, J. Maynard et T. Tao,
+\emph{Long gaps between primes}, Journal of the American Mathematical
+Society 31 (2018), 65--105.
+\href{https://arxiv.org/abs/1412.5029}{Texte.}
+\bibitem{tilted} GPT-5.6 Sol, manuscrit diffusé par DottedCalculator,
+\emph{A tilted residue-class construction for long prime-free intervals},
+25 août 2026, théorème (1.2).
+\href{https://github.com/DottedCalculator/ai-math/blob/main/Erdos_4_GPT_5.6_Sol.pdf}{Manuscrit.}
+\href{https://github.com/plby/lean-proofs/blob/main/src/latest/ErdosProblems/Erdos4Tilted.lean}{Formalisation de B. Alexeev.}
+\end{thebibliography}
+\end{document}
