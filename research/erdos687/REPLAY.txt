@@ -380,7 +380,49 @@ Extending an optimal cover
   Any iteration seeking a power saving in x needs additional information
   on the surviving points or on intersections of the deleted classes.
 
-Reproducible numerical checks
+Unconditional lower bounds and the near-cover criterion (Lean 4.33.1)
+
+  Croissance687.superlinear proves that Y(x)/x tends to infinity using
+  Mathlib and the catalog definition. For every fixed B >= 1 it constructs
+  an actual cover of [1,Bt] by primes <= 128t for all sufficiently large t.
+  The old zero classes leave only primes and integers with all prime factors
+  below a fixed cutoff. Greedy classes on a finite set of reserved primes
+  reduce the remaining count. Chebyshev bounds supply distinct new primes
+  for the remaining positions. The stronger Ford-Green-Konyagin-Maynard-Tao
+  lower bound is known (arXiv:1412.5029). No novelty of the asymptotic claim
+  or resolution of the open order-of-growth question is asserted.
+
+  Fenetres687.near_cover_lower applies to every interval length H and
+  every choice of classes through z <= x. If m points survive and r
+  additional primes are available, then floor(H/(1+floor(m/(r+1)))) <= Y(x).
+  Partage687.growth_outside_six certifies the two-ended gain of 28 outside
+  six residue classes mod 210. Masse687 bounds deletion by reciprocal
+  mass. Pertes687 proves the simultaneous semiprime loss estimate.
+
+  BorneRankin687.rankin_lower applies the finite criterion to the first
+  stage of the published OpenAI long-gap construction. It proves
+      x log(x) log_3(x) / (log_2(x))^2 = O(Y(x)).
+  The log_j notation denotes j iterated natural logarithms. This uses
+  only the bounded-prime near-cover; the later construction of composite
+  translates can use primes above the cutoff and is not used here.
+  The full derivation is unconditional. This classical Rankin rate is
+  weaker by a factor log_2(x) than the published FGKMT bound.
+
+  Clone https://github.com/openai/LongGapsBetweenPrimes at revision
+  03a1190d0bc5502d9f54eeb60ad3e45e22b0df0b, then run
+      python -B rejouer_rankin_687.py PATH/LongGapsBetweenPrimes.lean RankinSource687.lean
+  The extractor verifies the SHA256 and preserves the text of the 73
+  upstream declarations used in the proof, including their proofs. The
+  reduced import list is for the generated module on the catalog toolchain.
+  Compile RankinSource687, then BorneRankin687 after Fenetres687 and
+  Croissance687. OpenAI's source is released under Apache-2.0.
+
+  After building the preceding modules, compile Partage687, Masse687,
+  Pertes687, Croissance687, Fenetres687 and BorneRankin687 before Audit687. The main
+  conclusions were checked as declarations in an integrated Lean session;
+  their axiom lists contain propext, Classical.choice and Quot.sound.
+
+Numerical commands
 
   python -B certificat_183.py
   python -B recherche_687.py 71 --holes 1

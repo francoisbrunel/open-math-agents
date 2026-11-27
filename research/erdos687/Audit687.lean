@@ -12,6 +12,12 @@ import CapaciteParite687
 import SurvieTotale687
 import JacobsthalExtension687
 import Bords687
+import Partage687
+import Masse687
+import Pertes687
+import Croissance687
+import Fenetres687
+import BorneRankin687
 
 /-! Axiom audit for the Erdős 687 research modules on the catalog toolchain. -/
 #print axioms Couvertures687.witness47
@@ -98,3 +104,17 @@ import Bords687
 #print axioms CapaciteParite687.class_iff_tuple
 #print axioms Bords687.growth_if_not_divisible_by_three
 #print axioms Bords687.growth_outside_nine
+#print axioms Bords687.extend_both
+#print axioms Partage687.growth_outside_six
+#print axioms Masse687.weighted_survival
+#print axioms Masse687.necessary_mass
+#print axioms Pertes687.semiprime_loss
+#print axioms Croissance687.thin
+#print axioms Croissance687.small_density
+#print axioms Croissance687.smooth_or_prime
+#print axioms Croissance687.prime_supply
+#print axioms Croissance687.fixed_multiplier
+#print axioms Croissance687.superlinear
+#print axioms Fenetres687.near_cover_lower
+#print axioms Fenetres687.length_lt
+#print axioms BorneRankin687.rankin_lower

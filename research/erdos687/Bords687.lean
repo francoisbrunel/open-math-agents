@@ -7,6 +7,77 @@ open Extension687 Transfert687 Progressions687
 
 def rightResidue (y : ℕ) (a : ℕ → ℕ) (p : ℕ) := a p+(p-1)*(y+1)
 
+theorem finish_singletons {x z N : ℕ} (hzx : z ≤ x) (a : ℕ → ℕ)
+    (cap : (survivors z N a).card ≤ (x.primesLE \ z.primesLE).card) :
+    Green46.IsCoveredByResidues x N := by
+  classical
+  obtain ⟨r,hr⟩ := completes_of_card cap
+  let b (p : ℕ) := if p ≤ z then a p else r p
+  refine ⟨b,?_⟩
+  intro n hn
+  by_cases live : n ∈ survivors z N a
+  · obtain ⟨p,hp,hit⟩ := hr n live
+    obtain ⟨hin,hout⟩ := Finset.mem_sdiff.mp hp
+    obtain ⟨le,prime⟩ := Nat.mem_primesLE.mp hin
+    have big : ¬p ≤ z := fun h => hout (Nat.mem_primesLE.mpr ⟨h,prime⟩)
+    exact ⟨p,le,prime,by simpa [b,big,Nat.ModEq] using hit⟩
+  · have cl : ¬∀ p ∈ z.primesLE, n%p ≠ a p%p := fun h => live (Finset.mem_filter.mpr ⟨hn,h⟩)
+    push Not at cl
+    obtain ⟨p,hp,hit⟩ := cl
+    obtain ⟨le,prime⟩ := Nat.mem_primesLE.mp hp
+    exact ⟨p,le.trans hzx,prime,by simpa [b,le,Nat.ModEq] using hit⟩
+
+def leftResidue (L : ℕ) (a : ℕ → ℕ) (p : ℕ) := a p+(L+(p-1))
+
+/-- The fresh primes can be shared between any number of positions added
+    on the left and right. Both counts use the same old cover. -/
+theorem extend_both {x z y L R : ℕ} (hzx : z ≤ x) (a : ℕ → ℕ)
+    (ha : ∀ n ∈ Finset.Icc 1 y, ∃ p ≤ z, p.Prime ∧ n ≡ a p [MOD p])
+    (cap : (siftedIndices z L (leftResidue L a)).card +
+      (siftedIndices z R (rightResidue y a)).card ≤ (x.primesLE \ z.primesLE).card) :
+    Green46.IsCoveredByResidues x (y+(L+R)) := by
+  classical
+  let v (p : ℕ) := a p+L
+  let S := survivors z (y+(L+R)) v
+  let A := siftedIndices z L (leftResidue L a)
+  let B := siftedIndices z R (rightResidue y a)
+  let t := L+y+1
+  have incl : S ⊆ A.image (fun i => i+1) ∪ B.image (fun i => i+t) := by
+    intro n hn
+    obtain ⟨hi,avoid⟩ := Finset.mem_filter.mp hn
+    obtain ⟨lo,up⟩ := Finset.mem_Icc.mp hi
+    by_cases left : n ≤ L
+    · apply Finset.mem_union_left
+      refine Finset.mem_image.mpr ⟨n-1,Finset.mem_filter.mpr ⟨Finset.mem_range.mpr (by omega),?_⟩,
+        by omega⟩
+      intro p hp clash
+      have pp := (Nat.mem_primesLE.mp hp).2.pos
+      have e : leftResidue L a p+1 = v p+p := by dsimp [leftResidue,v]; omega
+      have h := (show n-1 ≡ leftResidue L a p [MOD p] from clash).add_right 1
+      rw [Nat.sub_add_cancel lo,e] at h
+      exact avoid p hp (by simpa [Nat.ModEq] using h)
+    · by_cases mid : n ≤ L+y
+      · obtain ⟨p,le,prime,h⟩ := ha (n-L) (Finset.mem_Icc.mpr ⟨by omega,by omega⟩)
+        exact False.elim (avoid p (Nat.mem_primesLE.mpr ⟨le,prime⟩)
+          (by simpa only [Nat.ModEq,Nat.sub_add_cancel (by omega : L ≤ n),v] using h.add_right L))
+      · apply Finset.mem_union_right
+        have nt : n-t+t=n := by dsimp [t]; omega
+        refine Finset.mem_image.mpr ⟨n-t,Finset.mem_filter.mpr ⟨Finset.mem_range.mpr
+          (by dsimp [t]; omega),?_⟩,nt⟩
+        intro p hp clash
+        have pp := (Nat.mem_primesLE.mp hp).2.pos
+        have e : rightResidue y a p+t = v p+p*(y+1) := calc
+          _ = v p + ((p-1)*(y+1)+(y+1)) := by dsimp [rightResidue,t,v]; omega
+          _ = _ := by rw [← Nat.succ_mul,Nat.succ_eq_add_one,Nat.sub_add_cancel pp]
+        have h := (show n-t ≡ rightResidue y a p [MOD p] from clash).add_right t
+        rw [nt,e] at h
+        exact avoid p hp (by simpa [Nat.ModEq] using h)
+  apply finish_singletons hzx v
+  calc S.card ≤ _ := Finset.card_le_card incl
+       _ ≤ (A.image (fun i => i+1)).card + (B.image (fun i => i+t)).card := Finset.card_union_le _ _
+       _ ≤ A.card+B.card := Nat.add_le_add Finset.card_image_le Finset.card_image_le
+       _ ≤ _ := cap
+
 theorem extend_given_cover_right {x z y J : ℕ} (hzx : z ≤ x) (a : ℕ → ℕ)
     (ha : ∀ n ∈ Finset.Icc 1 y, ∃ p ≤ z, p.Prime ∧ n ≡ a p [MOD p])
     (close : Completes (siftedIndices z J (rightResidue y a)) (x.primesLE \ z.primesLE)) :
