@@ -1,4 +1,5 @@
 import Progressions687
+import Protection687
 
 #print axioms Couvertures687.witness47
 #print axioms Couvertures687.witness47_small
@@ -31,3 +32,5 @@ import Progressions687
 #print axioms Transfert687.log_saving_at_cutoff
 #print axioms Progressions687.charge_le_index_sieve
 #print axioms Progressions687.H2_from_index_sieve
+#print axioms Protection687.protect_band
+#print axioms Protection687.protect_band_product

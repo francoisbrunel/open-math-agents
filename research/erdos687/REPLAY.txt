@@ -18,6 +18,9 @@ Proof sources
                             Y(73) >= 189, parity, counting and analytic transfer.
   Progressions687.lean       Uses the Chinese remainder theorem to embed the
                             survivors of one progression in a sifted interval.
+  Protection687.lean         For any protected set and any band of moduli,
+                            proves additive and multiplicative guarantees
+                            for simultaneously avoiding nonzero residues.
 
 Lean environment
 
@@ -28,7 +31,7 @@ Lean environment
   0df444a360eaa60ab8c11dca51a86af692955474
 
 From a fresh checkout at that formal-conjectures revision, use its lean-toolchain
-and lake-manifest.json. Run the following from the checkout root. Copy the six
+and lake-manifest.json. Run the following from the checkout root. Copy the seven
 Lean sources listed above to that root, using the replay names. The other files
 are independent of the Lean build. Quoting below is for a POSIX shell.
 
@@ -40,6 +43,7 @@ are independent of the Lean build. Quoting below is for a POSIX shell.
   lake env lean -j 1 -o .lake/build/lib/lean/ReductionIwaniec.olean ReductionIwaniec.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Transfert687.olean Transfert687.lean
   lake env lean -j 1 -o .lake/build/lib/lean/Progressions687.olean Progressions687.lean
+  lake env lean -j 1 -o .lake/build/lib/lean/Protection687.olean Protection687.lean
   lake env lean Audit687.lean
 
 Audit687.lean should be copied to the same directory before the final command.
@@ -77,6 +81,9 @@ Scope and remaining inputs
   obstruction and common-representative obstruction are documented in the
   report and TeX note. The Lean sources give the finite or conditional pieces
   explicitly named there; the prose arguments retain their own proof status.
+  Protection687.protect_band_product proves the finite survival-factor
+  product underlying the simultaneous semiprime argument. The choice of
+  semiprimes and the prime-number asymptotics in the TeX note are separate.
 
 Reproducible numerical checks
 
