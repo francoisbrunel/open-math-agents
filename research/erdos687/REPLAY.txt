@@ -529,3 +529,31 @@ Finite upper and lower certificates for Erdős 687(i)
   Preuve541 and Preuve1223. Their cover theorems exhibit a common residue
   and a prime within the cutoff at each position. They certify the lower
   bounds Y(541) >= 2057 and Y(1223) >= 5177.
+
+33 checked finite lower bounds and the weighted upper certificate
+
+  Certificats33_687.zip contains the exact 33 Lean modules used to
+  check the entries of ExtensionsSemences687.json. Its results.tsv
+  lists the cutoffs, lengths, SHA-256 source hashes and axiom reports.
+  Extract the archive in one directory, then run Lean 4.33.1 there:
+
+  lean -o TemoinIntervalle687.olean TemoinIntervalle687.lean
+  LEAN_PATH=. lean Segments687K1070.lean
+
+  The second command checks the largest cutoff, Y(8597) >= 16369.
+  Run each remaining Cover687K*.lean and Segments687K*.lean similarly.
+  Every certificate returned only propext and Quot.sound. The prime
+  interpretation of Window is DiviseurTemoin687.prime_cover.
+
+  VerificationPoids687.lean contains the Std-only integer checker
+  and interval assembly. PolynomePoids687.lean proves its packed
+  arithmetic properties, and NoyauPondere687.lean gives the implication
+  from a passing check to an obstruction for any allowed residue choices.
+  Reproduce groups of concrete integer checks with:
+
+  python -B rejouer_majoration_lean_687.py Majorant863_6890.jsonl.gz DEST --full --group-size 8
+
+  Compile VerificationPoids687.lean, followed by the generated
+  Wheel863H6890.lean, Wheel863H6890Group*.lean and Wheel863H6890Full.lean.
+  Each group has its own axiom report. The numeric records and all phases
+  have already been checked by the independent Python integer verifier.

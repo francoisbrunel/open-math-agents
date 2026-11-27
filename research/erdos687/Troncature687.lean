@@ -228,4 +228,20 @@ theorem inverse_of_quadratic (quad : (fun y : ℕ => (Erdos687.Y y:ℝ)) =O[atTo
     (Inverse687.reduced_inf.comp Inverse687.full_inf) (Eventually.of_forall small) gap
   exact ⟨a,ha,Inverse687.weak_negligible⟩
 
+/-- Convert the native logarithmic improvement to the hypothesis of the
+    inverse comparison, using the catalog's exact definition of Y. -/
+theorem quadratic_of_saving (saving : ∃ η : ℝ, 0 < η ∧ (fun x : ℕ => (Erdos687.Y x:ℝ)) =O[atTop]
+    (fun x : ℕ => (x:ℝ)^2/(Real.log x)^(2+η))) :
+    (fun x : ℕ => (Erdos687.Y x:ℝ)) =O[atTop] (fun x : ℕ => (x:ℝ)^2) := by
+  obtain ⟨η,hη,bound⟩ := saving
+  apply bound.trans (Asymptotics.IsBigO.of_bound 1 ?_)
+  have logs := Real.tendsto_log_atTop.comp
+    (tendsto_natCast_atTop_atTop : Tendsto (fun x : ℕ => (x:ℝ)) atTop atTop)
+  filter_upwards [logs.eventually_ge_atTop 1] with x h
+  change 1 ≤ Real.log (x:ℝ) at h
+  have den := Real.one_le_rpow h (by linarith : 0 ≤ 2+η)
+  have nn := div_nonneg (sq_nonneg (x:ℝ)) (zero_le_one.trans den)
+  simpa only [Real.norm_eq_abs,abs_of_nonneg nn,abs_of_nonneg (sq_nonneg (x:ℝ)),one_mul]
+    using (div_le_self (sq_nonneg (x:ℝ)) den)
+
 end Troncature687
