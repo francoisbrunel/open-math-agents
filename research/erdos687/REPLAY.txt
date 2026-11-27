@@ -475,3 +475,33 @@ Numerical commands
 The segmented cyclic-gap checker uses NumPy. The other Python commands use the
 standard library. Bilan_Erdos_687.pdf and borne_687.tex are the original working
 documents of November 26, prior to the Lean verifications.
+
+Finite complete cover with the first 200 primes (November 27)
+
+  Temoin1223.json gives one residue per prime up to 1223 covering all
+  integers 1 through 5177. Alben Weeks's v1.0-paper Method 5B witness
+  has length 5171 in the catalog convention, or gap 5172 in his convention.
+  Source: https://hexagonmath.org/2610.00660v1
+  His release: https://github.com/albenweeks/JacobsthalFunction/releases/tag/v1.0-paper
+  A local search changed residues of that cover. This proves a lower bound.
+
+  python -B rejouer_certificats_687.py Temoin1223.json Semence1223.lean 200 --namespace Semence1223
+  lean -o TemoinIntervalle687.olean TemoinIntervalle687.lean
+  LEAN_PATH=. lean -o Semence1223.olean Semence1223.lean
+
+  Using Lean 4.33.1, the last command checked every integer by ordinary
+  kernel reduction. The axiom report for Semence1223.At200.certificate
+  lists propext and Quot.sound. The generator combines the residues by CRT.
+  For each n in the interval, the packed certificate gives a divisor d
+  between 2 and 1223 such that n and the common CRT residue agree modulo d.
+  A prime divisor of d gives the required congruence. The two neighboring
+  integers are coprime to the translated primorial, so this particular
+  cover has length exactly 5177. The maximum may be larger.
+
+  ExtensionsSemences687.json records 33 further finite lower bounds derived
+  from Weeks's tables; published_table_Y refers only to the input tables.
+  The following commands recompute the arithmetic and generate Lean proofs.
+  The archive matching the cited release is the input to the first command.
+
+  python -B extensions_semences_687.py ARCHIVE.zip ExtensionsSemences687.json --cap 10070
+  python -B rejouer_certificats_687.py ExtensionsSemences687.json CertificatsSemences687.lean
