@@ -505,3 +505,27 @@ Finite complete cover with the first 200 primes (November 27)
 
   python -B extensions_semences_687.py ARCHIVE.zip ExtensionsSemences687.json --cap 10070
   python -B rejouer_certificats_687.py ExtensionsSemences687.json CertificatsSemences687.lean
+
+Finite upper and lower certificates for Erdős 687(i)
+
+  python -B verifier_majoration_687.py Majorant863_6890.jsonl.gz
+
+  This standard-library replay checks Y(863) <= 6889. By CRT, translate
+  the seven chosen classes for primes up to 17 to zero. For starts b in
+  each recorded segment [lo,end], its common core [end+1,lo+6890] lies
+  inside [b+1,b+6890]. Nonnegative integer weights supported on the core
+  vanish on the normalized small classes. Each remaining prime can remove
+  at most its heaviest class. The sum of these maxima is strictly below
+  the total weight. Reflection n -> -n handles the starts -b-6890-1.
+  The independent verifier enumerates every one of the 510510 phases,
+  replaying 1549 records and obtaining a minimum strict margin of 1.
+  The numerical upper certificate was checked with exact integer arithmetic.
+  These data alone give no conclusion about the asymptotic order.
+
+  python -B rejouer_certificats_687.py Temoin541.json Semence541.lean 100 --namespace Semence541
+
+  Under Lean 4.33.1, compile Semence541 after TemoinIntervalle687.
+  In the pinned mathlib environment compile DiviseurTemoin687, and then
+  Preuve541 and Preuve1223. Their cover theorems exhibit a common residue
+  and a prime within the cutoff at each position. They certify the lower
+  bounds Y(541) >= 2057 and Y(1223) >= 5177.
