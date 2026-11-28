@@ -247,7 +247,13 @@ $j$ fois. Le noyau Lean 4.34.1 a vérifié la majoration avec un
 $\eta>0$ existentiel dans \texttt{erdos687\_log\_saving}, en utilisant le
 théorème formalisé de la source. Son audit donne seulement
 \texttt{propext}, \texttt{Classical.choice} et \texttt{Quot.sound}.
-Le choix numérique $\eta=1/200$ relève du calcul sur papier.
+Le fichier \texttt{BorneExplicite687.lean} certifie en outre
+$\eta=1/100\,000$ avec les mêmes trois axiomes. Le coefficient
+$\exp(\gamma)/100$ de la source donne un coefficient de réserve
+$\exp(\gamma)/2400$. Pour $d=1/200\,000$, la perte $3\cdot35d$
+est strictement inférieure à cette réserve, et la comparaison des
+longueurs donne $\eta=2d$. Le choix plus grand $\eta=1/200$
+relève du calcul sur papier.
 
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's

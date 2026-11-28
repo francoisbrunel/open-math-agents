@@ -249,8 +249,14 @@ Quantitative survivor theorem
     directly (SHA-256 22cb97a38eb1c856d6fd115e4afeada4fd70ff2cdb4464ef099b7f89a5e2ccad).
     SourcePubliee687.source_bound, erdos687_log_saving and jacobsthal_log_saving
     each report only propext, Classical.choice and Quot.sound. The first
-    Y bound supplies some eta > 0. The particular value 1/200 proposed in
-    the mathematical note still requires a verified explicit constant.
+    Y bound supplies some eta > 0. StockExplicite687.explicit_gain in
+    BorneExplicite687.lean gives eta = 1/100000 with the same three axioms.
+    Its SHA-256 is b8156cfca6e053496fb8174bc7d8d9297b27528e3c99e23e3f4414d426e6c5e8.
+    The larger value 1/200 in the mathematical note remains a paper calculation.
+    From the same project with the generated files on LEAN_PATH, run:
+      lake env lean -o BorneNative687.olean BorneNative687.lean
+      python /path/to/rejouer_exposant_687.py BorneExplicite687.lean --jacobsthal lean/OAI/NumberTheory/Jacobsthal
+      lake env lean BorneExplicite687.lean
   Original preprint and formalization at revision adc7f1241b42e322a6451854ab7e4b4c146bf78a:
   https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026
   Independent upstream rebuild:
@@ -593,15 +599,30 @@ Additional two-sided interval information and the counting threshold
   records. Of these, 1522 work for all residues of 19 at once and 605
   verify each of its 19 choices separately. The explicit phase replay
   covered all 510510 starts, with least integer margin 1. This stronger
-  bound uses an integer certificate. The grouped Lean generator above
-  currently accepts certificates that do not branch on a residue of 19.
+  bound uses an integer certificate. The Lean generator supports both
+  ordinary cores and cores which split into all 19 residue classes.
 
   At x = 1223, reassemble the eight binary parts of the deposited
   Majorant1223_11850.jsonl.gz (in certificates/) in part00 to part07
   order by concatenation. Its SHA-256 is
   d425ba0b8f9d2afd3b1a5664ee84972479eee5030ba29efc8c040d97842b3749.
   Run python -B verifier_majoration_687.py Majorant1223_11850.jsonl.gz --length 11850 --cutoff 1223
-  Each of the 1103 records supplies all 19 residue branches.
+  The completed integer replay reports all 510510 phases, 1103 records
+  with 19 residue branches each, and minimum strict margin 1.
+  Thus Y(1223) <= 11849. Thomas Fredrickson's later lower construction
+  gives Y(1223) >= 5215. The first branched core has separately passed
+  the standard Lean 4.33.1 kernel, with the three audited axioms.
+  To generate and check the whole mixed certificate in the catalog's
+  Lake environment, use an empty DEST with sufficient disk space:
+
+  python -B rejouer_majoration_lean_687.py Majorant1223_11850.jsonl.gz DEST --full --group-size 1
+  lake env python -B verifier_groupes_lean_687.py DEST Wheel1223H11850
+
+  The second command checks the group inputs sequentially and records
+  verified digests in DEST so a later run can resume. It uses the
+  catalog build of FormalConjectures.ErdosProblems.«687». The first
+  command can also read Majorant863_6700.jsonl.gz; in that case run
+  the second command with Wheel863H6700.
 
   ReferenceWeeks863.lean checks Weeks's published cover of 3557 positions.
   Couverture1223_5181.lean checks the improved cover of 5181 positions.
