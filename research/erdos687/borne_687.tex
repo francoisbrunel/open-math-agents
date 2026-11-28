@@ -234,6 +234,34 @@ parents peut dépendre des résidus. Pour conclure à une nouvelle borne
 asymptotique, il reste à prouver ce critère uniformément en $x$ à la
 longueur visée.
 
+Cette correction a toutefois une limite uniforme particulièrement forte
+dans la bande utilisée ici. Lorsque $H<pq$ pour chaque paire distincte
+de premiers de $P$, deux classes distinctes par leur module ont au plus
+un point commun dans $[1,H]$. Deux points communs distincts auraient
+une différence positive multiple de $pq$ et strictement inférieure à
+$pq$. Le gain total de la forêt est donc au plus $|P|$ pour tout choix
+de résidus et de parents. À $z=x/(\log x)^{1/400}$ et
+$H=\lfloor z^2/(\log z)^2\rfloor$, on a finalement $H<z^2$, tandis que
+$|P|\le x=o(H\log\log x/(\log x)^2)$. La forêt seule ne peut donc
+économiser une proportion fixe de l'unité de réserve à cette échelle.
+
+Une autre condition permet d'utiliser toutes les paires, en tenant
+compte des triples pour contrôler les recouvrements concentrés sur
+quelques positions. Pour $i\in S$, soit $k_i$ le nombre de classes qui
+le touchent. Posons $d_i=\max(k_i-1,0)$, $D=\sum_i d_i$,
+$B=\sum_i\binom{k_i}{2}$ et $T=\sum_i\binom{k_i}{3}$.
+L'inégalité de Cauchy--Schwarz pondérée par $d_i$ donne
+\[
+ (2B)^2=\Big(\sum_i k_id_i\Big)^2
+ \le D\sum_i k_i^2d_i=D(6T+4B).
+\]
+Si $B>0$, le gain sur la somme brute des tailles des classes vaut
+donc au moins $2B^2/(3T+2B)$. Lors d'une couverture complète,
+$D=\sum_i k_i-|S|$ exactement. Cette identité donne un test
+d'impossibilité sans division, y compris si $B=0$.
+Pour en déduire un nouveau majorant de $Y$, il reste à établir des
+estimations uniformes sur ces moments de multiplicité.
+
 \paragraph{Quand les petits premiers partagent un représentant proche.}
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
