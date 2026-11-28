@@ -25,7 +25,7 @@ private theorem scales {d : ℝ} (hd : 0 < d) (hhalf : d ≤ 1/2) {x : ℕ}
     div_le_self hxp.le (Real.one_le_rpow (by linarith) hd.le), hlog, lower⟩
   linarith [Real.log_le_sub_one_of_pos (by norm_num : (0:ℝ) < 2)]
 
-private theorem sharp_band {d : ℝ} (hd : 0 < d) (hhalf : d ≤ 1/2) (tiny : d ≤ 1/400) :
+private theorem sharp_band {d : ℝ} (hd : 0 < d) (hhalf : d ≤ 1/2) (tiny : d ≤ 1/100) :
     ∀ᶠ x : ℕ in atTop,
       (∑ p ∈ x.primesLE \ (⌊top d x⌋₊).primesLE, (1:ℝ)/p) ≤
         (21/20)*d*Real.log (Real.log x) / Real.log x := by
@@ -42,7 +42,7 @@ private theorem sharp_band {d : ℝ} (hd : 0 < d) (hhalf : d ≤ 1/2) (tiny : d 
   have hb : Real.log (top d x)*S ≤ d*Real.log (Real.log x)+10 := by linarith only [hband,hlog]
   change S ≤ _ / Real.log x
   apply (le_div_iff₀ (by change 4 ≤ Real.log (x:ℝ) at hL; linarith)).2
-  have close : (399/400)*Real.log (x:ℝ) ≤ Real.log (top d x) := by
+  have close : (99/100)*Real.log (x:ℝ) ≤ Real.log (top d x) := by
     rw [hlog]
     have Lp : 0 < Real.log (x:ℝ) := by change 4 ≤ Real.log (x:ℝ) at hL; linarith
     have nneg : 0 ≤ Real.log (Real.log x) := Real.log_nonneg (by change 4 ≤ Real.log (x:ℝ) at hL; linarith)
@@ -51,8 +51,8 @@ private theorem sharp_band {d : ℝ} (hd : 0 < d) (hhalf : d ≤ 1/2) (tiny : d 
 
 open OMA.R_Erdos687_erdos_687_variants_iwaniec_R2
 
-private theorem transfer {c K d : ℝ} (hK : 0 < K) (hd : 0 < d) (hhalf : d ≤ 1/2)
-    (tiny : d ≤ 1/400) (hdel : (21/20)*d*K < c) (stock : stockBound c d) (progression : progressionBound K d) :
+theorem transfer {c K d : ℝ} (hK : 0 < K) (hd : 0 < d) (hhalf : d ≤ 1/2)
+    (tiny : d ≤ 1/100) (hdel : (21/20)*d*K < c) (stock : stockBound c d) (progression : progressionBound K d) :
     (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop]
       (fun x : ℕ => (x:ℝ)^2/(Real.log x)^(2+2*d)) := by
 

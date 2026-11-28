@@ -21,7 +21,7 @@ absolues $\eta>0$ et $C>0$ telles que, pour tout $x$ suffisamment grand,
 \[
                   Y(x) \le C\,\frac{x^2}{(\log x)^{2+\eta}} .
 \]
-Les constantes de la preuve du théorème permettent de prendre $\eta=1/200$.
+La normalisation par le produit de Mertens permet de prendre $\eta=1/98$.
 \end{proposition}
 
 \begin{proof}
@@ -407,6 +407,20 @@ a au plus une colonne commune. Les degrés $b_j$ des colonnes vérifient
 alors $\sum_j b_j(b_j-1)\le p(p-1)$ et Cauchy--Schwarz donne
 $s^2\le q\sum_j b_j^2\le q(p^2+s)$.
 
+Ce critère s'applique uniformément aux intervalles carrés. Fixons
+$m\ge5$, $z=k^m$ et $x=k^{m+1}$. Pour tout $k$ assez grand et
+tout choix des petites classes, toute partie $T$ contenant au moins
+la moitié des survivants de $[1,z^2]$ présente un rectangle pour
+chaque paire de premiers distincts $z<p,q\le x$. En effet, le minorant
+de crible sur le sous-intervalle de longueur
+$\lfloor z^2/(\log z)^2\rfloor$ donne $|T|\gg z^2/(\log z)^4$.
+On a donc $2z^2\le k|T|$ finalement, et $k^2x^3\le z^4$ puisque
+$m\ge5$. Il suit que $|T|^2\ge4x^3>q(p^2+|T|)$. L'injectivité
+résulte de $z^2<pq$. Le noyau Lean 4.34.1 a vérifié cette application
+dans \texttt{GrillesCarrees687.half\_stock\_rectangles}.
+Pour interdire une couverture complète, il reste à trouver, après le
+choix des autres classes, une partie interdite qu'elles épargnent.
+
 \paragraph{Représentant commun des petites classes.}
 La condition d'effectif ci-dessus exclut inconditionnellement une
 famille à l'échelle des puissances. Supposons $z\ge512$ et que les
@@ -609,6 +623,36 @@ Le noyau Lean 4.34.1 a vérifié \texttt{BorneIteree687.upper} avec
 \texttt{propext}, \texttt{Classical.choice} et \texttt{Quot.sound}.
 Le facteur supplémentaire tend vers l'infini. La question d'un
 minorant comparable reste ouverte.
+
+En conservant le produit de Mertens dans la normalisation, on obtient
+une majoration uniforme plus forte.
+\[
+ Y(x)\ll \frac{x^2}{(\log x)^{2+1/98}}.
+\]
+En effet, si $w=(\log z)/(\log\log z)^2$ et
+$V(w)=\prod_{p\le w}(1-1/p)$, la normalisation de Mertens de la source
+donne, pour tout $w$ assez grand,
+$e^{-\gamma}/(\log w\, V(w))\le101/100$.
+Le coefficient initial $e^\gamma/80$ se simplifie donc avec
+$e^{-\gamma}$. Comme $\log w\ge(99/100)\log\log z$, le coefficient de
+$N(z)\log\log z/(\log z)^2$ atteint $99/8080$.
+Après le changement de variable $z=x/(\log x)^d$, il reste
+$9801/808000$ pour la réserve de survivants. Pour $0<d\le1/100$, la
+somme des inverses des premiers de la bande a pour majorant
+$(21/20)d\log\log x/\log x$ à terme. On utilise ici
+$\log z\ge(99/100)\log x$ et la même erreur additive $10$
+dans la première estimation de Mertens. Le choix $d=1/196$ donne l’inégalité stricte suivante.
+\[
+ \frac{21}{20}\frac{1}{196}\frac94 < \frac{9801}{808000}.
+\]
+Les bornes de crible sur les progressions donnent donc $Y(x)$ au plus
+$\lfloor z^2/(\log z)^2\rfloor$ pour tout $x$ assez grand.
+L'amélioration sur l'ancienne majoration, même avec son facteur
+$(\log\log x)^2$, découle de
+$(\log\log x)^2=o((\log x)^{1/98-1/200})$.
+
+Le noyau Lean 4.34.1 a vérifié \texttt{BorneProduit687.upper} avec
+\texttt{propext}, \texttt{Classical.choice} et \texttt{Quot.sound}.
 
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's

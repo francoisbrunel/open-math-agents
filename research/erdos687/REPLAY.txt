@@ -526,6 +526,12 @@ Numerical commands
   of primes in (s,t] fits the budget at s. Compile ParametreItere687,
   then BorneItereeNatif687 with SurvieFineNatif687 and InverseNatif687
   on the same import path. The final declaration is BorneIteree687.upper.
+  Compile BorneProduitNatif687 after TransfertFinNatif687 using the
+  original OAI Jacobsthal checkout under Lean 4.34.1. The Mertens product
+  normalization cancels the Euler constant in the survivor bound.
+  BorneProduit687.upper_with_margin gives the parameter criterion and
+  BorneProduit687.upper specializes it to the log exponent 2 + 1/98.
+  The kernel audit lists propext, Classical.choice and Quot.sound.
   With the Lean 4.33.1 catalogue and CribleFin687, CribleTransfert687 and
   Harmonique687 on the import path, compile DensiteCarree687. Its
   power_saving_iff identifies the obstruction to decreasing the exponent
@@ -545,6 +551,10 @@ Numerical commands
   for the exact elimination of two remaining prime rows. The example sharp
   witnesses the need for four positions. GrillesBande687.rectangle gives the
   finite bipartite count for a rectangle in the joint residue image.
+  Under the native 4.34.1 toolchain, compile StockFinNatif687 and
+  GrillesBande687 before GrillesCarreesNatif687. Its half_stock_rectangles
+  exhibits a rectangle for every pair of large primes in every subset
+  retaining half of the small-prime survivors, for each fixed m >= 5.
   thin_of_cover proves the stated condition on the same assignment.
   The paper explains the conditional Siegel-zero obstruction to trying
   to exclude every sparse small-prime stage by itself.

@@ -275,7 +275,7 @@ def sharpStatement : Prop :=
     c * ((height z : ℝ) * OMA_M3.Qm ⌊width z⌋₊ / (scale z)^2) ≤
       ((LargePrimeDeletion.cutoffSurvivors (height z) ⌊z⌋₊ a).card : ℝ)
 
-private theorem shift_survivors (N z : ℕ) (a : ℕ → ℕ) :
+theorem shift_survivors (N z : ℕ) (a : ℕ → ℕ) :
     ∃ b : ℕ → ℕ, (LargePrimeDeletion.cutoffSurvivors N z b).card ≤ (survivors z N a).card := by
   let b (p : ℕ) := a p + p - 1
   refine ⟨b, Finset.card_le_card_of_injOn (fun i : ℕ => i+1) ?_ ?_⟩
@@ -295,7 +295,7 @@ private theorem shift_survivors (N z : ℕ) (a : ℕ → ℕ) :
   · intro i _ j _ he
     exact Nat.add_right_cancel he
 
-private theorem width_eventually :
+theorem width_eventually :
     ∀ᶠ z : ℝ in atTop, 3 ≤ ⌊width z⌋₊ ∧ 99/100*Real.log (Real.log z) ≤ Real.log (width z) := by
   have hu : Tendsto (fun z : ℝ => Real.log (Real.log z)) atTop atTop :=
     Real.tendsto_log_atTop.comp Real.tendsto_log_atTop
@@ -357,7 +357,7 @@ theorem sharp_normalize (h : sharpStatement) :
     _ ≤ _ := hz b
     _ ≤ _ := by exact_mod_cast shift
 
-private theorem cutoff_properties {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
+theorem cutoff_properties {d : ℝ} (hd : 0 < d) (hh : d ≤ 1/2) :
     ∀ᶠ x : ℕ in atTop, 0 < Real.log (top d x) ∧ Real.log (top d x) ≤ Real.log x ∧
       Real.log x/2 ≤ Real.log (top d x) ∧ (99/100)*Real.log (Real.log x) ≤ Real.log (Real.log (top d x)) := by
   have ht : Tendsto (fun x : ℕ => Real.log (x:ℝ)) atTop atTop :=

@@ -29,7 +29,10 @@ def stock(jacobsthal):
     cut = source[c:q].replace("(Real.tendsto_log_atTop.comp ht).eventually_ge_atTop 4", "(Real.tendsto_log_atTop.comp ht).eventually_ge_atTop 100")
     cut = cut.replace("change 4 ≤ Real.log L", "change 100 ≤ Real.log L").replace("Real.log (Real.log x)/2", "(99/100)*Real.log (Real.log x)").replace("Real.log L/2", "(99/100)*Real.log L")
     tail = source[q:].replace("Constant/2400", "Constant*3267/800000").replace("⟨c/2,", "⟨c*(99/100),").replace("Real.log L/2", "(99/100)*Real.log L")
-    return source[:w]+width+norm+cut+tail+"\nend StockFin687\n#print axioms StockFin687.sharp_stock\n"
+    prefix = source[:w].replace("private theorem shift_survivors", "theorem shift_survivors")
+    width = width.replace("private theorem width_eventually", "theorem width_eventually")
+    cut = cut.replace("private theorem cutoff_properties", "theorem cutoff_properties")
+    return prefix+width+norm+cut+tail+"\nend StockFin687\n#print axioms StockFin687.sharp_stock\n"
 
 
 def sieve():
@@ -44,16 +47,17 @@ def transfer(jacobsthal):
     src = src[src.index("private theorem scales"):]
     gain = file_text("GainVariable687.lean")
     band = between(gain, "theorem reciprocal_band", "theorem block_scale")
-    band = band.replace("theorem reciprocal_band", "private theorem sharp_band").replace("(hhalf : d ≤ 1/2)", "(hhalf : d ≤ 1/2) (tiny : d ≤ 1/400)")
+    band = band.replace("theorem reciprocal_band", "private theorem sharp_band").replace("(hhalf : d ≤ 1/2)", "(hhalf : d ≤ 1/2) (tiny : d ≤ 1/100)")
     band = band.replace("3*d*", "(21/20)*d*").replace("20/d", "400/d").replace("20 ≤", "400 ≤")
-    band = band.replace("  nlinarith only [hb, mul_le_mul_of_nonneg_right hlower hs, hlim]", """  have close : (399/400)*Real.log (x:ℝ) ≤ Real.log (top d x) := by
+    band = band.replace("  nlinarith only [hb, mul_le_mul_of_nonneg_right hlower hs, hlim]", """  have close : (99/100)*Real.log (x:ℝ) ≤ Real.log (top d x) := by
     rw [hlog]
     have Lp : 0 < Real.log (x:ℝ) := by change 4 ≤ Real.log (x:ℝ) at hL; linarith
     have nneg : 0 ≤ Real.log (Real.log x) := Real.log_nonneg (by change 4 ≤ Real.log (x:ℝ) at hL; linarith)
     linarith [mul_le_mul_of_nonneg_right tiny nneg,Real.log_le_sub_one_of_pos Lp]
   nlinarith only [hb,mul_le_mul_of_nonneg_right close hs,hlim]""")
     src = src.replace("open OMA.", band+"\n\nopen OMA.", 1)
-    src = src.replace("(hdel : 3*d*K", "(tiny : d ≤ 1/400) (hdel : (21/20)*d*K").replace("reciprocal_band hd hhalf", "sharp_band hd hhalf tiny").replace("3*d*", "(21/20)*d*")
+    src = src.replace("(hdel : 3*d*K", "(tiny : d ≤ 1/100) (hdel : (21/20)*d*K").replace("reciprocal_band hd hhalf", "sharp_band hd hhalf tiny").replace("3*d*", "(21/20)*d*")
+    src = src.replace("private theorem transfer ", "theorem transfer ")
     src = src.replace("explicit_gain", "gain_one_two_hundred").replace("fixed_", "sharp_").replace("1/100000", "1/200").replace("1/200000", "1/400")
     src = src.replace("3*(1/400:ℝ)*35", "(21/20)*(1/400:ℝ)*(9/4)").replace("0 < (35:ℝ)", "0 < (9/4:ℝ)").replace("(by norm_num) margin", "(by norm_num) (by norm_num) margin")
     src = src.replace("CribleTransfert687.uniform_progression_35", "ProgressionFine687.uniform_progression").replace("end StockExplicite687", "end TransfertFin687")
