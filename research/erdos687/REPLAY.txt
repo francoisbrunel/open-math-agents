@@ -541,6 +541,10 @@ Numerical commands
   DispersionBande687 imports EcartsMultiples687. Its overlap_budget gives
   the centered fourth-moment bound including exact duplicate incidences;
   collision_identity and upper_of_fourth give the expansion and reduction.
+  QuatreTemoins687 proves small_obstruction, extend_iff_hits and family_budget
+  for the exact elimination of two remaining prime rows. The example sharp
+  witnesses the need for four positions. GrillesBande687.rectangle gives the
+  finite bipartite count for a rectangle in the joint residue image.
   thin_of_cover proves the stated condition on the same assignment.
   The paper explains the conditional Siegel-zero obstruction to trying
   to exclude every sparse small-prime stage by itself.
@@ -761,6 +765,9 @@ Additional two-sided interval information and the counting threshold
   Couverture1223_5231.json extends this finite lower bound to 5231.
   Use 5231 in the same generation command and compile Borne1223_5231.
   Direct residue checks also leave both adjacent offsets, 0 and 5232, uncovered.
+  Replace 5231 by 5241 to replay the longer certificate Couverture1223_5241.
+  Borne1223_5241.lower_bound translates it to the catalogue statement.
+  The uncovered offsets directly adjacent to this run are 0 and 5242.
 
   Distribution687.threshold_comparison and Distribution687.twice_from_moment
   relate the scale of Y to counts of assignments or a finite central

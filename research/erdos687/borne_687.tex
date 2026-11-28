@@ -371,6 +371,42 @@ suffirait de trouver, dans chaque profil de faible effectif pour un
 même $m$, une partie $T$ avec $h\le1$ et $h^3Q<((1-h)s)^4$. La
 majoration uniforme de ce moment centré reste à établir.
 
+\paragraph{Éliminer deux derniers premiers ensemble.}
+Pour deux premiers distincts $p,q$, une partie $T$ est couverte par une
+classe de chaque module si et seulement si toutes ses parties de taille
+au plus quatre le sont, avec des choix qui peuvent dépendre de la partie.
+En effet, si deux points ont même reste modulo $p$ et des restes
+distincts modulo $q$, ils imposent le choix de leur classe modulo $p$.
+En cas d'échec, deux points hors de cette classe ont des restes différents
+modulo $q$ ; les quatre points témoignent de l'échec. On échange les
+modules si c'est le reste modulo $q$ qui est commun. En l'absence de ces
+deux situations, les couples distincts de restes forment un couplage
+dans le graphe biparti. Trois arêtes de ce couplage interdisent la
+couverture ; deux arêtes se couvrent toujours. La constante quatre est
+atteinte par les positions impaires $1,7,11,17$ pour $p=3,q=5$.
+
+Ainsi les résidus des autres grands premiers peuvent être complétés
+aux modules $p,q$ exactement lorsqu'ils touchent au moins un point de
+chaque partie interdite d'au plus quatre survivants. Pour toute famille
+$\mathcal F$ de telles parties, éventuellement chevauchantes, notons
+$L_r(t)=|\{W\in\mathcal F:\exists n\in W,\ n\equiv t\bmod r\}|$.
+Une couverture exige
+\[
+ |\mathcal F|\le \sum_{r\in P\setminus\{p,q\}} L_r(a_r).
+\]
+Ce critère tient compte de la contrainte commune aux deux classes.
+
+Par exemple, quatre positions dont les couples de restes forment un
+rectangle à deux lignes et deux colonnes constituent une partie interdite.
+Dans $[1,H]$ avec $H<pq$, le couple de restes détermine chaque position.
+Si $T$ a $s$ positions et si $s^2>q(p^2+s)$, un rectangle existe.
+C'est le comptage biparti classique de K\H{o}vári, Sós et Turán pour
+$K_{2,2}$ (\href{https://doi.org/10.4064/cm-3-1-50-57}{Colloquium Mathematicum, 1954}).
+En l'absence de rectangle, chaque paire ordonnée de lignes distinctes
+a au plus une colonne commune. Les degrés $b_j$ des colonnes vérifient
+alors $\sum_j b_j(b_j-1)\le p(p-1)$ et Cauchy--Schwarz donne
+$s^2\le q\sum_j b_j^2\le q(p^2+s)$.
+
 \paragraph{Représentant commun des petites classes.}
 La condition d'effectif ci-dessus exclut inconditionnellement une
 famille à l'échelle des puissances. Supposons $z\ge512$ et que les
