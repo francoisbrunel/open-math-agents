@@ -129,7 +129,8 @@ Scope and remaining inputs
   Its proof chooses d = min(1/2, c/(6*K)), bounds the reciprocal-prime sum
   by 3*d*log(log x)/log x, and obtains exponent 2+2*d. The later theorem
   gain_from_stock supplies its progression hypothesis. The stronger fixed
-  exponent 401/200 still has the numerical hypotheses of log_saving_of_two_sieves.
+  exponent 401/200 appears conditionally in log_saving_of_two_sieves. The
+  native transfer documented below now establishes it unconditionally.
 
   For the survivor input, the authors' separate Lean 4.34.1 development
   contains source_root_survivor_lower with an existential positive constant
@@ -252,7 +253,7 @@ Quantitative survivor theorem
     Y bound supplies some eta > 0. StockExplicite687.explicit_gain in
     BorneExplicite687.lean gives eta = 1/100000 with the same three axioms.
     Its SHA-256 is b8156cfca6e053496fb8174bc7d8d9297b27528e3c99e23e3f4414d426e6c5e8.
-    The larger value 1/200 in the mathematical note remains a paper calculation.
+    The larger value 1/200 was subsequently checked as described below.
     From the same project with the generated files on LEAN_PATH, run:
       lake env lean -o BorneNative687.olean BorneNative687.lean
       python /path/to/rejouer_exposant_687.py BorneExplicite687.lean --jacobsthal lean/OAI/NumberTheory/Jacobsthal
@@ -270,6 +271,21 @@ Quantitative survivor theorem
   uniformly in the residues and in z>=J. ProgressionFine687.uniform_progression
   gives the coefficient 9/4 on the whole band for 0<d<=1/2. All four
   files passed the catalog kernel and their printed axioms were standard.
+
+  The complete native Lean 4.34.1 proof of the explicit exponent 401/200
+  uses the same pinned sources and the BorneNative687.olean built above.
+  In the native project, place the generated files in a directory on
+  LEAN_PATH; run from that directory with the project's lake environment:
+    python /path/to/rejouer_gain_fin_687.py . --jacobsthal /path/to/math/lean/OAI/NumberTheory/Jacobsthal
+    lake env lean -o StockFinNatif687.olean StockFinNatif687.lean
+    lake env lean -o CribleFinNatif687.olean CribleFinNatif687.lean
+    lake env lean TransfertFinNatif687.lean
+  TransfertFin687.gain_one_two_hundred reports propext, Classical.choice,
+  Quot.sound. Its conclusion is Y(x) = O(x^2/(log x)^(2+1/200)).
+  Verified SHA-256 digests of the three UTF-8 sources, in build order:
+    e4d0c512839152b5e463e2bf39a930950772b4e837f2fdfa651249605e6029ab
+    06eb3c77fdda92ca268ca05c0eb1441aa7458becda5ebbb9ee536f8d291c077a
+    9f909a68756dbcfa9b2814d05b634c643f7e90b477fb3e9948172dd14dd5e0ff
   Original preprint and formalization at revision adc7f1241b42e322a6451854ab7e4b4c146bf78a:
   https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026
   Independent upstream rebuild:

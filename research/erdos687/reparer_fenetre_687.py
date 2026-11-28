@@ -95,16 +95,26 @@ def solve(primes, initial, width, moves, deadline):
     return found,visits,exhausted
 
 
-def run(path, out, index, seconds, radius):
+def run(path, out, index, seconds, radius, window):
     primes = first_primes(index)
     record = json.loads(path.read_text(encoding="utf-8"))[str(index)]
     assert record["x"] == primes[-1] and record["residues"][0] == 1
     odd = [(a*pow(2,-1,p)-1)%p for a,p in zip(record["residues"][1:],primes[1:])]
     m = (record["Y"]-1)//2
     assert verify(index,m,odd,primes) == record["residues"]
+    # Rank adjacent translates by the number of initially uncovered positions.
+    # Every shift in the requested window is still tested.
+    shifts = range(-window,window+2)
+    starts = {}
+    for shift in shifts:
+        seed = [(a+shift)%p for a,p in zip(odd,primes[1:])]
+        occupancy = bytearray(m+1)
+        for p,r in zip(primes[1:],seed):
+            occupancy[r::p] = bytes([1])*len(range(r,m+1,p))
+        starts[shift] = (occupancy.count(0),seed)
     for depth in range(1,radius+1):
-        for shift in (0,1):
-            seed = [(a+shift)%p for a,p in zip(odd,primes[1:])]
+        for shift in sorted(shifts,key=lambda k:(starts[k][0],abs(k),k)):
+            seed = starts[shift][1]
             sol,n,done = solve(primes[1:],seed,m+1,depth,monotonic()+seconds)
             print(f"depth={depth} shift={shift} states={n} complete={done} found={sol is not None}",flush=True)
             if sol is not None:
@@ -121,6 +131,7 @@ if __name__ == "__main__":
     cli.add_argument("output",type=Path)
     cli.add_argument("--index",type=int,default=200)
     cli.add_argument("--radius",type=int,default=5)
+    cli.add_argument("--window",type=int,default=0,help="extra half-window offsets on either side")
     cli.add_argument("--seconds",type=float,default=900,help="per depth and orientation")
     args=cli.parse_args()
-    run(args.seed,args.output,args.index,args.seconds,args.radius)
+    run(args.seed,args.output,args.index,args.seconds,args.radius,args.window)

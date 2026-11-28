@@ -275,8 +275,19 @@ $\eta=1/100\,000$ avec les mêmes trois axiomes. Le coefficient
 $\exp(\gamma)/100$ de la source donne un coefficient de réserve
 $\exp(\gamma)/2400$. Pour $d=1/200\,000$, la perte $3\cdot35d$
 est strictement inférieure à cette réserve, et la comparaison des
-longueurs donne $\eta=2d$. Le choix plus grand $\eta=1/200$
-relève du calcul sur papier.
+longueurs donne $\eta=2d$. La chaîne native plus précise vérifie
+également $\eta=1/200$. Le fichier \texttt{StockFinNatif687.lean}
+conserve la marge $e^\gamma/40$ de la référence, puis un coefficient
+de réserve $3267e^\gamma/800000$. Le fichier \texttt{CribleFinNatif687.lean}
+borne chaque progression avec le coefficient $9/4$. À $d=1/400$,
+le majorant harmonique de la bande a pour coefficient $(21/20)d$.
+L'inégalité stricte
+\[
+  \frac{21}{20}\frac1{400}\frac94 < \frac{3267e^\gamma}{800000}
+\]
+laisse un survivant pour chaque choix de classes.
+Le noyau Lean 4.34.1 a vérifié \texttt{TransfertFin687.gain\_one\_two\_hundred}
+avec les trois axiomes indiqués ci-dessus.
 
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's
