@@ -6,6 +6,58 @@ from rejouer_exposant_687 import assemble
 from rejouer_borne_native_687 import file_text, between
 
 
+def retained_margin(source):
+    """Keep an arbitrary fraction of the positive reference margin."""
+    stopped = between(source, "theorem sharp_stopped_correction", "end NumberTheoryLean.SourceRootErrorLower")
+    root = between(source, "theorem sharp_root_survivor_lower", "end Erdos970Final")
+    parameters = "(r : ℝ) (rp : 0 < r) (ru : r < 1)"
+    old_constant = "Real.exp Real.eulerMascheroniConstant/80"
+    new_constant = "r*(Real.exp Real.eulerMascheroniConstant/40)"
+    general = stopped.replace("sharp_stopped_correction", "retained_stopped_correction " + parameters)
+    general = general.replace(old_constant, new_constant)
+    general = general.replace("  have heighth : 0 < c_L/8 := by positivity",
+        "  let loss := c_L*(1-r)/4\n"
+        "  have heighth : 0 < loss := div_pos (mul_pos hc_L (sub_pos.mpr ru)) (by norm_num)")
+    general = general.replace("c_L/8", "loss").replace("c_L/(8*Csmall)", "loss/Csmall")
+    general = general.replace("c_L/(8*Cbad)", "loss/Cbad").replace("c_L/2", "(r*c_L)")
+    general = general.replace("by rw [eqc]; ring", "by rw [eqc]")
+    general = general.replace("[correction,mu,v,P,small,V0,z,Y,w,B,stop]", "[correction,mu,v,P,small,V0,z,Y,w,B,stop,loss]")
+    stopped_wrapper = stopped.split(":= by")[0] + """:= by
+  obtain ⟨c,L,S,y,e,rest⟩ := retained_stopped_correction (1/2) (by norm_num) (by norm_num) Cmin
+  exact ⟨c,L,S,y,by rw [e]; ring,rest⟩
+
+"""
+    general_root = root.replace("sharp_root_survivor_lower", "retained_root_survivor_lower " + parameters)
+    general_root = general_root.replace(old_constant, new_constant)
+    general_root = general_root.replace("sharp_stopped_correction 1", "retained_stopped_correction r rp ru 1")
+    root_wrapper = root.split(":= by")[0] + """:= by
+  obtain ⟨c,e,rest⟩ := retained_root_survivor_lower (1/2) (by norm_num) (by norm_num)
+  exact ⟨c,by rw [e]; ring,rest⟩
+
+"""
+    source = source.replace(stopped, general + "\n\n" + stopped_wrapper)
+    source = source.replace(root, general_root + "\n\n" + root_wrapper)
+    producer = """theorem retained_cutoff (r : ℝ) (rp : 0 < r) (ru : r < 1) :
+    ∀ᶠ z : ℝ in atTop, ∀ b : ℕ → ℕ,
+      (r*(Real.exp Real.eulerMascheroniConstant/40))*
+        ((StockSource687.height z:ℝ)*OMA_M3.Qm ⌊StockSource687.width z⌋₊/(StockSource687.scale z)^2)
+        ≤ ((LargePrimeDeletion.cutoffSurvivors (StockSource687.height z) ⌊z⌋₊ b).card:ℝ) := by
+  obtain ⟨c,eqc,hc,stock⟩ := Erdos970Final.retained_root_survivor_lower r rp ru
+  filter_upwards [stock,Real.tendsto_log_atTop.eventually
+    JacobsthalSourceScale.sourceW_bounds_eventually,eventually_gt_atTop (1:ℝ)] with z root width pos
+  have hw : sourceW z ≤ Real.log z := width.2.2
+  have cut : sourceW z ≤ z := by linarith [Real.log_le_sub_one_of_pos (zero_lt_one.trans pos)]
+  intro b
+  have h := RootCutoffSurvivors.cutoff_lower_of_root_lower (sourceY z) cut
+    (ErdosCorrectionLimit.sourceRootNode (1/100) z) root b
+  rw [eqc] at h
+  simpa only [StockSource687.height,StockSource687.width,StockSource687.scale,OMA_M3.Qm,
+    sourceY,sourceB,sourceW,SmallSieveFinite.smallEuler,LargePrimeDeletion.cutoffPrimes,one_div] using h
+
+"""
+    return source.replace("theorem sharp_bound :", producer + "theorem sharp_bound :")
+
+
 def stock(jacobsthal):
     source = assemble(jacobsthal).split("private theorem scales")[0]
     source = source.replace("fixed", "sharp").replace("StockExplicite687", "StockFin687")
@@ -32,7 +84,7 @@ def stock(jacobsthal):
     prefix = source[:w].replace("private theorem shift_survivors", "theorem shift_survivors")
     width = width.replace("private theorem width_eventually", "theorem width_eventually")
     cut = cut.replace("private theorem cutoff_properties", "theorem cutoff_properties")
-    return prefix+width+norm+cut+tail+"\nend StockFin687\n#print axioms StockFin687.sharp_stock\n"
+    return retained_margin(prefix)+width+norm+cut+tail+"\nend StockFin687\n#print axioms StockFin687.sharp_stock\n#print axioms SourcePubliee687.retained_cutoff\n"
 
 
 def sieve():

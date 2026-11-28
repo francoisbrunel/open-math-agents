@@ -83,8 +83,8 @@ open ErdosPrimeInputs.PrimePrefixMass
 open scoped Topology
 attribute [local instance] Classical.propDecidable
 
-theorem sharp_stopped_correction (Cmin : ℝ) :
-    ∃ c Clen Cs xi₀ : ℝ,c = Real.exp Real.eulerMascheroniConstant/80 ∧ 0 < c ∧ 1 ≤ Clen ∧ 0 < Cs ∧ Cmin ≤ Cs ∧ 0 < xi₀ ∧ xi₀ ≤ 1 ∧
+theorem retained_stopped_correction (r : ℝ) (rp : 0 < r) (ru : r < 1) (Cmin : ℝ) :
+    ∃ c Clen Cs xi₀ : ℝ,c = r*(Real.exp Real.eulerMascheroniConstant/40) ∧ 0 < c ∧ 1 ≤ Clen ∧ 0 < Cs ∧ Cmin ≤ Cs ∧ 0 < xi₀ ∧ xi₀ ≤ 1 ∧
     ∀ eta : ℝ,0 < eta → eta < 1/2 → ∀ xi : ℝ,∀ hxi : 0 < xi,xi ≤ xi₀ →
     ∃ rho : ℝ,10 < rho ∧ ∀ Kstop : ℝ,0 < Kstop →
     ∀ᶠ top : ℝ in atTop,∃ hw : 1 < sourceW top,∃ htop : sourceW top < top,
@@ -103,16 +103,17 @@ theorem sharp_stopped_correction (Cmin : ℝ) :
         (∑ ps∈stopped w stop P.card v,(countSurvivors Y small a (after w v ps)-referenceValue w (after w v ps))) ≤
         countSurvivors Y small a v := by
   obtain ⟨c_L,eqc,hc_L,hRef⟩ := sharp_polynomial_margin
-  have heighth : 0 < c_L/8 := by positivity
-  obtain ⟨Cbad,K,hCbad,hK,hError⟩ := stopped_error_reduction (1/100) 2 (c_L/8) (by norm_num) (by norm_num) heighth
+  let loss := c_L*(1-r)/4
+  have heighth : 0 < loss := div_pos (mul_pos hc_L (sub_pos.mpr ru)) (by norm_num)
+  obtain ⟨Cbad,K,hCbad,hK,hError⟩ := stopped_error_reduction (1/100) 2 (loss) (by norm_num) (by norm_num) heighth
   obtain ⟨Csmall,B₀,W,hCsmall,hB₀,hW,hError⟩ := hError K (le_refl _)
-  let eps := c_L/(8*Csmall)
-  let budget := c_L/(8*Cbad)
+  let eps := loss/Csmall
+  let budget := loss/Cbad
   have heps : 0 < eps := by dsimp [eps]; positivity
   have hbudget : 0 < budget := by dsimp [budget]; positivity
   obtain ⟨Clen,Cs,xi₀,hClen,hCs,hCsMin,hxi₀,hxi₀1,hCompact⟩ :=
     source_compact_error_mass K eps budget (1/100) Cmin hK heps hbudget (by norm_num) (by norm_num)
-  refine ⟨c_L/2,Clen,Cs,xi₀,by rw [eqc]; ring,by positivity,hClen,hCs,hCsMin,hxi₀,hxi₀1,?_⟩
+  refine ⟨(r*c_L),Clen,Cs,xi₀,by rw [eqc],by positivity,hClen,hCs,hCsMin,hxi₀,hxi₀1,?_⟩
   intro eta heta0 heta xi hxi hx
   obtain ⟨rho,hrho,hCompact⟩ := hCompact eta heta0 heta xi hxi hx
   refine ⟨rho,hrho,?_⟩
@@ -145,22 +146,46 @@ theorem sharp_stopped_correction (Cmin : ℝ) :
     rfl h199 h23 hcons rfl rfl hpower a eps heps.le stop
   have hBad := hCompact z a rfl h199 h23 hcons rfl rfl hRoot
   dsimp only at hErr hBad
-  have hSmallPay : Csmall*eps=c_L/8 := by dsimp [eps]; field_simp [hCsmall.ne']
-  have hBadPay : Cbad*budget=c_L/8 := by dsimp [budget]; field_simp [hCbad.ne']
+  have hSmallPay : Csmall*eps=loss := by dsimp [eps]; field_simp [hCsmall.ne']
+  have hBadPay : Cbad*budget=loss := by dsimp [budget]; field_simp [hCbad.ne']
   have hBadScaled := mul_le_mul_of_nonneg_left hBad hCbad.le
   rw [hBadPay] at hBadScaled
   rw [hSmallPay] at hErr
   let correction := ∑ ps∈stopped w stop P.card v,(countSurvivors Y small a (after w v ps)-referenceValue w (after w v ps))
-  have hScaled : c_L/2+(B^2/mu)*correction ≤ (B^2/mu)*countSurvivors Y small a v := by
-    dsimp only [correction,mu,v,P,small,V0,z,Y,w,B,stop] at *
+  have hScaled : (r*c_L)+(B^2/mu)*correction ≤ (B^2/mu)*countSurvivors Y small a v := by
+    dsimp only [correction,mu,v,P,small,V0,z,Y,w,B,stop,loss] at *
     nlinarith
   have hf : 0 < B^2/mu := div_pos (sq_pos_of_pos hBpos) hmu
   apply (mul_le_mul_iff_right₀ hf).mp
   calc
-    _ = c_L/2+(B^2/mu)*correction := by
-      change (B^2/mu)*(c_L/2*(mu/B^2)+correction)=_
+    _ = (r*c_L)+(B^2/mu)*correction := by
+      change (B^2/mu)*((r*c_L)*(mu/B^2)+correction)=_
       field_simp [hmu.ne',hBpos.ne']
     _ ≤ _ := hScaled
+
+theorem sharp_stopped_correction (Cmin : ℝ) :
+    ∃ c Clen Cs xi₀ : ℝ,c = Real.exp Real.eulerMascheroniConstant/80 ∧ 0 < c ∧ 1 ≤ Clen ∧ 0 < Cs ∧ Cmin ≤ Cs ∧ 0 < xi₀ ∧ xi₀ ≤ 1 ∧
+    ∀ eta : ℝ,0 < eta → eta < 1/2 → ∀ xi : ℝ,∀ hxi : 0 < xi,xi ≤ xi₀ →
+    ∃ rho : ℝ,10 < rho ∧ ∀ Kstop : ℝ,0 < Kstop →
+    ∀ᶠ top : ℝ in atTop,∃ hw : 1 < sourceW top,∃ htop : sourceW top < top,
+      ∀ a : ℕ → ℕ,
+      let w := sourceW top
+      let B := sourceB top
+      let Y := sourceY top
+      let small := LargePrimeDeletion.cutoffPrimes ⌊w⌋₊
+      let V0 := SmallSieveFinite.smallEuler ⌊w⌋₊
+      let z := sourceRootNode (1/100) top
+      let P := sourcePrimeSet w top
+      let v := rootVertex z ∅ P ((Y:ℝ)*V0)
+      let stop := stopCandidate Y w Cs eta Clen B xi (Kstop*(Real.log w)^2) (rho*Kstop*(Real.log w)^2)
+        (lower w top xi) (width w top xi) (label (zero_lt_one.trans hw) htop hxi) a z
+      c*((Y:ℝ)*V0/B^2)+
+        (∑ ps∈stopped w stop P.card v,(countSurvivors Y small a (after w v ps)-referenceValue w (after w v ps))) ≤
+        countSurvivors Y small a v := by
+  obtain ⟨c,L,S,y,e,rest⟩ := retained_stopped_correction (1/2) (by norm_num) (by norm_num) Cmin
+  exact ⟨c,L,S,y,by rw [e]; ring,rest⟩
+
+
 end NumberTheoryLean.SourceRootErrorLower
 
 
@@ -183,7 +208,7 @@ open _root_.Filter NumberTheoryLean NumberTheoryLean.PrimeHistories
   ErdosInverseBoxHeight ErdosCorrectionLimit
 
 
-theorem sharp_root_survivor_lower : ∃ c : ℝ,c = Real.exp Real.eulerMascheroniConstant/80 ∧ 0 < c ∧ ∀ᶠ top : ℝ in atTop,
+theorem retained_root_survivor_lower (r : ℝ) (rp : 0 < r) (ru : r < 1) : ∃ c : ℝ,c = r*(Real.exp Real.eulerMascheroniConstant/40) ∧ 0 < c ∧ ∀ᶠ top : ℝ in atTop,
     ∀ a : ℕ → ℕ,
     c*((sourceY top : ℝ)*SmallSieveFinite.smallEuler ⌊sourceW top⌋₊/(sourceB top)^2) ≤
       countSurvivors (sourceY top) (cutoffPrimes ⌊sourceW top⌋₊) a
@@ -191,7 +216,7 @@ theorem sharp_root_survivor_lower : ∃ c : ℝ,c = Real.exp Real.eulerMascheron
           ((sourceY top : ℝ)*SmallSieveFinite.smallEuler ⌊sourceW top⌋₊)) := by
   obtain ⟨eta0,heta0,heta01,hCorrection⟩ := source_stopped_correction
   obtain ⟨c,Clen,Cs,xi0,eqc,hc,hClen,hCs,_hCsMin,hxi0,hxi01,hError⟩ :=
-    sharp_stopped_correction 1
+    retained_stopped_correction r rp ru 1
   have hClenPos : 0 < Clen := by linarith
   obtain ⟨K,hK,hCorrection⟩ := hCorrection Cs hCs.le
   let eta : ℝ := eta0/2
@@ -214,6 +239,17 @@ theorem sharp_root_survivor_lower : ∃ c : ℝ,c = Real.exp Real.eulerMascheron
   have hSign := hCorrection a
   dsimp only at hLower hSign
   linarith
+
+theorem sharp_root_survivor_lower : ∃ c : ℝ,c = Real.exp Real.eulerMascheroniConstant/80 ∧ 0 < c ∧ ∀ᶠ top : ℝ in atTop,
+    ∀ a : ℕ → ℕ,
+    c*((sourceY top : ℝ)*SmallSieveFinite.smallEuler ⌊sourceW top⌋₊/(sourceB top)^2) ≤
+      countSurvivors (sourceY top) (cutoffPrimes ⌊sourceW top⌋₊) a
+        (rootVertex (sourceRootNode (1/100) top) ∅ (sourcePrimeSet (sourceW top) top)
+          ((sourceY top : ℝ)*SmallSieveFinite.smallEuler ⌊sourceW top⌋₊)) := by
+  obtain ⟨c,e,rest⟩ := retained_root_survivor_lower (1/2) (by norm_num) (by norm_num)
+  exact ⟨c,by rw [e]; ring,rest⟩
+
+
 
 end Erdos970Final
 
@@ -238,6 +274,23 @@ namespace SourcePubliee687
 
 open Filter OAI.Erdos970 OAI.Erdos970.NumberTheoryLean
 open ErdosInverseBoxHeight
+
+theorem retained_cutoff (r : ℝ) (rp : 0 < r) (ru : r < 1) :
+    ∀ᶠ z : ℝ in atTop, ∀ b : ℕ → ℕ,
+      (r*(Real.exp Real.eulerMascheroniConstant/40))*
+        ((StockSource687.height z:ℝ)*OMA_M3.Qm ⌊StockSource687.width z⌋₊/(StockSource687.scale z)^2)
+        ≤ ((LargePrimeDeletion.cutoffSurvivors (StockSource687.height z) ⌊z⌋₊ b).card:ℝ) := by
+  obtain ⟨c,eqc,hc,stock⟩ := Erdos970Final.retained_root_survivor_lower r rp ru
+  filter_upwards [stock,Real.tendsto_log_atTop.eventually
+    JacobsthalSourceScale.sourceW_bounds_eventually,eventually_gt_atTop (1:ℝ)] with z root width pos
+  have hw : sourceW z ≤ Real.log z := width.2.2
+  have cut : sourceW z ≤ z := by linarith [Real.log_le_sub_one_of_pos (zero_lt_one.trans pos)]
+  intro b
+  have h := RootCutoffSurvivors.cutoff_lower_of_root_lower (sourceY z) cut
+    (ErdosCorrectionLimit.sourceRootNode (1/100) z) root b
+  rw [eqc] at h
+  simpa only [StockSource687.height,StockSource687.width,StockSource687.scale,OMA_M3.Qm,
+    sourceY,sourceB,sourceW,SmallSieveFinite.smallEuler,LargePrimeDeletion.cutoffPrimes,one_div] using h
 
 theorem sharp_bound : InterfaceSource687.sharpStatement := by
   obtain ⟨c,eqc,hc,stock⟩ := Erdos970Final.sharp_root_survivor_lower
@@ -429,3 +482,4 @@ theorem sharp_bridge (h : InterfaceSource687.sharpStatement) : sharpStatement :=
 
 end StockFin687
 #print axioms StockFin687.sharp_stock
+#print axioms SourcePubliee687.retained_cutoff

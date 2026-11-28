@@ -21,7 +21,8 @@ absolues $\eta>0$ et $C>0$ telles que, pour tout $x$ suffisamment grand,
 \[
                   Y(x) \le C\,\frac{x^2}{(\log x)^{2+\eta}} .
 \]
-La normalisation par le produit de Mertens permet de prendre $\eta=1/98$.
+En conservant $63/64$ de la marge de référence et en normalisant par
+le produit de Mertens, on peut prendre $\eta=1/50$.
 \end{proposition}
 
 \begin{proof}
@@ -653,6 +654,25 @@ $(\log\log x)^2=o((\log x)^{1/98-1/200})$.
 
 Le noyau Lean 4.34.1 a vérifié \texttt{BorneProduit687.upper} avec
 \texttt{propext}, \texttt{Classical.choice} et \texttt{Quot.sound}.
+
+\paragraph{Exposant $2+1/50$.}
+La comparaison avec la marge de référence est asymptotique. Pour tout
+$0<r<1$ fixé, le terme d'erreur devient assez petit pour conserver
+la fraction $r$ de la constante $e^\gamma/40$. Le théorème Lean
+\texttt{SourcePubliee687.retained\_cutoff} donne alors le coefficient
+$e^\gamma r/40$ devant $N(z)V_0/B^2$ pour toutes les classes.
+En reprenant les deux normalisations précédentes, le coefficient de
+réserve vaut $(9801/10100)(r/40)$. Les choix $r=63/64$ et $d=1/100$
+vérifient
+\[
+   \frac{21}{20}\frac{1}{100}\frac94
+        <\frac{9801}{10100}\frac{63}{64\cdot40}.
+\]
+Il reste au moins une position au cutoff $x$ dans l'intervalle de
+longueur $\lfloor z^2/(\log z)^2\rfloor$, avec $z=x/(\log x)^d$.
+L'exposant au dénominateur devient $2+2d=2+1/50$. Le noyau Lean
+4.34.1 vérifie \texttt{BorneProduit687.upper\_one\_fiftieth} avec les
+mêmes trois axiomes.
 
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's

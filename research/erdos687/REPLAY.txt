@@ -531,6 +531,12 @@ Numerical commands
   normalization cancels the Euler constant in the survivor bound.
   BorneProduit687.upper_with_margin gives the parameter criterion and
   BorneProduit687.upper specializes it to the log exponent 2 + 1/98.
+  Rebuild StockFinNatif687, TransfertFinNatif687 and BorneProduitNatif687
+  after replaying rejouer_gain_fin_687.py on the pinned 4.34.1 source.
+  SourcePubliee687.retained_cutoff retains any fixed r in (0,1).
+  BorneProduit687.upper_one_fiftieth takes r=63/64 and d=1/100, giving
+  the exponent 2 + 1/50. The audits of both old and new exponents list
+  propext, Classical.choice and Quot.sound.
   The kernel audit lists propext, Classical.choice and Quot.sound.
   With the Lean 4.33.1 catalogue and CribleFin687, CribleTransfert687 and
   Harmonique687 on the import path, compile DensiteCarree687. Its
