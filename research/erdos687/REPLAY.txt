@@ -693,6 +693,19 @@ Additional two-sided interval information and the counting threshold
   module with LEAN_PATH=. under Lean 4.33.1. The kernel reports propext
   and Quot.sound for both. Couverture1223_5181.json contains the residues.
 
+  Couverture1223_5217.json extends the Fredrickson/Weeks seed to 5217.
+  Generate the certificate and compile the modules in this order:
+    python -B rejouer_certificats_687.py Couverture1223_5217.json Couverture1223_5217.lean 200 --namespace Couverture1223_5217 --chunk-size 64
+    TemoinIntervalle687, DiviseurTemoin687, Couverture1223_5217, Borne1223_5217
+  The last module states the numerical inequality for Erdos687.Y.
+  A short reconstruction starts with the original 5215 certificate.
+  Translate every covered residue by +10, then replace seven (prime,residue)
+  pairs with (521,444), (607,25), (787,212), (811,10), (929,498),
+  (971,228), (1087,491). The other 193 rows leave only the ten positions
+  10, 228, 1486, 1578, 1786, 1846, 2356, 3060, 3360 and 3570.
+  The seven displayed residues cover all ten. The CRT endpoints have
+  gcd one with the primorial at offsets 0 and 5218.
+
   Distribution687.threshold_comparison and Distribution687.twice_from_moment
   relate the scale of Y to counts of assignments or a finite central
   moment. SautsRankin687.arbitrarily_large derives a prime-jump consequence
