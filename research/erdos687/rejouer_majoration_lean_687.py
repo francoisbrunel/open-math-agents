@@ -3,9 +3,27 @@ import argparse
 import base64
 import gzip
 import json
+import re
 from math import factorial, gcd, isqrt, prod
 from pathlib import Path
 import zlib
+
+
+def weight_literal(hex_digits):
+    digits = hex_digits.zfill((len(hex_digits)+255)//256*256)
+    chunks = [digits[i:i+256] for i in range(0,len(digits),256)]
+    return "weight687% [" + ",".join("0x"+part for part in chunks) + "]"
+
+
+def chunk_group(source, wheel):
+    pattern = r"(?m)^(private def w\w* : Nat := )0x([0-9a-fA-F]+)$"
+    updated, count = re.subn(pattern,lambda m:m[1]+weight_literal(m[2]), source)
+    if count:
+        header = "public import "+wheel+"\n"
+        if header not in updated:
+            raise ValueError("missing public wheel import")
+        updated = updated.replace(header, header+"meta import EntierPoids687\n", 1)
+    return updated
 
 
 def prime_list(x):
@@ -218,7 +236,7 @@ def mixed_group(wheel, primes, records, first_index, period):
     lo = period + records[0]["b"]
     lines += [f"public theorem certified : Segment tailPrimes {H} {lo} {hi} := {join_tree(leaves)}",
               "#print axioms certified", f"end {name}"]
-    return name, "\n".join(lines) + "\n"
+    return name, chunk_group("\n".join(lines) + "\n", wheel)
 
 
 def mixed_replay(records, output, group_size):

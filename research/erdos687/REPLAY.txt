@@ -513,6 +513,9 @@ Numerical commands
   If f(H) is the least cutoff for full coverage, the explicit cutoff
   floor(f(H)/(1+floor(log f(H)))) is o(f(H)) and permits o(H/log H)
   missed positions. The open target in the catalog requires full coverage.
+  InverseFinNatif687.lean imports InverseNatif687 and TransfertFinNatif687.
+  InverseFin687.cutoff_lower gives sqrt(H) (log H)^(401/400) = O(f(H)),
+  with the same three axioms, using H <= Y(f(H)) and eventually H <= f(H)^3.
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is
@@ -662,6 +665,27 @@ Additional two-sided interval information and the counting threshold
   catalog build of FormalConjectures.ErdosProblems.«687». The first
   command can also read Majorant863_6700.jsonl.gz; in that case run
   the second command with Wheel863H6700.
+
+  Mixed groups encode their large weight integers as 1024-bit pieces.
+  EntierPoids687 emits a single natural-number literal for each word.
+  All arithmetic and every branch are still checked by the ordinary
+  kernel. The first complete 19-branch record passed this replay in
+  17 seconds on the research machine, reporting propext and Quot.sound.
+
+  The local repair search can read a JSON seed indexed by prime count,
+  with fields x, Y and residues on [1,Y]:
+    python -B reparer_fenetre_687.py seed.json result.json --index 200 --radius 4 --window 70 --seconds 10
+  An output line with complete=False records a time limit. At the
+  Fredrickson 5215 seed, exhaustive radius-four searches for each of
+  the two immediate half-window extensions found no repair. Through
+  radius three this also held on all 142 translates tested. The class
+  modulo 2 stays fixed and all other 199 rows are available to change.
+  A complete negative search only describes the stated neighbourhood.
+  The two search programs also accept the original CoordinatedGap1223.lean
+  as their seed. They check its primorial, all interior gcds and both
+  endpoints and convert the CRT translation directly. The 5215 source,
+  by Thomas Fredrickson from Alben Weeks's first stage, is pinned here:
+  https://github.com/thomasfredrickson/open-math-agents/blob/80e854737cbea0dffa811917d14d90114d6ca5b3/research/erdos-handoffs/687-i/coordinated-reserve/CoordinatedGap1223.lean
 
   ReferenceWeeks863.lean checks Weeks's published cover of 3557 positions.
   Couverture1223_5181.lean checks the improved cover of 5181 positions.

@@ -1,11 +1,28 @@
 """Search all nearby choices of odd prime classes on a translated window."""
 import argparse
 import json
+from math import gcd, prod
 from pathlib import Path
+import re
 from time import monotonic
 
 from extensions_semences_687 import first_primes, verify
 from prolonger_687 import extended
+
+
+def read_seed(path, primes):
+    raw = path.read_text(encoding="utf-8")
+    if path.suffix.lower() != ".lean":
+        return json.loads(raw)[str(len(primes))]
+    start = int(re.search(r"def start : ℕ := (\d+)",raw)[1])
+    modulus = int(re.search(r"def modulus : ℕ := (\d+)",raw)[1])
+    bound = re.search(r"theorem lower_bound : (\d+) ≤ Erdos687\.Y (\d+)",raw)
+    length,cutoff = map(int,bound.groups())
+    if (modulus != prod(primes) or cutoff != primes[-1] or
+        gcd(start,modulus) != 1 or gcd(start+length+1,modulus) != 1 or
+        any(gcd(start+i,modulus)==1 for i in range(1,length+1))):
+        raise ValueError("the primorial, interval or endpoints do not match this CRT witness")
+    return {"x":cutoff,"Y":length,"residues":[(-start)%p for p in primes]}
 
 
 def positions(mask):
@@ -97,7 +114,7 @@ def solve(primes, initial, width, moves, deadline):
 
 def run(path, out, index, seconds, radius, window):
     primes = first_primes(index)
-    record = json.loads(path.read_text(encoding="utf-8"))[str(index)]
+    record = read_seed(path,primes)
     assert record["x"] == primes[-1] and record["residues"][0] == 1
     odd = [(a*pow(2,-1,p)-1)%p for a,p in zip(record["residues"][1:],primes[1:])]
     m = (record["Y"]-1)//2

@@ -80,7 +80,7 @@ def check(directory, wheel, memory):
         if original != target:
             target.write_bytes(original.read_bytes())
         compile_module(name)
-    for name in ["VerificationPoids687", "Branches19_687"]:
+    for name in ["VerificationPoids687", "Branches19_687", "EntierPoids687"]:
         compile_supplied(name)
     public_data(wheel)
     compile_module(wheel)

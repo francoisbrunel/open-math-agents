@@ -288,6 +288,16 @@ L'inégalité stricte
 laisse un survivant pour chaque choix de classes.
 Le noyau Lean 4.34.1 a vérifié \texttt{TransfertFin687.gain\_one\_two\_hundred}
 avec les trois axiomes indiqués ci-dessus.
+Si $f(H)$ désigne le plus petit seuil de premiers permettant de couvrir
+$[1,H]$, la même borne donne
+\[
+       f(H)\gg \sqrt H\,(\log H)^{401/400}.
+\]
+En effet $H\le Y(f(H))$ et la majoration élémentaire utilisée dans cette
+comparaison donne $H\le f(H)^3$ pour $H$ assez grand. Donc
+$\log H\le3\log f(H)$. Il suffit de prendre la racine carrée dans la
+borne supérieure de $Y(f(H))$. Le noyau natif vérifie cette implication
+dans \texttt{InverseFin687.cutoff\_lower}.
 
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's
