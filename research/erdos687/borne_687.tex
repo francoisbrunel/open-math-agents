@@ -214,6 +214,26 @@ Les configurations réalisant les deux extrêmes peuvent être différentes.
 Une estimation reliant la perte à l'effectif initial pourrait encore
 améliorer le résultat.
 
+Une variante tient compte des intersections sur le même ensemble $S$
+de survivants des petits premiers. Pour $p$ dans la bande restante $P$,
+notons $C_p=\{n\in S:n\equiv a_p\bmod p\}$. Pour chaque $p$, choisissons
+au plus un premier antérieur $\rho(p)\in P$, $\rho(p)<p$, et donnons la
+classe vide aux parents absents. Alors
+\[
+ \left|\bigcup_{p\in P} C_p\right|
+ \le \sum_{p\in P}\bigl(|C_p|-|C_p\cap C_{\rho(p)}|\bigr).
+\]
+En effet, pour tout entier couvert, sa première classe le compte encore
+après le retrait de son intersection avec le parent. Cette majoration
+sur une forêt est une forme de la borne de Hunter
+(\href{https://www.cambridge.org/core/journals/journal-of-applied-probability/article/an-upper-bound-for-the-probability-of-a-union/092D711504BA968EF0D1D903A2685D60}{Journal of Applied Probability, 1976}).
+Pour exclure les couvertures complètes à une longueur donnée, il suffit
+donc que, pour chaque choix des résidus, il existe des parents pour
+lesquels cette somme est strictement inférieure à $|S|$. Le choix des
+parents peut dépendre des résidus. Pour conclure à une nouvelle borne
+asymptotique, il reste à prouver ce critère uniformément en $x$ à la
+longueur visée.
+
 \paragraph{Quand les petits premiers partagent un représentant proche.}
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
