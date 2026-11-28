@@ -373,6 +373,102 @@ a diverging factor. Along that subsequence the probability of a
 completion tends to zero. Taking logarithms and using
 $\log B\asymp_\delta\log_2 x$ gives the claimed restriction on $t$.
 
+\paragraph{Enlarging the initial zero interval.}
+The same obstruction on $t$ holds for every varying
+$L^2\le w\le x/2$ under the preceding assumptions on $t,B$.
+In fact a positive lower bound on the completion probability also
+requires
+\[
+                 t\log w\,\log B\ll_K L .
+\]
+To see this, the primes in $(x,y]$ each survive the first choices
+with probability $A$. Two distinct such primes have no common
+prime divisor in the tilted range. The preceding collision estimate
+therefore bounds their joint survival probability by
+$(1+o(1))A^2$, uniformly since $w\ge L^2$. Their surviving count
+is $(1+o_{\mathbb P}(1))Ay/L$: the mean tends to infinity since
+$A\gg 1/L$ by Mertens. The final capacity bound forces
+$A\log B\ll_K1$.
+
+Uniformly in this enlarged range,
+$A\asymp\min(1,t\log w/L)$. Indeed
+$-\log A=\sum_{w<s\le x/2}s^{-1-\tau}+O(1/w)$ over primes.
+Partial summation using Mertens' reciprocal prime estimate replaces
+the sum by $\int_{\log w}^{\log(x/2)}e^{-\tau v}\,dv/v+O(1)$,
+uniformly. The upper endpoint after scaling by $\tau$ is bounded
+below by a positive constant. The integral is
+$\log^+(1/(\tau\log w))+O(1)$. Since $\log B\to\infty$, the
+necessary prime condition now forces $\tau\log w\ll1/\log B$.
+In particular $\log w=o(L)$, the rough composite estimate above
+applies, and the second-moment error is still negligible
+($(\log w)^2w^{-1+\tau}=o(1)$). This recovers the condition
+$te^{-t}\log B\ll_K1$ even with an optimized choice of this cutoff.
+
+\paragraph{The leading constant two for the independent composite-block stage.}
+There is a stronger obstruction for the specific rule (5.27) in the
+tilted construction. Take $w=L^{100}$, $L^\delta\le B\ll L/t$,
+$t\to\infty$, $t\ll\log_3 x$. Use the squarefree rough composite set
+$\mathcal C$ and its all-fiber blocks as in Sections 4--5 of that
+manuscript. If this stage is to leave only $O(x/L)$ composites with
+probability bounded below, then
+\[
+  te^{-t}\,(\log w)\log B=O(1),\qquad
+  t\ge 2\log_3x+\log_4x-O(1).
+\]
+This concerns the independent capped block choices and includes
+incidental coverage from other blocks of the chosen residue.
+It allows no subsequent composite cleanup beyond $O(x/L)$ individual
+vertices. Arbitrary jointly chosen rows are subject only to the
+weaker necessary condition above.
+
+Write $q=Ae^{-t}$, so $q_v\asymp q$ on $\mathcal C$ and the number
+$N$ of preliminarily surviving composites is $\asymp q|\mathcal C|$
+with probability tending to one by the variance bound above. For a
+fixed final prime $p$, write $F_E$ for the fiber of a block $E$,
+and $B_p$ for the number of blocks. As in (4.4), $B_p\asymp x$.
+Every fiber has size $O(B/\log B)$ by the deterministic progression
+sieve. If $v\in F_E\setminus E$, all differences within this fiber
+are $hp$ with $0<|h|<2B<w$. Their residues are distinct at every
+tilted prime $w<s\le x/2$. At each such coordinate, conditioning
+on avoidance of the residues of $E$ only increases the probability
+of selecting the forbidden residue of $v$. Multiplying over
+independent coordinates gives
+$\mathbb P(v\in S\mid E\subset S)\le q_v$.
+The dummy class misses all members of $\mathcal C$.
+
+Let $Z$ be, conditional on the preliminary choices, the sum over all
+surviving $v\in\mathcal C$ and all final $p$ of their hit probabilities
+$\theta_{pv}$. Dropping the cap only increases this sum. Using
+the weights $\mathbf1_{E\subset S}/(2B_p\mathbb P(E\subset S))$
+and summing first over $v\in F_E$ shows
+\[
+ \mathbb E Z
+ \ll \sum_p\left(\frac{|\mathcal C|}{B_p}
+                       +q\max_E |F_E|\right)
+ \ll \frac{|\mathcal C|}{L}+\frac{xqB}{L\log B}.
+\]
+Since $|\mathcal C|\asymp xB/\log w$, it follows that
+$Z/N=O_{\mathbb P}(1/(Lq)+1/L)$.
+Each $\theta_{pv}$ is $o(1)$ uniformly, even conditionally.
+In fact a block has size $k\ll B/\log w$ and the product of its
+one-point probabilities has inverse $\exp(O(k\log L))=x^{o(1)}$
+because $B\ll L/t$. The local factor comparison (4.14)--(4.15)
+has logarithmic error $O(k^2/w+k^2\log y/(w\log w))=o(1)$:
+there are at most $k\log y/\log w$ prime divisors of its product.
+Thus every inverse block probability is $x^{o(1)}$. A fiber has
+at most $O(B)$ labels and their weights have denominator $2B_p$.
+
+If $1/(Lq)=o(\log B)$ along a subsequence, independence of the colors
+and Jensen's inequality now give conditional mean uncovered count
+at least $N\exp(-2Z/N)=N B^{-o_{\mathbb P}(1)}$.
+Here $N=(x/L)B^{1-o_{\mathbb P}(1)}$, since
+$q|\mathcal C|\asymp xBt e^{-t}/L$ and $t\ll\log_3 x$.
+Changing one final row changes the count by $O(B)$, so the
+conditional variance is $O(xB^2/L)$ by bounded differences.
+Chebyshev's inequality leaves more than any fixed multiple of $x/L$
+with probability tending to one. This proves the stated necessary
+condition since $Lq\asymp t(\log w)e^{-t}$.
+
 \section*{A necessary distribution for nearly quadratic covers}
 Suppose there is a sequence $x\to\infty$ of covers of length $H$ with
 $\log H/\log x\to2$. Fix $1/2<\alpha<1$ and put $z=\lfloor x^\alpha\rfloor$.

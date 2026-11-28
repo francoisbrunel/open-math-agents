@@ -160,6 +160,51 @@ applies along arbitrary sequences \(x\to\infty\) and gives
 \(E(x,H)=o(H/\log H)\), a contradiction on an infinite subsequence.
 \end{proof}
 
+\paragraph{A quantitative estimate for the number left to cover.}
+Suppose $H\ge x$, $\log H\sim\log x$, and put
+\[
+ L=\log H,\quad w=\max(2H/x,L^2),\quad
+ \rho=\frac{\log w}{L},\quad D=\log(1/\rho).
+\]
+Then $\rho\to0$, $D\to\infty$, and
+\[
+ \limsup_{x\to\infty}
+ \frac{\holes(x,H)}
+ {(H/L)\rho D/\log D}\le 1 .
+\]
+The construction can reserve all primes in $(x/2,x]$ for subsequent
+choices. Here are details giving the leading constant. Fix $0<\delta<1$
+and choose $u=(1+\delta)D/\log D$, $z=\exp(L/u)$ and
+$\varepsilon=\delta/10$. Choose the zero class through $w$ and on
+$(z,x/2]$. Eventually $w<z<x/2$. A surviving composite cannot
+have a factor above $x/2$, because its cofactor would lie in $[2,2H/x]$.
+Its prime factors therefore lie in $(w,z]$. The nonsquarefree
+composites contribute $O(H/w)=o(H/L)$ before sieving by that band.
+
+For a squarefree composite $n> H^{1-\varepsilon}$ in this set,
+sum products $\prod_{i=1}^k\log p_i$ over ordered selections of $k$
+distinct divisors from its prime factors, with
+$k=\lfloor(1-2\varepsilon)u\rfloor$. At each of the $k$ selections
+the remaining sum of weights exceeds $\varepsilon L$.
+Thus every such $n$ contributes at least $(\varepsilon L)^k$.
+For fixed distinct $p_i$, the residual cofactor is $w$-rough and lies
+below $M=H/\prod p_i\ge H^{2\varepsilon}$. The elementary interval
+sieve used above bounds its count by $C M/\log w$ uniformly, since
+$w=H^{o(1)}$. Summing over ordered tuples and using
+$\sum_{p\le z}\log(p)/p\le 2\log z$ shows that their total count is at
+most
+\[
+ \frac{C H}{\log w}\left(\frac{2}{\varepsilon u}\right)^k=o(H/L).
+\]
+Indeed $k\log(\varepsilon u/2) =
+((1-2\varepsilon)(1+\delta)+o(1))D$, whose coefficient exceeds one.
+The integers up to $H^{1-\varepsilon}$ are also $o(H/L)$.
+The prime number theorem leaves at most $(1+o(1))H/L$ candidates
+including the primes. At each $w<p\le z$ keep the most populous
+class for deletion. Mertens' product theorem gives a surviving
+fraction at most $(1+o(1))\log w/\log z=(1+o(1))\rho u$.
+Taking $\delta\downarrow0$ gives the stated limsup.
+
 \paragraph{Lean declarations.}
 The finite estimate is \texttt{Restes687.band\_estimate}.
 Theorems~\ref{th:near} and~\ref{cor:separate} are
