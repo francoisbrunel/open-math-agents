@@ -546,6 +546,11 @@ Numerical commands
   for the reverse inequality. Theorem separation combines this with
   aligned_stock and thin_of_cover. At m=3072 every complete cover
   must differ from every local center by reciprocal mass >= 1/8704.
+  DilatationCarree687 imports StabiliteCarree687. Its dilated_stock
+  counts the surviving distances D*q, for primes z<q<=z^2/(2D).
+  Its tail_separation allows one to remove the contributions of all
+  primes dividing D from the discrepancy when these rows differ.
+  At D=2 and m=6144 the remaining odd primes must have mass >= 1/17408.
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is

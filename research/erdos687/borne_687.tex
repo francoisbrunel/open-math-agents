@@ -365,6 +365,25 @@ complet jusqu'à $k^{m+1}$ doit donc satisfaire, pour chaque $1\le b\le z^2$,
 \]
 Cette condition permet un nombre variable de classes exceptionnelles.
 
+On peut isoler les écarts sur les petits premiers. Fixons un entier
+$D\ge1$ tel que $a_p\not\equiv b\bmod p$ pour chaque premier $p\mid D$,
+$p\le z$. Prenons comme classes auxiliaires $a_p$ pour $p\mid D$ et
+$b\bmod p$ ailleurs. Du côté le plus long de $b$, tous les entiers
+$b\pm Dq$, pour $z<q\le h=\lfloor z^2/(2D)\rfloor$ premier, survivent.
+En effet, si $p\mid D$ ils sont congrus à $b$ et, sinon, $p\nmid Dq$.
+Si $z\ge512D$, alors $z\le h$, $z^2\le4Dh$ et $\log h\le2\log z$.
+Les mêmes bornes de Chebyshev donnent
+$D(\pi(h)-\pi(z))\ge z^2/(64\log z)$. Appliquons la stabilité aux
+classes auxiliaires et aux classes du recouvrement. Pour $m,D$ fixés
+et $k$ suffisamment grand, il faut donc
+\[
+ \frac1{64D}\le\frac{24}{m}
+ +68\sum_{\substack{p\le z\ {\rm premier},\ p\nmid D\\
+                       a_p\not\equiv b\bmod p}}\frac1p .
+\]
+Par exemple, si la parité diffère de celle de $b$, prendre $D=2$ et
+$m=6144$ impose une somme d'au moins $1/17408$ sur les premiers impairs.
+
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
 infinité de $x$ des classes recouvrant $[1,H]$ et un entier $b$ avec
