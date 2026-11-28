@@ -299,6 +299,19 @@ $\log H\le3\log f(H)$. Il suffit de prendre la racine carrée dans la
 borne supérieure de $Y(f(H))$. Le noyau natif vérifie cette implication
 dans \texttt{InverseFin687.cutoff\_lower}.
 
+La preuve conserve aussi une marge si l'on ajoute des classes.
+Pour $d=1/400$ et pour la même longueur $N=\mathrm{length}(d,x)$
+utilisée dans le transfert, posons $L=\log x$ et
+$W=N\log L/L^2$. Il existe deux constantes $\kappa,c'>0$ telles que,
+pour tout $x$ suffisamment grand, après le criblage par tous les
+premiers jusqu'à $x$ puis par un ensemble arbitraire de premiers $E$
+au-dessus de $x$, au moins $c'W$ entiers survivent dès que
+$|E|\le\kappa x\log L/L$. En effet, si $m$ est la différence strictement
+positive entre le coefficient de réserve et $(21/20)d(9/4)$,
+la première étape conserve au moins $mW$. Une classe supplémentaire coûte
+au plus $35N/(xL)$. Les choix $\kappa=m/70$ et $c'=m/2$ conviennent.
+Le noyau Lean 4.34.1 vérifie \texttt{SurvieFine687.additional\_prime\_budget}.
+
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's
 function}, prépublication, 25 septembre 2026, théorèmes 1.1 et 1.2.

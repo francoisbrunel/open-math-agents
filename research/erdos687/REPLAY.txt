@@ -516,6 +516,11 @@ Numerical commands
   InverseFinNatif687.lean imports InverseNatif687 and TransfertFinNatif687.
   InverseFin687.cutoff_lower gives sqrt(H) (log H)^(401/400) = O(f(H)),
   with the same three axioms, using H <= Y(f(H)) and eventually H <= f(H)^3.
+  Compile SurvieFineNatif687 after TransfertFinNatif687. The theorem
+  SurvieFine687.additional_prime_budget keeps a positive constant times
+  stockUnit (1/400) x even after up to kappa*x*log(log x)/log x further
+  prime classes at arbitrary primes above x. Its native kernel audit
+  reports propext, Classical.choice and Quot.sound.
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is

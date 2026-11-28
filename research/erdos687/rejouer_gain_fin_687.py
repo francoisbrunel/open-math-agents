@@ -61,11 +61,75 @@ def transfer(jacobsthal):
             "open Filter GainVariable687 Transfert687 StockFin687\nopen scoped Asymptotics BigOperators\n\n"+src)
 
 
+def robust(jacobsthal):
+    original = file_text("SurvieTotale687.lean")
+    band = between(transfer(jacobsthal), "private theorem scales", "open OMA.")
+    equality = between(original, "private theorem band_remaining", "/-- A uniform positive stock")
+    middle = between(original, "  intro a E hE size", "  have loss1")
+    end = between(original, "  have f1 :=", "theorem stockUnit_pos")
+    end = end.replace("change c/4*W", "change (m/2)*W").replace("  linarith", "  dsimp [m] at *\n  linarith")
+    return """import TransfertFinNatif687
+
+/-! Uniform survivor density at the 401/200 length scale after adding a
+reserve of arbitrary primes having cardinality comparable to
+x log log x / log x. -/
+namespace SurvieFine687
+open Filter GainVariable687 Transfert687 SurvieTotale687 StockFin687
+open scoped Asymptotics BigOperators
+""" + band + "\n" + equality + """
+
+theorem additional_prime_budget :
+    ∃ κ c' : ℝ, 0 < κ ∧ 0 < c' ∧ ∀ᶠ x : ℕ in atTop,
+      ∀ (a : ℕ → ℕ) (E : Finset ℕ), (∀ p ∈ E, x < p ∧ p.Prime) →
+        (E.card:ℝ) ≤ κ*(x:ℝ)*Real.log (Real.log x)/Real.log x →
+        c'*stockUnit (1/400) x ≤
+          ((remaining (survivors x (length (1/400) x) a) E a).card:ℝ) := by
+  classical
+  obtain ⟨c,eqc,hc,hs⟩ := sharp_stock (sharp_bridge SourcePubliee687.sharp_bound)
+  let d := (1/400:ℝ)
+  let m := c-(21/20)*d*(9/4)
+  have hd : 0 < d := by dsimp [d]; norm_num
+  have hh : d ≤ 1/2 := by dsimp [d]; norm_num
+  have hm : 0 < m := by
+    dsimp [m,d]; rw [eqc]
+    linarith [Real.one_half_lt_eulerMascheroniConstant, Real.add_one_le_exp Real.eulerMascheroniConstant]
+  refine ⟨m/70,m/2,by positivity,by positivity,?_⟩
+  have tends : Tendsto (fun x : ℕ => Real.log (x:ℝ)) atTop atTop :=
+    Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
+  filter_upwards [hs d hd hh,ProgressionFine687.uniform_progression hd hh,
+    CribleTransfert687.progression_at_reference hd hh,sharp_band hd hh (by dsimp [d]; norm_num),
+    tends.eventually_ge_atTop 4,eventually_ge_atTop (1:ℕ)] with x hstock hband hlarge hmass hL hx
+  """+middle+"""
+  have loss1 : (∑ p ∈ P, (charge S a p:ℝ)) ≤ ((21/20)*d*(9/4))*W := calc
+    _ ≤ ∑ p ∈ P, (9/4)*(V/p) := Finset.sum_le_sum (hband a)
+    _ = ((9/4)*V)*(∑ p ∈ P, (1:ℝ)/p) := by simp only [Finset.mul_sum,mul_one_div,mul_div_assoc]
+    _ ≤ ((9/4)*V)*((21/20)*d*Real.log L/L) := mul_le_mul_of_nonneg_left hmass (by positivity)
+    _ = _ := by dsimp [W,stockUnit,V,L]; ring
+  have loss2 : (∑ p ∈ E, (charge T a p:ℝ)) ≤ (m/2)*W := calc
+    _ ≤ ∑ _p ∈ E, 35*(V/x) := by
+      apply Finset.sum_le_sum
+      intro p hp
+      obtain ⟨gt,prime⟩ := hE p hp
+      have mono : charge T a p ≤ charge S a p :=
+        Finset.card_le_card (Finset.filter_subset_filter _ incl)
+      exact (show (charge T a p:ℝ) ≤ charge S a p by exact_mod_cast mono).trans
+        (hlarge a x p le_rfl top_le gt.le prime (zle.trans_lt gt))
+    _ = (E.card:ℝ)*(35*(V/x)) := by simp
+    _ ≤ (m/70*(x:ℝ)*Real.log L/L)*(35*(V/x)) := mul_le_mul_of_nonneg_right size (by positivity)
+    _ = _ := by change _ = m/2*(V*(Real.log L/L)); field_simp; ring
+  """+end+"""
+
+end SurvieFine687
+#print axioms SurvieFine687.additional_prime_budget
+"""
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
     parser.add_argument("--jacobsthal", type=Path, required=True)
     args = parser.parse_args()
     for name, content in [("StockFinNatif687",stock(args.jacobsthal)), ("CribleFinNatif687",sieve()),
-                          ("TransfertFinNatif687",transfer(args.jacobsthal))]:
+                          ("TransfertFinNatif687",transfer(args.jacobsthal)),
+                          ("SurvieFineNatif687",robust(args.jacobsthal))]:
         (args.directory / (name+".lean")).write_text(content, encoding="utf-8", newline="\n")
