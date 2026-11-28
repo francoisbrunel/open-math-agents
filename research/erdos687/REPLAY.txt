@@ -778,6 +778,9 @@ Additional two-sided interval information and the counting threshold
   Replace 5231 by 5241 to replay the longer certificate Couverture1223_5241.
   Borne1223_5241.lower_bound translates it to the catalogue statement.
   The uncovered offsets directly adjacent to this run are 0 and 5242.
+  Couverture1223_5243.json gives 5243 consecutive covered offsets.
+  Replacing 5241 by 5243 in both module names reproduces the longer
+  certificate and Borne1223_5243.lower_bound in the catalogue.
 
   Distribution687.threshold_comparison and Distribution687.twice_from_moment
   relate the scale of Y to counts of assignments or a finite central
