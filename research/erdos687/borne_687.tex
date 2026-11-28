@@ -320,6 +320,25 @@ Il reste à savoir si les classes plus grandes peuvent effectivement
 les couvrir tous.
 
 \paragraph{Représentant commun des petites classes.}
+La condition d'effectif ci-dessus exclut inconditionnellement une
+famille à l'échelle des puissances. Supposons $z\ge512$ et que les
+restes jusqu'à $z$ coïncident avec un même entier $b\in[1,z^2]$.
+Du côté le plus long de l'intervalle à partir de $b$, chaque distance
+première $z<q\le\lfloor z^2/2\rfloor$ fournit un survivant distinct.
+En effet $n=b+q$ ou $n=b-q$, et aucun premier $p\le z$ ne divise
+$n-b$. En notant $h=\lfloor z^2/2\rfloor$, les estimations
+élémentaires de Chebyshev donnent
+\[
+ |S|\ge\pi(h)-\pi(z)\ge\frac{z^2}{64\log z}.
+\]
+On utilise $\pi(h)\ge h/(4\log h)$, $4h\ge z^2$,
+$\log h\le2\log z$ et $\pi(z)\le8z/\log z$.
+Pour $z=k^m$ et $m>1536$, ce minorant dépasse strictement
+$(24/m)z^2/\log z$. Aucun choix des classes restantes jusqu'à
+$k^{m+1}$ ne peut couvrir l'intervalle pour $k$ suffisamment grand.
+Le représentant commun intervient dans l'hypothèse. Le théorème chinois
+seul ne donne pas un représentant qui appartienne à l'intervalle.
+
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
 infinité de $x$ des classes recouvrant $[1,H]$ et un entier $b$ avec

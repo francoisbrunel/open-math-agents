@@ -535,6 +535,11 @@ Numerical commands
   thin_of_cover proves the stated condition on the same assignment.
   The paper explains the conditional Siegel-zero obstruction to trying
   to exclude every sparse small-prime stage by itself.
+  CentreCarre687 imports DensiteCarree687 and Comptage687.
+  aligned_stock counts prime distances from a common representative in
+  [1,z^2]. This gives at least z^2/(64 log z) survivors for z >= 512.
+  no_aligned_cover eliminates the resulting profiles at every fixed
+  m > 1536, allowing all choices at the remaining primes.
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is
