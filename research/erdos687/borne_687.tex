@@ -262,7 +262,64 @@ d'impossibilité sans division, y compris si $B=0$.
 Pour en déduire un nouveau majorant de $Y$, il reste à établir des
 estimations uniformes sur ces moments de multiplicité.
 
-\paragraph{Quand les petits premiers partagent un représentant proche.}
+\paragraph{Une condition pour améliorer l'exposant de $x$.}
+Pour préciser l'obstacle à un gain sur la puissance de $x$, fixons un
+entier $m\ge2$ et écrivons $z=k^m$, $x=k^{m+1}$, $N=z^2$. Soit $S$
+l'ensemble des positions de $[1,N]$ épargnées par les premiers jusqu'à $z$,
+et $C_p$ la classe choisie modulo $p$, restreinte à $S$. Pour tout $k$
+assez grand (à $m$ fixé) et tout choix des classes,
+\[
+ \sum_{z<p\le x}|C_p|\le\frac{24}{m}\frac{N}{\log z}.
+\]
+En effet $J=\lfloor N/p\rfloor+1$ vérifie
+$k^{m-1}\le J\le z$ et $\log J\ge\frac12\log z$.
+Le crible supérieur sur les indices de la progression donne
+$|C_p|\le3J/\log J\le12N/(p\log z)$. La borne de Mertens utilisée
+ci-dessus donne $\sum_{z<p\le x}1/p\le2/m$ dès que $\log k\ge10$.
+
+Par conséquent, une couverture complète à ces paramètres exige, pour
+le \emph{même} choix des petites classes, $|S|\le(24/m)N/\log z$.
+Si, pour un seul $m\ge2$, tous les choix donnent strictement plus de
+survivants pour tous les $k$ assez grands, alors
+\[
+      Y(t)\ll_m t^{\,2m/(m+1)}\qquad(t\to\infty).
+\]
+On prend $k=\lceil t^{1/(m+1)}\rceil$ et on utilise la monotonie de
+$Y$. Il suffirait en particulier d'une constante positive arbitraire
+dans une borne inférieure uniforme $|S|\ge c z^2/\log z$ aux carrés,
+puis de prendre $m>24/c$.
+
+On peut éviter de poser cette hypothèse plus forte. Appelons ici un
+profil complétable un choix des classes jusqu'à $k^{m+1}$ qui recouvre
+$[1,k^{2m}]$ et qui, au stade $k^m$, laisse au plus
+$(24/m)k^{2m}/\log(k^m)$ survivants. Alors les deux assertions suivantes
+sont équivalentes.
+\begin{enumerate}
+\item Il existe $\alpha<2$ tel que $Y(t)\ll t^\alpha$ pour tout $t$
+assez grand.
+\item Il existe un entier $m\ge2$ tel que, pour tout $k$ assez grand,
+aucun de ces profils ne soit complétable.
+\end{enumerate}
+Pour le premier sens, choisir $m$ avec $(m+1)\alpha<2m$. La borne de
+croissance interdit alors de couvrir $k^{2m}$ positions au seuil
+$k^{m+1}$. Réciproquement, la majoration des pertes force toute
+couverture à satisfaire la condition de faible effectif. L'interpolation
+entre les puissances donne donc l'exposant $2m/(m+1)$. Ces implications
+ne décident pas laquelle des configurations peut effectivement exister.
+
+Cette hypothèse uniforme rencontre un obstacle précis. Sous l'hypothèse
+d'une infinité de zéros de Siegel, le corollaire 1 de Granville
+\cite{granville}, appliqué à $v=2$ où $f(2)=0$, fournit des intervalles
+de longueur $z^2$ contenant $o(z^2/\log z)$ survivants. La translation
+de l'intervalle définit les petites classes. Pour atteindre un seuil
+$k^m$ avec $m$ fixé, on arrondit $z$ vers le haut. L'ajout des
+premiers retire des positions, et le rallongement de l'intervalle
+ajoute au plus $O_m(z^{2-1/m})=o(z^2/\log z)$ positions.
+Ces exemples conditionnels concernent le nombre initial de survivants.
+Il reste à savoir si les classes plus grandes peuvent effectivement
+les couvrir tous.
+
+\paragraph{Représentant commun des petites classes.}
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
 infinité de $x$ des classes recouvrant $[1,H]$ et un entier $b$ avec

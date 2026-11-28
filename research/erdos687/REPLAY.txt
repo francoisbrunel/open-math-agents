@@ -526,6 +526,15 @@ Numerical commands
   of primes in (s,t] fits the budget at s. Compile ParametreItere687,
   then BorneItereeNatif687 with SurvieFineNatif687 and InverseNatif687
   on the same import path. The final declaration is BorneIteree687.upper.
+  With the Lean 4.33.1 catalogue and CribleFin687, CribleTransfert687 and
+  Harmonique687 on the import path, compile DensiteCarree687. Its
+  power_saving_iff identifies the obstruction to decreasing the exponent
+  of x. For some fixed integer m >= 2 one must exclude full covers of
+  [1,k^(2m)] at cutoff k^(m+1) for all sufficiently large k whose
+  small-prime stage at z=k^m leaves at most (24/m)*z^2/log z survivors.
+  thin_of_cover proves the stated condition on the same assignment.
+  The paper explains the conditional Siegel-zero obstruction to trying
+  to exclude every sparse small-prime stage by itself.
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is
