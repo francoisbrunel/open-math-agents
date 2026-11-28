@@ -532,6 +532,15 @@ Numerical commands
   of x. For some fixed integer m >= 2 one must exclude full covers of
   [1,k^(2m)] at cutoff k^(m+1) for all sufficiently large k whose
   small-prime stage at z=k^m leaves at most (24/m)*z^2/log z survivors.
+  EcartsMultiples687 imports DensiteCarree687. Its cover_moment gives a
+  residue-independent necessary condition using weighted counts of distinct
+  tuples in a common residue class. upper_of_tuple_bound interpolates it.
+  OrdreMoments687 imports EcartsMultiples687 and CentreCarre687. Its
+  fixed_order_fails proves that at every fixed m and every fixed order,
+  the uncentered inequality eventually holds for every finite test set.
+  DispersionBande687 imports EcartsMultiples687. Its overlap_budget gives
+  the centered fourth-moment bound including exact duplicate incidences;
+  collision_identity and upper_of_fourth give the expansion and reduction.
   thin_of_cover proves the stated condition on the same assignment.
   The paper explains the conditional Siegel-zero obstruction to trying
   to exclude every sparse small-prime stage by itself.

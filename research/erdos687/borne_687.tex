@@ -319,6 +319,58 @@ Ces exemples conditionnels concernent le nombre initial de survivants.
 Il reste à savoir si les classes plus grandes peuvent effectivement
 les couvrir tous.
 
+\paragraph{Tester la répartition des survivants avant de choisir les dernières classes.}
+Soient $P$ les premiers restants, $h=\sum_{p\in P}1/p$, $T$ une partie
+des survivants et $s=|T|$. Écrivons $n_{pr}=|\{i\in T:i\equiv r\bmod p\}|$.
+Pour $j\ge0$ posons
+\[
+ A_j=\sum_{p\in P}p^j\sum_{r\bmod p}(n_{pr})_{j+1},
+ \qquad (n)_d=n(n-1)\cdots(n-d+1).
+\]
+Ce sont des comptages de tuples ordonnés de positions distinctes. Si les
+dernières classes recouvrent $T$, alors
+\[
+       (s-j|P|)_+^{j+1}\le h^j A_j,\qquad t_+=\max(t,0).
+\]
+En effet, $\sum_p(n_{p,a_p}-j)_+\ge(s-j|P|)_+$. Appliquer Jensen
+avec les poids $1/(ph)$, puis utiliser $(n-j)_+^{j+1}\le(n)_{j+1}$.
+Le cas $P=\varnothing$ est immédiat.
+
+Le test non centré a une limite même si l'on choisit librement $T$.
+Pour chaque $p$, Jensen sur les $p$ restes donne
+$p^j\sum_r(n_{pr})_{j+1}\ge(s-jp)_+^{j+1}$.
+Si $h^j|\{p\in P:p\le|P|\}|\ge1$, le test est donc satisfait par tout
+ensemble $T$. À $z=k^m$, $x=k^{m+1}$, $P=(z,x]\cap\mathbb P$,
+ce phénomène survient pour tout ordre $j$ fixé et tout $k$ assez grand
+à $m\ge2$ fixé. En effet $\pi(x)\ge x/(4\log x)$, $\pi(z)\le z$ et
+$x\ge128z(\log x)^2$ donnent $|P|\ge x/(8\log x)$ et
+$h\ge1/(8\log x)$. Une deuxième application de la borne sur $\pi$ à
+$|P|$ donne $\pi(|P|)-\pi(z)\ge z$. Or $z\ge(8\log x)^j$ à terme.
+
+Le centrage permet une autre condition à l'ordre quatre. Posons
+\[
+  Q=\sum_{p\in P}\frac1p\sum_{r\bmod p}(p n_{pr}-s)^4 .
+\]
+Si les dernières classes couvrent $T$, notons $d_i$ le nombre de fois
+où $i$ est couvert après sa première couverture et $D=\sum_{i\in T}d_i$.
+Pour tout tel choix on a
+\[
+                 ((1-h)s+D)^4\le h^3 Q .
+\]
+En effet, $\sum_p n_{p,a_p}=s+D$. Jensen, cette fois sur les écarts
+signés $p n_{p,a_p}-s$ avec poids $1/(ph)$, donne l'inégalité en
+élargissant la somme de quatrièmes puissances à tous les restes.
+La contribution de $p$ à $Q$ vaut exactement
+\[
+ p^3\sum_r n_{pr}^4-4sp^2\sum_r n_{pr}^3
+           +6s^2p\sum_r n_{pr}^2-3s^4 .
+\]
+Les trois sommes comptent des collisions de quatre, trois et deux
+positions, ici avec répétition. Pour améliorer l'exposant de $Y$, il
+suffirait de trouver, dans chaque profil de faible effectif pour un
+même $m$, une partie $T$ avec $h\le1$ et $h^3Q<((1-h)s)^4$. La
+majoration uniforme de ce moment centré reste à établir.
+
 \paragraph{Représentant commun des petites classes.}
 La condition d'effectif ci-dessus exclut inconditionnellement une
 famille à l'échelle des puissances. Supposons $z\ge512$ et que les
