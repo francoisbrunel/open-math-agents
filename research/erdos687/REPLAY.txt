@@ -493,6 +493,16 @@ Numerical commands
   see Z. E. Brady, Sieves and Iteration Rules (2017), section 1.1,
   Proposition 2, https://www.notzeb.com/phd-thesis.pdf .
 
+  Compile PrimesRares687 after ProgressionPremiere687 and Extension687,
+  then IntervallesPremiers687. All four printed theorems passed the
+  standard Lean 4.33.1 axiom audit. If b is coprime to q and
+  2 <= q+b <= qH+b <= y^2, each composite qn+b has a prime factor <= y.
+  If at most pi(x)-pi(y) of the H terms are primes above y, distinct
+  reserve primes cover the remaining indices, so H <= Y(x) for y <= x.
+  In particular, a near-linear upper bound for Y forces, for fixed e>0
+  and all sufficiently large k, more than pi(4k)-pi(2k) primes in
+  every (b,b+floor(k^(1+e))] with k^2 <= b <= 2k^2.
+
   python -B certificat_183.py
   python -B recherche_687.py 71 --holes 1
   python -B recherche_687.py 47 73

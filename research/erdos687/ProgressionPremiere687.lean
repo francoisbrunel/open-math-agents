@@ -4,15 +4,12 @@ import Transfert687
     The variable b can include the starting offset of the progression. -/
 namespace ProgressionPremiere687
 
-theorem cover_of_small_factors {q b x H : ℕ} (cop : q.Coprime b)
-    (factors : ∀ n ∈ Finset.Icc 1 H, ∃ p ≤ x, p.Prime ∧ p ∣ q*n+b) :
-    H ≤ Erdos687.Y x := by
+theorem factor_classes {q b : ℕ} (cop : q.Coprime b) :
+    ∃ a : ℕ → ℕ, ∀ n p : ℕ, p.Prime → p ∣ q*n+b → n ≡ a p [MOD p] := by
   classical
   let a (p : ℕ) := if h : ∃ n : ℕ, p ∣ q*n+b then Classical.choose h else 0
-  apply Transfert687.le_Y_of_covered
   refine ⟨a,?_⟩
-  intro n hn
-  obtain ⟨p,bound,prime,hit⟩ := factors n hn
+  intro n p prime hit
   have exists_hit : ∃ m : ℕ, p ∣ q*m+b := ⟨n,hit⟩
   have chosen : p ∣ q*(a p)+b := by
     simpa only [a,dif_pos exists_hit] using Classical.choose_spec exists_hit
@@ -21,9 +18,19 @@ theorem cover_of_small_factors {q b x H : ℕ} (cop : q.Coprime b)
     have one := Nat.dvd_gcd pq pb
     rw [cop.gcd_eq_one] at one
     exact prime.not_dvd_one one)
-  refine ⟨p,bound,prime,Nat.ModEq.cancel_left_of_coprime unit ?_⟩
+  apply Nat.ModEq.cancel_left_of_coprime unit
   exact Nat.ModEq.add_right_cancel' b
     ((Nat.modEq_zero_iff_dvd.mpr hit).trans (Nat.modEq_zero_iff_dvd.mpr chosen).symm)
+
+theorem cover_of_small_factors {q b x H : ℕ} (cop : q.Coprime b)
+    (factors : ∀ n ∈ Finset.Icc 1 H, ∃ p ≤ x, p.Prime ∧ p ∣ q*n+b) :
+    H ≤ Erdos687.Y x := by
+  obtain ⟨a,classes⟩ := factor_classes cop
+  apply Transfert687.le_Y_of_covered
+  refine ⟨a,?_⟩
+  intro n hn
+  obtain ⟨p,bound,prime,hit⟩ := factors n hn
+  exact ⟨p,bound,prime,classes n p prime hit⟩
 
 /-- A full block longer than Y(x) contains a term with no prime factor ≤ x. -/
 theorem rough_term {q b x H : ℕ} (cop : q.Coprime b) (long : Erdos687.Y x < H) :
@@ -56,17 +63,15 @@ theorem prime_in_progression {q b x H : ℕ} (cop : q.Coprime b) (start : 2 ≤ 
 open Filter
 open scoped Asymptotics
 
-/-- An upper exponent for Y gives primes uniformly in reduced progressions
-    up to the complementary exponent, with a strict margin in the sum. -/
-theorem moduli_of_upper_power {α δ : ℝ} (nonneg : 0 ≤ α) (gap : α+δ < 2)
+theorem room_of_upper_power {α δ : ℝ} (nonneg : 0 ≤ α) (gap : α+δ < 2) (K : ℕ)
     (upper : (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop] (fun x : ℕ => (x:ℝ)^α)) :
-    ∀ᶠ x : ℕ in atTop, ∀ q b : ℕ, 2 ≤ q → b < q → q.Coprime b → (q:ℝ) ≤ (x:ℝ)^δ →
-      ∃ p : ℕ, p.Prime ∧ x < p ∧ p ≤ x^2 ∧ p ≡ b [MOD q] := by
+    ∀ᶠ x : ℕ in atTop, ∀ q b : ℕ, b < q → (q:ℝ) ≤ (x:ℝ)^δ →
+      K*(q*(Erdos687.Y x+1)+b) ≤ x^2 := by
   obtain ⟨C,hC,est⟩ := upper.exists_pos
   have grows := (tendsto_rpow_atTop (show 0 < 2-(α+δ) by linarith)).comp
     (tendsto_natCast_atTop_atTop : Tendsto (fun x : ℕ => (x:ℝ)) atTop atTop)
-  filter_upwards [est.bound,grows.eventually_ge_atTop (C+2),eventually_ge_atTop (1:ℕ)] with x hx large xpos
-  intro q b hq hb cop small
+  filter_upwards [est.bound,grows.eventually_ge_atTop ((K:ℝ)*(C+2)),eventually_ge_atTop (1:ℕ)] with x hx large xpos
+  intro q b hb small
   have one : (1:ℝ) ≤ x := by exact_mod_cast xpos
   have pos : (0:ℝ) < x := by linarith
   have power := Real.one_le_rpow one nonneg
@@ -75,13 +80,26 @@ theorem moduli_of_upper_power {α δ : ℝ} (nonneg : 0 ≤ α) (gap : α+δ < 2
       abs_of_nonneg (Real.rpow_nonneg pos.le α)] using hx
   have factor : (Erdos687.Y x : ℝ)+2 ≤ (x:ℝ)^α*(C+2) := by nlinarith
   have rb : (b:ℝ) ≤ q := by exact_mod_cast hb.le
-  have roomR : (q:ℝ)*((Erdos687.Y x:ℝ)+1)+b ≤ (x:ℝ)^2 := calc
+  have base : (q:ℝ)*((Erdos687.Y x:ℝ)+1)+b ≤ (x:ℝ)^(α+δ)*(C+2) := calc
     _ ≤ (q:ℝ)*((Erdos687.Y x:ℝ)+2) := by linarith
     _ ≤ (x:ℝ)^δ*((x:ℝ)^α*(C+2)) := mul_le_mul small factor (by positivity) (by positivity)
     _ = (x:ℝ)^(α+δ)*(C+2) := by rw [Real.rpow_add pos]; ring
+  have roomR : (K:ℝ)*((q:ℝ)*((Erdos687.Y x:ℝ)+1)+b) ≤ (x:ℝ)^2 := calc
+    _ ≤ (K:ℝ)*((x:ℝ)^(α+δ)*(C+2)) := mul_le_mul_of_nonneg_left base (Nat.cast_nonneg _)
+    _ = (x:ℝ)^(α+δ)*((K:ℝ)*(C+2)) := by ring
     _ ≤ (x:ℝ)^(α+δ)*(x:ℝ)^(2-(α+δ)) := mul_le_mul_of_nonneg_left large (by positivity)
     _ = _ := by rw [← Real.rpow_add pos,show α+δ+(2-(α+δ))=2 by ring,Real.rpow_two]
-  have room : q*(Erdos687.Y x+1)+b ≤ x^2 := by exact_mod_cast roomR
+  exact_mod_cast roomR
+
+/-- An upper exponent for Y gives primes uniformly in reduced progressions
+    up to the complementary exponent, with a strict margin in the sum. -/
+theorem moduli_of_upper_power {α δ : ℝ} (nonneg : 0 ≤ α) (gap : α+δ < 2)
+    (upper : (fun x : ℕ => (Erdos687.Y x : ℝ)) =O[atTop] (fun x : ℕ => (x:ℝ)^α)) :
+    ∀ᶠ x : ℕ in atTop, ∀ q b : ℕ, 2 ≤ q → b < q → q.Coprime b → (q:ℝ) ≤ (x:ℝ)^δ →
+      ∃ p : ℕ, p.Prime ∧ x < p ∧ p ≤ x^2 ∧ p ≡ b [MOD q] := by
+  filter_upwards [room_of_upper_power nonneg gap 1 upper] with x broad
+  intro q b hq hb cop small
+  have room : q*(Erdos687.Y x+1)+b ≤ x^2 := by simpa using broad q b hb small
   obtain ⟨n,hn,prime,big⟩ := prime_in_progression cop (by omega) (Nat.lt_succ_self _) room
   exact ⟨q*n+b,prime,big,(Nat.add_le_add_right (Nat.mul_le_mul_left q (Finset.mem_Icc.mp hn).2) b).trans room,
     by simp [Nat.ModEq]⟩

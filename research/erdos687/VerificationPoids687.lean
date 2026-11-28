@@ -1,6 +1,8 @@
-import Std
+module
+public import Std
 
 /-! Executable input and local assembly for ordinary-kernel certificate replay. -/
+@[expose] public section
 namespace VerificationPoids687
 
 abbrev B : Nat := 2^32

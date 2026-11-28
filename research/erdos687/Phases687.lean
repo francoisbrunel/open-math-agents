@@ -1,4 +1,5 @@
 import NoyauPondere687
+import Branches19_687
 import FormalConjectures.ErdosProblems.«687»
 
 /-! Translating and reflecting a finite core obstruction verifies an upper
@@ -81,20 +82,22 @@ theorem common_phase (a : ℕ → ℕ) :
   let c := Nat.chineseRemainderOfFinset (fun p => phase (a p) p) id S nz pairs
   exact ⟨c,fun p hp => ((c.2 p hp).add_right _).trans (phase_add _ (Nat.mem_primesLE.mp hp).2.pos)⟩
 
-/-- For length 6890, checking these 255256 consecutive starts suffices
-    to exclude all assignments of all primes, with no restriction on x. -/
-theorem wheel6890 {x : ℕ} {ps : List ℕ}
+/-- Reflection reduces a length-H computation to half the wheel. The
+    integer k accounts for the parity of H when centering the starts. -/
+theorem wheel_upper {x H A k : ℕ} {ps : List ℕ}
+    (geometry : 2*A+H+1+k=1021020) (parity : k ≤ 1)
     (primes : ∀ p, p ∈ ps ↔ p≤x ∧ p.Prime)
-    (reject : ∀ t, 507064≤t → t≤762319 → ∀ a, Normal t ps a → ¬Covers 6890 ps a) :
-    Erdos687.Y x < 6890 := by
-  suffices every : ∀ y, Green46.IsCoveredByResidues x y → y < 6890 by
-    have h : Erdos687.Y x ≤ 6889 :=
-      csSup_le ⟨0,fun _ => 0,by simp⟩ (fun y hy => Nat.le_of_lt_succ (every y hy))
-    exact Nat.lt_succ_of_le h
+    (reject : ∀ t, A≤t → t≤A+255255 → ∀ a, Normal t ps a → ¬Covers H ps a) :
+    Erdos687.Y x < H := by
+  suffices every : ∀ y, Green46.IsCoveredByResidues x y → y < H by
+    apply every
+    exact Nat.sSup_mem (s := {y : ℕ | Green46.IsCoveredByResidues x y})
+      ⟨0,fun _ => 0,by simp⟩
+      ⟨primorial x,fun _ h => (Erdos687.lt_primorial_of_isCoveredByResidues h).le⟩
   intro y all
   obtain ⟨a,ha⟩ := all
   by_contra! le
-  have cov : Covers 6890 ps a := by
+  have cov : Covers H ps a := by
     intro n hn hN
     obtain ⟨p,hp,pr,h⟩ := ha n (Finset.mem_Icc.mpr ⟨hn,hN.trans le⟩)
     exact ⟨p,(primes p).mpr ⟨hp,pr⟩,h⟩
@@ -104,12 +107,12 @@ theorem wheel6890 {x : ℕ} {ps : List ℕ}
     rw [show 510510=primorial 17 by decide]
     exact ((primes p).mp hp).2.dvd_primorial_iff.mpr old
   obtain ⟨c,hc⟩ := common_phase a
-  let s := (c+3446)%510510
-  let t := 507064+s
+  let s := (c+(510510-A))%510510
+  let t := A+s
   have sb : s<510510 := Nat.mod_lt _ (by decide)
   have ht : t ≡ c [MOD 510510] := by
     calc
-      _ ≡ 507064+(c+3446) [MOD 510510] := (Nat.mod_modEq _ _).add_left _
+      _ ≡ A+(c+(510510-A)) [MOD 510510] := (Nat.mod_modEq _ _).add_left _
       _ = c+510510 := by omega
       _ ≡ c [MOD 510510] := (Nat.modEq_add_modulus_iff.mpr (Nat.ModEq.refl c)).symm
   have norm : Normal t ps a := by
@@ -118,11 +121,31 @@ theorem wheel6890 {x : ℕ} {ps : List ℕ}
       (hc p (Nat.mem_primesLE.mpr ⟨old,((primes p).mp hp).2⟩))
   by_cases first : s≤255255
   · exact reject t (by dsimp [t]; omega) (by dsimp [t]; omega) a norm cov
-  · let u := 507064+(510511-s)
-    have mirror : 510510 ∣ t+u+6890+1 := by
+  · let u := A+(510510+k-s)
+    have mirror : 510510 ∣ t+u+H+1 := by
       refine ⟨3,?_⟩
       dsimp [t,u]; omega
     obtain ⟨b,nb,cb⟩ := reflect pos dvd mirror norm cov
     exact reject u (by dsimp [u]; omega) (by dsimp [u]; omega) b nb cb
+
+theorem wheel6890 {x : ℕ} {ps : List ℕ}
+    (primes : ∀ p, p ∈ ps ↔ p≤x ∧ p.Prime)
+    (reject : ∀ t, 507064≤t → t≤762319 → ∀ a, Normal t ps a → ¬Covers 6890 ps a) :
+    Erdos687.Y x < 6890 :=
+  wheel_upper (A := 507064) (k := 1) (by decide) (by decide) primes reject
+
+theorem mixed_wheel {x H A k stop : ℕ} {ps : List ℕ}
+    (geometry : 2*A+H+1+k=1021020) (parity : k≤1) (enough : A+255255 ≤ stop)
+    (primes : ∀ p, p ∈ (19 :: ps) ↔ p≤x ∧ p.Prime)
+    (certified : Branches19_687.Segment ps H A stop) : Erdos687.Y x < H := by
+  apply wheel_upper geometry parity primes
+  intro t lo hi a norm
+  obtain ⟨L,N,hL,hN,h⟩ := certified t lo (hi.trans enough)
+  apply core_excludes (fun p hm => ((primes p).mp hm).2.pos) hL hN _ norm
+  rcases h with direct | branches
+  · exact NoyauPondere687.encoded direct
+  · apply NoyauPondere687.branch (by decide : 0 < 19)
+    intro j
+    exact branches j.val (Nat.zero_le _) (by omega)
 
 end Phases687

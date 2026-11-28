@@ -32,11 +32,11 @@ private theorem covered_weight (i : ℕ) (w r : ℕ → ℕ) (rows : List (ℕ �
       · exact (eqn (hp ▸ h)).elim
       · simpa [eqn] using ih ⟨p,hp,h⟩
 
-theorem sound {F L N : ℕ} {rows : List (ℕ × ℕ)} (test : check F L N rows=true) :
-    Obstruction L N (rows.map Prod.fst) := by
+theorem positive_support {F L N : ℕ} {rows : List (ℕ × ℕ)} (test : check F L N rows=true)
+    (r : ℕ → ℕ) (normalized : ∀ p ∈ rows.map Prod.fst, p≤17 → r p%p=phase L p)
+    (all : ∀ i<N, 0 < digit B F i → ∃ p ∈ rows.map Prod.fst, i%p=r p%p) : False := by
   simp only [check,Bool.and_eq_true,decide_eq_true_eq,List.all_eq_true] at test
   obtain ⟨⟨size,limit,mask,gap⟩,tests⟩ := test
-  intro r normalized all
   let w := digit B F
   have ceilingMass : half ≤ B-1 := by decide
   have mass := total_from_word (bits := 32) rfl (by decide : 1<B)
@@ -64,10 +64,49 @@ theorem sound {F L N : ℕ} {rows : List (ℕ × ℕ)} (test : check F L N rows=
     | cons q qs ih =>
       simp only [List.map_cons,List.sum_cons]
       exact Nat.add_le_add (upper q (by simp)) (ih (fun a ha => upper a (by simp [ha])))
-  have lower := Finset.sum_le_sum (s := Finset.range N)
-    (fun i hi => covered_weight i w r rows (all i (Finset.mem_range.mp hi)))
+  have lower : (∑ i ∈ Finset.range N, w i) ≤
+      ∑ i ∈ Finset.range N, (rows.map (fun q => if i%q.1=r q.1%q.1 then w i else 0)).sum := by
+    apply Finset.sum_le_sum
+    intro i hi
+    by_cases h : 0 < w i
+    · exact covered_weight i w r rows (all i (Finset.mem_range.mp hi) h)
+    · simp [Nat.eq_zero_of_not_pos h]
   rw [transpose] at lower
   exact (Nat.not_lt_of_ge (lower.trans bound)) (mass.symm ▸ gap)
+
+theorem sound {F L N : ℕ} {rows : List (ℕ × ℕ)} (test : check F L N rows=true) :
+    Obstruction L N (rows.map Prod.fst) := by
+  intro r norm all
+  exact positive_support test r norm (fun i hi _ => all i hi)
+
+/-- For each residue of a new prime, certify the positive support on the
+    other rows and verify that its mass on the prescribed residue is zero. -/
+theorem branch {L N p : ℕ} {ps : List ℕ} (prime_pos : 0 < p)
+    (cases : ∀ j : Fin p, ∃ F rows, rows.map Prod.fst = ps ∧ check F L N rows = true ∧
+      digit B (F % (B^p-1)) j.val = 0) : Obstruction L N (p :: ps) := by
+  intro r norm all
+  let j : Fin p := ⟨r p % p,Nat.mod_lt _ prime_pos⟩
+  obtain ⟨F,rows,list,test,zero⟩ := cases j
+  have h := test
+  simp only [check,Bool.and_eq_true,decide_eq_true_eq] at h
+  obtain ⟨⟨size,limit,mask,_⟩,_⟩ := h
+  have light := (input_bound (bits := 32) rfl (by decide : 1<B) (by decide : ceiling<B) mask).trans_lt
+    (limit.trans_le (by decide : half ≤ B-1))
+  have empty : row N (digit B F) p (r p%p) = 0 :=
+    (fixed_row (by decide : 1<B) prime_pos size light (r p)).trans zero
+  apply positive_support test r
+  · intro q hq small
+    exact norm q (List.mem_cons_of_mem p (list ▸ hq)) small
+  · intro i hi positive
+    obtain ⟨q,hq,hit⟩ := all i hi
+    rcases List.mem_cons.mp hq with eq | rest
+    · subst q
+      have one := Finset.single_le_sum (f := fun n : ℕ => if n%p=r p%p then digit B F n else 0)
+        (fun _ _ => Nat.zero_le _) (Finset.mem_range.mpr hi)
+      change _ ≤ row N (digit B F) p (r p%p) at one
+      rw [empty,if_pos hit] at one
+      omega
+    · exact ⟨q,list.symm ▸ rest,hit⟩
 
 theorem encoded {L N : ℕ} {ps : List ℕ} (h : VerificationPoids687.Encoded L N ps) :
     Obstruction L N ps := by
