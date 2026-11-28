@@ -781,6 +781,7 @@ Additional two-sided interval information and the counting threshold
   Couverture1223_5243.json gives 5243 consecutive covered offsets.
   Replacing 5241 by 5243 in both module names reproduces the longer
   certificate and Borne1223_5243.lower_bound in the catalogue.
+  The same commands with 5247 reproduce the further finite improvement.
 
   Distribution687.threshold_comparison and Distribution687.twice_from_moment
   relate the scale of Y to counts of assignments or a finite central
@@ -808,6 +809,9 @@ Additional two-sided interval information and the counting threshold
   any sequence of cutoffs, with the same assignment at infinitely
   many of those cutoffs. The three audited declarations use only the
   usual axioms.
+  The further theorem simultaneous gives one assignment at every member
+  of any prescribed increasing cutoff sequence. The additive loss is at
+  most the preceding primorial minus one at each step.
   ConcentrationClasses687 proves the bounded-differences estimate
   lower_tail for independent resampling of a list of prime rows.
   Compile MoyenneConditionnelle687 with StabiliteCarree687 available

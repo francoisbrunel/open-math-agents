@@ -34,18 +34,23 @@ def good (u h : ℕ → ℕ) : Set Rows := ⋃ i : ℕ × ℕ, boundedAt u h i.1
 private theorem closed_at (u h : ℕ → ℕ) (M N : ℕ) : IsClosed (boundedAt u h M N) :=
   isClosed_iInter (fun n => isClosed_iInter (fun _ => (open_covers (u n) (M*h n+1)).isClosed_compl))
 
-private theorem prescribed (x K : ℕ) (b : Rows) :
-    ∃ a ∈ PiNat.cylinder b K, covers a x (Erdos687.Y x-(primorial K-1)) := by
+theorem prescribed_through (x K : ℕ) (b : Rows) :
+    ∃ a : Rows, (∀ p ≤ K, a p = b p) ∧ covers a x (Erdos687.Y x-(primorial K-1)) := by
   obtain ⟨r,agree,full⟩ := ClassesImposees687.at_maximum x K.primesLE
     (fun p hp => (Nat.mem_primesLE.mp hp).2) b
-  let a := fun p => if p < K then b p else r p
-  refine ⟨a,PiNat.mem_cylinder_iff.mpr (fun i hi => by simp [a,hi]),?_⟩
+  let a := fun p => if p ≤ K then b p else r p
+  refine ⟨a,fun i hi => by simp [a,hi],?_⟩
   intro n hn
   obtain ⟨p,px,pr,hit⟩ := full n hn
   refine ⟨p,px,pr,?_⟩
-  by_cases small : p < K
-  · simpa [a,small] using hit.trans (agree p (Nat.mem_primesLE.mpr ⟨small.le,pr⟩))
+  by_cases small : p ≤ K
+  · simpa [a,small] using hit.trans (agree p (Nat.mem_primesLE.mpr ⟨small,pr⟩))
   · simpa [a,small] using hit
+
+private theorem prescribed (x K : ℕ) (b : Rows) :
+    ∃ a ∈ PiNat.cylinder b K, covers a x (Erdos687.Y x-(primorial K-1)) := by
+  obtain ⟨a,agree,hit⟩ := prescribed_through x K b
+  exact ⟨a,PiNat.mem_cylinder_iff.mpr (fun p hp => agree p hp.le),hit⟩
 
 /-- Even the starting threshold and multiplicative constant may initially
 depend on the entire infinite profile. A uniform additive loss is one
@@ -124,7 +129,37 @@ theorem near_optimal_residual (u e : ℕ → ℕ) (large : Tendsto e atTop atTop
   obtain ⟨atN,hit⟩ := Set.mem_iUnion.mp hn
   exact ⟨n,atN,hit⟩
 
+private noncomputable def stage (u : ℕ → ℕ) : ℕ → Rows
+  | 0 => Classical.choose (prescribed_through (u 0) 0 (fun _ => 0))
+  | j+1 => Classical.choose (prescribed_through (u (j+1)) (u j) (stage u j))
+
+/-- Simultaneous near-maximality at every prescribed increasing cutoff.
+The explicit loss at a stage depends only on the preceding cutoff. -/
+theorem simultaneous (u : ℕ → ℕ) (grow : StrictMono u) :
+    ∃ a : Rows, covers a (u 0) (Erdos687.Y (u 0)) ∧ ∀ j,
+      covers a (u (j+1)) (Erdos687.Y (u (j+1))-(primorial (u j)-1)) := by
+  classical
+  have next (j : ℕ) := Classical.choose_spec (prescribed_through (u (j+1)) (u j) (stage u j))
+  have stable {i j : ℕ} (le : i ≤ j) {p : ℕ} (old : p ≤ u i) : stage u j p=stage u i p := by
+    induction j,le using Nat.le_induction with
+    | base => rfl
+    | succ j ij ih =>
+      exact ((next j).1 p (old.trans (grow.monotone ij))).trans ih
+  let a := fun p => stage u p p
+  have agree (j p : ℕ) (up : p ≤ u j) : a p=stage u j p := by
+    rcases le_total j p with jp|pj
+    · exact stable jp up
+    · exact (stable pj (grow.id_le p)).symm
+  have inherit (j H : ℕ) (h : covers (stage u j) (u j) H) : covers a (u j) H := by
+    intro n hn
+    obtain ⟨p,pj,pr,hit⟩ := h n hn
+    exact ⟨p,pj,pr,by rwa [agree j p pj]⟩
+  refine ⟨a,inherit 0 _ ?_,fun j => inherit (j+1) _ (next j).2⟩
+  simpa only [primorial_zero,Nat.sub_self,Nat.sub_zero,stage] using
+    (Classical.choose_spec (prescribed_through (u 0) 0 (fun _ => 0))).2
+
 end ProfilsCoherents687
 #print axioms ProfilsCoherents687.uniform_of_nonmeagre
 #print axioms ProfilsCoherents687.upper_of_nonmeagre
 #print axioms ProfilsCoherents687.near_optimal_residual
+#print axioms ProfilsCoherents687.simultaneous

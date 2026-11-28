@@ -199,6 +199,19 @@ argument.
 Lean 4.33.1 verifies both \texttt{ProfilsCoherents687.upper\_of\_nonmeagre}
 and \texttt{ProfilsCoherents687.near\_optimal\_residual}.
 
+There is also a simultaneous version. For any strictly increasing
+sequence of cutoffs $u_0,u_1,\ldots$, one assignment attains $Y(u_0)$
+at the first cutoff and covers at least
+\[
+       Y(u_{j+1})-\Big(\prod_{p\le u_j}p-1\Big)
+\]
+positions at every subsequent cutoff (with a negative length read as
+zero). At step $j+1$ prescribe the preceding assignment through $u_j$.
+Each prime row then stabilizes once the cutoff reaches it. Taking its
+stabilized value preserves all the earlier covers. For example, along
+$u_0=2$ and $u_{j+1}=16^{u_j}$, the loss is at most $\sqrt{u_{j+1}}$ at
+every stage. The kernel verifies \texttt{ProfilsCoherents687.simultaneous}.
+
 \section*{Two limits of weighted interval estimates}
 Suppose small-prime classes have already been fixed. Put nonnegative
 weights on the remaining positions, with total $W>0$. For a remaining
