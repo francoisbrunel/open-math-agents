@@ -384,6 +384,22 @@ et $k$ suffisamment grand, il faut donc
 Par exemple, si la parité diffère de celle de $b$, prendre $D=2$ et
 $m=6144$ impose une somme d'au moins $1/17408$ sur les premiers impairs.
 
+Enfin, pour tout entier $t\ge0$, on peut choisir un seul $m$
+qui exclut uniformément tous les recouvrements ayant au plus $t$
+classes différentes de celles d'un entier $b$ de la fenêtre.
+Posons $K=17408(t+1)$, $u_0=1$, $u_{i+1}=K u_i^2$,
+$B=u_t$ et $m=6144B$. S'il y a au plus $t$ premiers en écart,
+partons de $D=1$. Tant qu'un premier en écart $p\nmid D$ satisfait
+$p\le KD$, multiplions $D$ par $p$. Après $i$ opérations, $D\le u_i$.
+Au terme d'au plus $t$ opérations, $D\le B$ et tout premier en écart
+restant dépasse $KD$. La somme des inverses de ces premiers,
+multipliée par $D$, vaut donc au plus $t/K\le1/17408$.
+Comme $24D/m\le1/256$, la condition précédente imposerait
+$1/64\le1/256+68/17408=1/128$. Le seuil sur $k$ peut être choisi
+simultanément pour les entiers $1\le D\le B$, qui forment un ensemble
+fini fixé avant $k$. Les classes, le centre et les premiers en écart
+peuvent tous varier avec $k$.
+
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
 infinité de $x$ des classes recouvrant $[1,H]$ et un entier $b$ avec

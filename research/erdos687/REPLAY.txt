@@ -551,6 +551,10 @@ Numerical commands
   Its tail_separation allows one to remove the contributions of all
   primes dividing D from the discrepancy when these rows differ.
   At D=2 and m=6144 the remaining odd primes must have mass >= 1/17408.
+  NombreEcarts687 imports DilatationCarree687. The theorem many_changes
+  excludes at most t discrepancies from any local center uniformly
+  for one fixed m depending only on t, for all sufficiently large k.
+  Its proof absorbs the small exceptions into D and bounds the tail by t/(K*D).
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is
