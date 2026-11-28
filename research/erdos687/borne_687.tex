@@ -6,7 +6,7 @@
 \newtheorem{proposition}{Proposition}
 \title{Une conséquence de la borne quantitative de crible pour le problème d'Erdős 687}
 \author{Note de travail de la session de recherche de francoisbrunel avec Codex}
-\date{26 novembre 2026}
+\date{28 novembre 2026}
 \begin{document}
 \maketitle
 
@@ -243,7 +243,11 @@ ni une priorité bibliographique ni un minorant comparable.
 Les constructions de Ford et al. \cite{fgkmt} et du crible incliné
 \cite{tilted} demeurent d'une échelle différente. La seconde établit
 $Y(x)\gg x\log x/\log_3 x$, où $\log_j$ désigne le logarithme itéré
-$j$ fois. L'argument de la présente note n'a pas été vérifié en Lean.
+$j$ fois. Le noyau Lean 4.34.1 a vérifié la majoration avec un
+$\eta>0$ existentiel dans \texttt{erdos687\_log\_saving}, en utilisant le
+théorème formalisé de la source. Son audit donne seulement
+\texttt{propext}, \texttt{Classical.choice} et \texttt{Quot.sound}.
+Le choix numérique $\eta=1/200$ relève du calcul sur papier.
 
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's

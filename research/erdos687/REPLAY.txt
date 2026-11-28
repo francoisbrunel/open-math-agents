@@ -243,9 +243,14 @@ Quantitative survivor theorem
   Add --general when generating BorneNative687.lean to include the bound on
   the general Jacobsthal function. SHA-256 checks pin the copied catalog definitions.
   The generator assembles the transfer, the original definitions of the catalog
-  target, and the application to SourcePubliee687.source_bound. The complete
-  4.34.1 chain still awaits a kernel check. All 42 dependency revisions were
-  checked before the native Linux run was stopped.
+    target, and the application to SourcePubliee687.source_bound. The full
+    chain, including --general, passed the native Windows Lean 4.34.1 kernel
+    on 28 November 2026. The checked BorneNative687.lean is also included
+    directly (SHA-256 22cb97a38eb1c856d6fd115e4afeada4fd70ff2cdb4464ef099b7f89a5e2ccad).
+    SourcePubliee687.source_bound, erdos687_log_saving and jacobsthal_log_saving
+    each report only propext, Classical.choice and Quot.sound. The first
+    Y bound supplies some eta > 0. The particular value 1/200 proposed in
+    the mathematical note still requires a verified explicit constant.
   Original preprint and formalization at revision adc7f1241b42e322a6451854ab7e4b4c146bf78a:
   https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026
   Independent upstream rebuild:
