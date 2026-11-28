@@ -674,6 +674,40 @@ L'exposant au dénominateur devient $2+2d=2+1/50$. Le noyau Lean
 4.34.1 vérifie \texttt{BorneProduit687.upper\_one\_fiftieth} avec les
 mêmes trois axiomes.
 
+\paragraph{Transfert sans perte fixe et exposant $2+1/20$ sur papier.}
+Notons $I$ le coefficient signé de bord et $M_g$ la masse de
+renouvellement dans la proposition 6.3 de \cite{survivors}.
+L'argument donne plus généralement tout exposant $2+\eta$ avec
+\[
+                 0<\eta<\mathcal C,\qquad
+                 \mathcal C=-\tfrac1{100}+2I/M_g .
+\]
+En effet, pour $0<b<b'<\mathcal C$, la limite (6.20) fournit la
+marge $e^\gamma b'$ au lieu de $e^\gamma/40$. Dans la comparaison
+arrêtée de la section 11, choisir les erreurs assez petites pour
+conserver la fraction $b/b'$ de cette marge donne uniformément
+$|S|\ge e^\gamma b\,N(z)V_0/B^2$. Par Mertens et
+$\log w\sim\log\log z$, le coefficient du minorant de
+$N(z)\log\log z/(\log z)^2$ est donc au moins $b-o(1)$.
+Prenons $d=\eta/2$ et $z=x/(\log x)^d$. Pour chaque $z<p\le x$,
+les indices de sa classe ont longueur $M=N(z)/p+O(1)$, avec
+$\log M\sim\log x$ uniformément. Le crible supérieur à $\sqrt M$
+donne au plus $(2+o(1))M/\log M$ positions possibles dans la classe.
+La somme sur les premiers de la bande vaut
+$(d+o(1))\log\log x/\log x$ pour les poids $1/p$.
+La capacité totale de la bande a donc pour coefficient au plus
+$2d+o(1)$ dans les mêmes unités que le stock. Choisir
+$\eta<b<b'<\mathcal C$ laisse une position et donne le majorant.
+
+La remarque 6.4 du manuscrit donne $I>222979373/10^9$ et (4.22)
+donne $M_g\le4e^\gamma$. Pour fixer une constante rationnelle,
+$e^\gamma<9/5$. En effet,
+$\gamma\le\sum_{k=1}^{64}1/k-6\log 2<4.744-4.158=0.586$,
+alors que $\log(9/5)>2((2/7)+(2/7)^3/3)>0.586$.
+Il s'ensuit que $\mathcal C>1/20$. Ce calcul emploie la majoration
+affinée de la queue dans la remarque 6.4. La vérification Lean de
+$2+1/50$ ci-dessus n'emploie pas cette remarque.
+
 \paragraph{Ce qui bloque une augmentation du petit seuil dans cette preuve.}
 Une façon d'essayer de gagner davantage est de prendre
 $w=(\log z)^{1+\varepsilon}$, $\varepsilon>0$ fixé, et d'adapter la
