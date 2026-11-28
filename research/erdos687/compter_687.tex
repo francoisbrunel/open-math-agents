@@ -220,6 +220,9 @@ nonnegative after including the sieve errors in the envelopes.
 Their sum is the total envelope difference, by counting all hits in
 two orders. Each normalized quantity therefore tends to zero.
 Multiplying $L$ by $\log x/\log z$ gives the claimed stock limit.
+Lean verifies the finite accounting identity, the squeeze, and the
+exact integral as \texttt{RigiditeCritique687.balance},
+\texttt{.saturation}, and \texttt{.sieve\_gap}.
 In particular a positive normalized excess in any one of these
 quantities, uniformly along putative nearly quadratic covers, would
 exclude that sequence. No such uniform excess is established here.
@@ -229,6 +232,130 @@ uncovered. In that case count repeated hits as
 $\sum_{n\in S}\max(m(n)-1,0)$. Each uncovered position has $m(n)=0$
 and adds one unit to the available envelope difference, which
 changes its normalized value by $o(1)$.
+This tolerance matters for a proof strategy. Under the hypothesis of
+infinitely many Siegel zeros, Granville's Corollary 1 at the fixed
+parameter $2$ gives a sequence of intervals of length $H=x^{2+o(1)}$
+with $o(H/\log x)$ survivors after sieving through $x$.
+Consequently the global stock law and the vanishing normalized
+repeat count can hold for these nearly complete assignments too.
+An argument that excludes every such numerical profile would also
+exclude that exceptional-zero hypothesis.
+
+For complete covers there is a local form. Let $Q=Q(x)\ge1$ satisfy
+$\log Q=o(\log x)$. For a residue $b$ modulo $Q$ avoiding $a_p$
+at every $p\mid Q$, the same calculation gives
+\[
+ \#\{n\in S:n\equiv b\bmod Q\}
+   =\left(\log\frac{2-\alpha}{\alpha}+o(1)\right)
+       \frac{H}{\varphi(Q)\log x}.
+\]
+If $b$ hits one of those prescribed classes the count is zero. On an
+allowed progression the new interval length is $H/Q+O(1)$, with
+the same limiting logarithmic exponent $2$. The excluded primes
+dividing $Q$ are all below $z$ eventually. Their deletion from
+the sieve multiplies its Euler product by $Q/\varphi(Q)$.
+This same product occurs in the upper envelopes after restricting
+to a larger prime, since each such prime is coprime to $Q$.
+Iwaniec's upper and lower corollaries for excluded divisors of $Q$
+have relative additive bracket error
+$O(\log\log(3Q)/\log N)=o(1)$ at each interval length $N$ used here.
+Their constants are uniform in $Q$ and in the interval origin.
+See the \href{https://github.com/jasondavies/iwaniec-linear-sieve/blob/84dfeff69393f31bbdcd126531f0ad8976069dad/IwaniecLinearSieve/Main/Corollary.lean}{formal statements of both corollaries}.
+Thus the global squeeze applies inside every such progression, even
+when the modulus and the admissible class vary along the sequence.
+
+\paragraph{The least prime at every fixed power cutoff.}
+The stock law extends to every fixed $0<\alpha<1$. Let $f,F$ be
+the usual dimension-one sieve functions in Granville's formula (1),
+with $(u f(u))'=F(u-1)$ for $u>2$ and $f(2)=0$. Under the same
+near-quadratic hypothesis one has
+\[
+ \frac{\log x}{H}|S_\alpha|
+      \longrightarrow C(\alpha):=\frac{e^{-\gamma}}{\alpha}f(2/\alpha).
+\]
+Here $S_\alpha$ consists of positions with no hit at $p\le x^\alpha$.
+Assign each remaining covered position to its \emph{least} hitting
+prime $p$. Within its progression the smaller rows sieve an interval
+of length $H/p+O(1)$ through $p^-$, the cutoff just below $p$.
+Writing $t=\log p/\log x$, the upper sieve and Mertens' product give
+the sum of the normalized row envelopes as
+\[
+ e^{-\gamma}\int_\alpha^1 F(2/t-1)\frac{dt}{t^2}
+   =\frac{e^{-\gamma}}2\int_2^{2/\alpha} F(u-1)\,du
+   =C(\alpha).
+\]
+The lower sieve for $S_\alpha$ gives exactly this constant.
+The functions are continuous on the compact ranges used; replacing
+$H/p$ by its integer part has uniformly vanishing relative error.
+If $H/p<p$, sieving the row only through its length gives the same
+limiting upper envelope at $t=1$, where $F(1)=2e^\gamma$.
+Thus the normalized sum of the deficits of the least-prime rows
+tends to zero. When finitely many fixed cutoffs are used these
+conclusions hold simultaneously. The argument allows $o(H/\log x)$
+uncovered positions, which contribute directly to the counting identity.
+
+There is a genuine change in the number of repeated hits at
+$\alpha=1/2$. For each fixed $\alpha<1/2$, and every assignment, a
+positive proportion on the scale $H/\log x$ of duplicate hits remains
+when counting all hits on $S_\alpha$ with multiplicity beyond the first.
+To see this, choose four constants
+$\alpha<a_1<a_2<b_1<b_2<1/2$. Count pairs with
+$x^{a_1}<p\le x^{a_2}$, $x^{b_1}<q\le x^{b_2}$ for which $n$ hits
+both rows and has no hit at any prime less than $p$. No assignment
+can count a position more than $m(n)-1$ times this way: the first
+prime is determined and only the second can vary.
+The two classes pick one progression modulo $pq$. Its indices form
+an interval of length $H/(pq)+O(1)$, sieved by primes below $p$.
+The sieve parameter exceeds $2$ by a fixed amount since
+$3a_2+b_2<2$. The lower linear sieve thus gives at least
+$cH/(pq\log x)$ positions, with $c>0$ independent of the choices.
+The reciprocal sums over both bands tend to positive constants.
+This proves the asserted lower bound even for assignments which
+leave holes. For each fixed $\alpha>1/2$ a nearly complete cover
+instead has $o(H/\log x)$ repeats as proved above.
+
+\paragraph{A test using the additive large sieve.}
+Here is one quadratic test of the global profile. Fix $a\in(1/2,1)$
+and give each survivor through $x^a$ weight $f(t)$, where
+$t=\log p/\log x$ for its first covering prime and $f$ is a bounded
+step function with fixed breakpoints. Put
+\[
+ w(t)=\frac2{t(2-t)},\qquad
+ M=\int_a^1 w(t)f(t)\,dt,\qquad B=\int_a^1 tw(t)f(t)\,dt .
+\]
+Take $Q=\min(x,\sqrt H)/\log x$. Every squarefree $q\le Q$ contains
+at most one prime above $x^a$. Write $A$ for the simultaneous CRT
+representative of the chosen classes. The Ramanujan sum $c_d(n-A)$
+is the constant $\mu(d)$ on the initial survivors whenever $d$ is
+squarefree and all its primes are at most $x^a$. For $q=dp$ with a
+larger prime, the additional factor is $p\,1_{n\equiv A\bmod p}-1$.
+Project the additive Fourier coefficients at each squarefree modulus
+onto this one direction by Cauchy--Schwarz. The large sieve upper
+bound is $(H+O(Q^2))$ times the sum of the squared weights.
+For the lower estimate the row deficits have negligible total mass;
+changing weights on multiply hit rows costs at most
+$2\|f\|_\infty\sum_{m(n)\ge2}m(n)=o(H/\log x)$.
+The uniform row envelopes bound each normalized row by a constant.
+Thus the weighted first moments of the row errors also suffice after
+squaring. The elementary asymptotic
+$\sum_{d\le T}\mu^2(d)/\varphi(d)\sim\log T$ and partial summation
+give the following necessary inequality in the limit:
+\[
+ \int_a^1 wf^2 \ \ge\
+ (2-a+\log a)M^2+
+ \int_a^1\frac{1-t}{t}\left(\frac{2f(t)}{2-t}-M\right)^2dt .
+\]
+Indeed the coefficient of $M^2$ from smooth moduli is
+$1-\int_a^1(1-t)\,dt/t=2-a+\log a$, since the other moduli each
+have a unique large prime and $Q/p<x^a$.
+Subtracting the right side from the left gives
+\[
+   T+(M-B)^2-B^2,\qquad T=\int_a^1\frac{2f(t)^2}{(2-t)^2}\,dt .
+\]
+Ordinary integral Cauchy--Schwarz gives $B^2\le2(1-a)T\le T$.
+Hence these particular large-sieve projections are compatible with
+the required profile for every such weight. A contradiction by this
+route would need information beyond these projections.
 
 \section*{Coherent assignments and uniform upper bounds}
 The upper-bound question admits a deterministic reformulation for

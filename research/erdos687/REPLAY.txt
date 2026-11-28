@@ -826,3 +826,7 @@ Additional two-sided interval information and the counting threshold
   TranslationsCarrees687 imports ClassesImposees687 and DensiteCarree687.
   The kernel verifies progression and obstruction for the regular family
   of overlapping square windows inside any longer covering interval.
+  RigiditeCritique687 imports DispersionBande687 and the fundamental
+  theorem of calculus. The 4.33.1 kernel checks balance, saturation and
+  sieve_gap. The first-prime stock law is derived from the classical
+  interval sieve in compter_687.tex, with the range and error specified.
