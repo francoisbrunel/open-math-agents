@@ -360,6 +360,31 @@ la première étape conserve au moins $mW$. Une classe supplémentaire coûte
 au plus $35N/(xL)$. Les choix $\kappa=m/70$ et $c'=m/2$ conviennent.
 Le noyau Lean 4.34.1 vérifie \texttt{SurvieFine687.additional\_prime\_budget}.
 
+\paragraph{Agrandissement du seuil.}
+L'application de cette réserve à tous les premiers d'une bande donne
+directement une majoration plus forte de la fonction demandée :
+\[
+ Y(t)\ll \frac{t^2}{(\log t)^{401/200}(\log\log t)^2}.
+\]
+En effet, fixons $A=\max(1,16/\kappa)$ et prenons
+$s=\lceil At/\log\log t\rceil$. Finalement $s\le t$,
+$\log t/2\le\log s\le\log t$ et
+$\log\log t/2\le\log\log s$. La majoration élémentaire
+$\pi(t)\le8t/\log t$ donne
+\[
+   \#\{p:s<p\le t\}\le \pi(t)
+       \le \kappa s\,\frac{\log\log s}{\log s}.
+\]
+La réserve démontrée au seuil $s$ permet ainsi d'ajouter \emph{tous}
+les premiers manquants jusqu'à $t$. Un entier de l'intervalle de
+longueur $N=\mathrm{length}(1/400,s)$ survit à tout choix des classes.
+Donc $Y(t)\le N\ll s^2/(\log s)^{401/200}$. Comme
+$s\le2At/\log\log t$ pour $t$ assez grand, la borne annoncée suit.
+Le noyau Lean 4.34.1 a vérifié \texttt{BorneIteree687.upper} avec
+\texttt{propext}, \texttt{Classical.choice} et \texttt{Quot.sound}.
+Le facteur supplémentaire tend vers l'infini. La question d'un
+minorant comparable reste ouverte.
+
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's
 function}, prépublication, 25 septembre 2026, théorèmes 1.1 et 1.2.
