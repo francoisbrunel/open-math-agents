@@ -172,6 +172,139 @@ bounded differences argument gives
 for all sufficiently large $k$, with $c'_a>0$. Here $a$ and $m$ must
 be fixed before $k$ tends to infinity.
 
+\section*{How far a typical half-prefix can be extended}
+Fix $0<\theta<1$ with $e^\gamma(1-\theta)<2\theta$, in particular
+$\theta=1/2$. At cutoff $x$, put $z=\lfloor\theta x\rfloor$,
+$V=\prod_{p\le z}(1-1/p)$ and $B=\pi(x)-\pi(z)$. Prescribe
+independent uniform classes for the primes up to $z$. Let $A_x$ be the
+maximum initial length which the remaining primes through $x$ can
+cover together with those prescribed classes. Write $U_H$ for the
+number of positions in the initial interval of length $H$ that avoid
+the prescribed classes. For every realization, when $z\ge2$,
+\[
+       H\le 2(z+1) \quad\Longrightarrow\quad
+       \{A_x\ge H\}=\{U_H\le B\}.
+\]
+Indeed all survivors have the same parity. Distinct survivors in the
+same class modulo a prime $p>z$ must differ by at least $2p$. Each
+remaining prime can therefore remove at most one, while $B$ primes
+can always handle any $B$ survivors individually.
+
+Put $H_x=B/V$. Mertens' theorem and the prime number theorem give
+$H_x/x\to e^\gamma(1-\theta)$. For each fixed multiple of $x$,
+$\mathbb E U_H=HV$ and $\operatorname{Var}U_H\le HV$ by the finite
+variance estimate above. Applying Chebyshev just below and above
+$H_x$ gives $A_x/x\to e^\gamma(1-\theta)$ in probability. In
+particular a typical half-prefix extends to about $0.8905x$, even
+when every later class is chosen optimally.
+
+There is a limiting law at the transition. Set
+$\sigma_x=\sqrt{B(1-e^{-\gamma})}/V$. Then
+\[
+                (A_x-H_x)/\sigma_x\ \Longrightarrow\ \mathcal N(0,1).
+\]
+To check the variance constant, take $H/H_x\to1$, so $H<2z$
+eventually. The pair correlation at shift $d<H$, divided by $V^2$,
+is zero for odd $d$. For even $d$ it is the ordinary prime-pair
+singular series $\mathfrak S(d)$ times
+$\prod_{p>z}(1-1/(p-1)^2)^{-1}=1+O(1/(z\log z))$: every prime factor
+of the even $d$ is at most $z$. The two-point case of the singular
+series mean estimate gives
+$2\sum_{d<H}(H-d)(\mathfrak S(d)-1)=-H\log H+O(H)$.
+Expanding the variance as the sum of covariances therefore gives
+\[
+ \operatorname{Var} U_H=HV-HV^2\log H+
+             O\!\left(HV^2+\frac{H^2 V^2}{z\log z}\right)
+       \sim B(1-e^{-\gamma}).
+\]
+By CRT, the random sieve is a uniform translate modulo the primorial
+$Q=\prod_{p\le z}p$. Theorem 1 and identity (11) of
+\href{https://arxiv.org/pdf/math/0409258}{Montgomery and Soundararajan,
+\emph{Primes in short intervals}} give the Gaussian moments of the
+standardized $U_H$. For fixed moment order $k$, the power saving in
+$H$ dominates all factors of $Q/\varphi(Q)=1/V=O(\log x)$. The same
+paper's Theorem 2 with $k=2$ supplies the singular series calculation
+used above. The normal law is moment-determinate. Taking
+$H=\lfloor H_x+t\sigma_x\rfloor$ in the finite criterion now gives
+the stated limit.
+
+If a single sequence of independent uniform rows is used at all
+cutoffs, for every fixed $\varepsilon>0$ almost surely
+\[
+                  A_x=H_x+O_{\theta,\varepsilon}(x^{1/2+\varepsilon})
+                  \qquad (x\in\mathbb N,\ x\to\infty).
+\]
+For $0<\varepsilon<1/2$ apply the fixed even moment bound to
+$H=\lfloor H_x\pm x^{1/2+\varepsilon}\rfloor$. The mean of $U_H$
+differs from $B$ by $\asymp x^{1/2+\varepsilon}V$, and its centered
+moment of order $2k$ is $O_k((xV)^k)$. The probability of crossing
+either threshold in the wrong direction is
+$O_k(x^{-2k\varepsilon}(\log x)^k)$, summable for sufficiently large
+fixed $k$. Borel--Cantelli does not require independence across
+cutoffs. The known superlinear lower bound on the unrestricted maximum
+therefore requires exceptional prefixes even when all the later rows
+may be chosen after inspecting the prefix.
+
+\paragraph{A restriction on reducing the bias in the tilted lower construction.}
+Consider the preliminary law of
+\href{https://github.com/DottedCalculator/ai-math/blob/main/Erdos_4_GPT_5.6_Sol.pdf}
+{\emph{A tilted residue-class construction for long prime-free intervals},
+Sections 2--3}. Write $L=\log x$, $w=L^{100}$, $\tau=t/L$ and
+$y=xB$, where $L^\delta\le B\le L$ for fixed $\delta>0$ and
+$1\le t\ll\log_3 x$. All primes up to $w$ select zero. For each prime
+$w<s\le x/2$ the survival factor of a nonzero residue is
+$B_s=(s-1)/(s-1+s^{-\tau})$; that of zero is $s^{-\tau}B_s$.
+For any fixed $K>1$, a necessary condition for a probability bounded
+away from zero of completing $(x,y]$ with rows through $Kx$ is
+\[
+       t e^{-t}\log B\ll_K 1,\qquad
+       t\ge \log_3 x+\log_4 x-O_{K,\delta}(1).
+\]
+The obstruction concerns this specified sampling law, and applies
+even if the unused rows are optimized jointly.
+
+Here is the deterministic part. Each fresh $p\in(x/2,Kx]$ has at
+most $O(B/\log B)$ survivors in any one class. Its indices form an
+interval of length $\asymp_K B$ and avoid one residue at every
+prime through, for example, $B^{1/4}$. The upper interval sieve
+and CRT give the bound, uniformly in all choices. Thus at most
+$O_K(xB/(L\log B))$ survivors can be removed altogether.
+
+For the other direction let $\mathcal C$ be the squarefree composites
+in $(x,y]$ with all prime factors bigger than $w$. Their largest
+prime factor is at most $x/2$, because $2B<w$. The elementary
+rough-number estimate in Section 3.2 of the manuscript, or the
+fundamental lemma at $\log y/\log w\to\infty$, gives
+$|\mathcal C|\asymp y/\log w$ (primes and nonsquarefree numbers
+contribute $o(y/\log w)$). Put $A=\prod_{w<s\le x/2}B_s$ over primes.
+As in the manuscript, partial summation of
+$\sum_{w<s\le x/2}s^{-1-\tau}$ gives $A\asymp t\log w/L$
+uniformly here: the exponential integral at the lower endpoint
+equals $-\log(\tau\log w)+O(1)$, and the one at the upper endpoint
+is bounded for $t\ge1$. A member $v$ survives with probability
+$q_v=A v^{-\tau}\asymp A e^{-t}$. Thus the expected surviving
+count $M$ in $\mathcal C$ is $\asymp xB\,t e^{-t}/L$.
+
+This count concentrates around $M$. At a prime where two residues
+differ, their joint survival probability is at most the product of
+their probabilities. For distinct $u,v$ the inflation at primes with
+equal residues is at most
+$\gcd(u,v)^\tau\prod_{s\mid u-v,\ s>w} B_s^{-1}
+\le(1+o(1))\gcd(u,v)^\tau$ uniformly: there are at most
+$\log y/\log w$ relevant primes, each giving $\log B_s^{-1}=O(1/w)$.
+Since any nontrivial common divisor exceeds $w$,
+\[
+ \sum_{u,v\in\mathcal C}(\gcd(u,v)^\tau-1)
+ \ \le\ \sum_{w<d\le y}d^\tau\lfloor y/d\rfloor^2
+ \ \ll\ y^2w^{-1+\tau}=o(|\mathcal C|^2).
+\]
+The bounded ratio of largest to smallest $q_v$ and $M\to\infty$
+therefore give variance $o(M^2)$. If $t e^{-t}\log B$ were unbounded,
+a subsequence would have $M$ larger than the total final capacity by
+a diverging factor. Along that subsequence the probability of a
+completion tends to zero. Taking logarithms and using
+$\log B\asymp_\delta\log_2 x$ gives the claimed restriction on $t$.
+
 \section*{A necessary distribution for nearly quadratic covers}
 Suppose there is a sequence $x\to\infty$ of covers of length $H$ with
 $\log H/\log x\to2$. Fix $1/2<\alpha<1$ and put $z=\lfloor x^\alpha\rfloor$.
@@ -331,7 +464,9 @@ more precise limit for $D_\alpha=\sum_{n\in S_\alpha}(m(n)-1)_+$:
 \]
 Use $f(u)=0$ for $u\le2$. For the lower bound pair each position's
 least hitting prime $p>x^\alpha$ with every later hitting prime
-$q>p$. This counts each duplicate exactly once. For fixed
+$q>p$. This counts each duplicate exactly once; Lean checks the two
+finite identities in \texttt{PremierRecouvrant687.first\_count} and
+\texttt{PremierRecouvrant687.pair\_count}. For fixed
 $p=x^t,q=x^v$ the indices in their common progression are sieved
 by all primes less than $p$. The lower sieve gives the displayed
 integral as a lower limit by partial summation. One may first restrict

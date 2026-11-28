@@ -841,3 +841,6 @@ Additional two-sided interval information and the counting threshold
   the lower sieve for exact prime-hit patterns can use excluded modulus 1.
   CentreDemiEntier687 imports DilatationCarree687. Lean 4.33.1 verifies
   stock, square and no_full_cover for odd rows aligned at a half-integer.
+  PremierRecouvrant687 imports DispersionBande687. Lean 4.33.1 checks
+  first_count and pair_count by grouping points by their least covering
+  prime, counting every additional hit once.
