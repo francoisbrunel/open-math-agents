@@ -711,6 +711,11 @@ Additional two-sided interval information and the counting threshold
   The seven displayed residues cover all ten. The CRT endpoints have
   gcd one with the primorial at offsets 0 and 5218.
 
+  Couverture1223_5229.json records a further extension of the same seed
+  to 5229 positions. Its first and last adjacent offsets (0 and 5230)
+  are coprime to the primorial. Replay the command above with 5229
+  substituted for 5217 and compile Borne1223_5229 for the catalogue result.
+
   Distribution687.threshold_comparison and Distribution687.twice_from_moment
   relate the scale of Y to counts of assignments or a finite central
   moment. SautsRankin687.arbitrarily_large derives a prime-jump consequence
