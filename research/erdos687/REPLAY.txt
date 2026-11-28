@@ -823,3 +823,6 @@ Additional two-sided interval information and the counting threshold
   reports propext, Classical.choice and Quot.sound for both results.
   The deeper power-sized prefix in compter_687.tex uses the lower
   linear sieve analytically.
+  TranslationsCarrees687 imports ClassesImposees687 and DensiteCarree687.
+  The kernel verifies progression and obstruction for the regular family
+  of overlapping square windows inside any longer covering interval.

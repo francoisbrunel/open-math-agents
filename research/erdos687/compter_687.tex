@@ -172,6 +172,64 @@ bounded differences argument gives
 for all sufficiently large $k$, with $c'_a>0$. Here $a$ and $m$ must
 be fixed before $k$ tends to infinity.
 
+\section*{A necessary distribution for nearly quadratic covers}
+Suppose there is a sequence $x\to\infty$ of covers of length $H$ with
+$\log H/\log x\to2$. Fix $1/2<\alpha<1$ and put $z=\lfloor x^\alpha\rfloor$.
+Write $S$ for the positions avoiding the chosen classes through $z$,
+$N_p$ for the number of elements of $S$ hit by the chosen class at $p$,
+and $m(n)$ for the number of hits at $z<p\le x$. Then
+\[
+ \frac{|S|\log x}{H}\longrightarrow \log\frac{2-\alpha}{\alpha},
+ \qquad
+ \frac{\log x}{H}\sum_{n\in S}(m(n)-1)\longrightarrow0 .
+\]
+In particular the positions whose first covering prime lies between
+$x^\alpha$ and $x^\beta$, for fixed $\alpha<\beta<1$, have limiting
+count, in units of $H/\log x$,
+$\log((2-\alpha)/\alpha)-\log((2-\beta)/\beta)$.
+The limits apply to every such sequence of assignments.
+
+Indeed set $s=\log H/\log z$ and $r=\log x/\log z$.
+For $2<s<4$, the lower interval sieve gives, in units $H/\log z$,
+the lower envelope $L=(2/s)\log(s-1)+o(1)$ for $|S|$.
+The indices in one progression modulo $p$ form an interval of length
+$H/p+O(1)$. Multiplication by $p$ permutes the classes of each
+prime up to $z$, so that CRT converts their restrictions to ordinary
+interval sieving. At $t=\log p/\log z$ the upper interval sieve
+therefore gives $N_p\le U_p$, where
+$U_p/(H/\log z)=(2/(s-t)+o(1))/p$. Here $s-t$ stays in a compact subset of
+$(1,3)$ for each fixed $\alpha$ in the indicated range.
+These constants follow from formula (1) and the explicit sieve
+functions in \href{https://arxiv.org/pdf/2010.01211}{Granville,
+\emph{Sieving intervals and Siegel zeros}, pp.\ 1--2}. Uniformity
+over a compact range of exponents also follows by dividing the
+range into finitely many subintervals, varying the sieve cutoff
+monotonically at fixed interval length, then taking the mesh to zero.
+
+Partial summation using Mertens' theorem gives the normalized sum of
+row envelopes as $\int_1^r 2\,dt/(t(s-t))+o(1)$. Subtracting the
+lower envelope yields exactly
+\[
+ \int_1^r \frac{2\,dt}{t(s-t)}
+       -\frac2s\log(s-1)=\frac2s\log\frac{r}{s-r}.
+\]
+The right side tends to zero since $s/r\to2$. The excess of the
+actual stock over the lower envelope, the sum of the row deficits
+$\sum_p(U_p-N_p)$, and the number of repeated hits are all
+nonnegative after including the sieve errors in the envelopes.
+Their sum is the total envelope difference, by counting all hits in
+two orders. Each normalized quantity therefore tends to zero.
+Multiplying $L$ by $\log x/\log z$ gives the claimed stock limit.
+In particular a positive normalized excess in any one of these
+quantities, uniformly along putative nearly quadratic covers, would
+exclude that sequence. No such uniform excess is established here.
+
+The conclusions also hold if $o(H/\log x)$ positions are left
+uncovered. In that case count repeated hits as
+$\sum_{n\in S}\max(m(n)-1,0)$. Each uncovered position has $m(n)=0$
+and adds one unit to the available envelope difference, which
+changes its normalized value by $o(1)$.
+
 \section*{Coherent assignments and uniform upper bounds}
 The upper-bound question admits a deterministic reformulation for
 infinite assignments. Give $\mathbb N^{\mathbb N}$ its product topology,
@@ -220,6 +278,19 @@ Each prime row then stabilizes once the cutoff reaches it. Taking its
 stabilized value preserves all the earlier covers. For example, along
 $u_0=2$ and $u_{j+1}=16^{u_j}$, the loss is at most $\sqrt{u_{j+1}}$ at
 every stage. The kernel verifies \texttt{ProfilsCoherents687.simultaneous}.
+
+A long cover also imposes a finite simultaneous condition. Prescribe
+the classes below $w$ and let $D=\prod_{p\le w}p$. If
+$Y(x)\ge H+TD+(D-1)$, a single assignment with that prefix covers
+every length-$H$ window starting at offsets $0,D,\ldots,TD$.
+First align a maximal assignment with the prescription by a shift of
+at most $D-1$. For the window at $jD$ the classes at all primes shift
+by $-jD$, preserving the prescribed rows. In particular
+at $z=k^m$, $x=k^{m+1}$ and $H=z^2$, all these translated profiles
+must have at most $(24/m)H/\log z$ survivors through $z$ for large $k$.
+To exclude the long cover it suffices to prove one translate exceeds
+this threshold in each such progression for a single chosen prefix.
+Lean verifies \texttt{TranslationsCarrees687.obstruction}.
 
 \section*{Two limits of weighted interval estimates}
 Suppose small-prime classes have already been fixed. Put nonnegative
