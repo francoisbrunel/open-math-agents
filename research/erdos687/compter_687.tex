@@ -142,7 +142,16 @@ inequality of McDiarmid} gives, uniformly in the prescribed prefix,
 Summing dyadically using $\pi(2t)\le16t/\log t$ gives
 $\sum_{p>w}p^{-2}\le32/(w\log w)$ for $w\ge2$. The bound is therefore
 $\exp(-c\log z\log\log z)$ for some absolute $c>0$ and all sufficiently
-large $k$. This last estimate is an analytic deduction. The number of
+large $k$. Using its finite exponential-moment bound, Lean 4.33.1
+also verifies, for every $w\ge2$ with $2w\le z$ and
+$\prod_{p\le w}p\le z$, the explicit estimate
+\[
+  \Pr(E\mid (a_p)_{p\le w})
+      \le \exp\!\left(-\frac{w\log w}{2\cdot12^2\cdot68^2\cdot32}\right).
+\]
+The declarations are \texttt{ConcentrationUniforme687.uniform} and
+\texttt{ConcentrationUniforme687.logarithmic}. The latter instantiates
+$w=\lfloor\log_{16}z\rfloor$. The number of
 possible assignments to the middle primes still exceeds the reciprocal
 of the displayed bound, so exceptional profiles can persist.
 

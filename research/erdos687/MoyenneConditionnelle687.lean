@@ -66,7 +66,7 @@ theorem draw_stock {p : ℕ} {P : Finset ℕ} (hp : 0 < p) (mem : p ∈ P) (H : 
 theorem expected (ps : List ℕ) (distinct : ps.Nodup) (P : Finset ℕ)
     (sub : ∀ p ∈ ps, p ∈ P) (pos : ∀ p ∈ ps, 0 < p) (H : ℕ) (a : Rows) :
     sample ps (stock P H) a =
-      (ps.map (fun p => 1-(p:ℝ)⁻¹)).prod*stock (P \ ps.toFinset) H a := by
+      (ps.map (fun p : ℕ => 1-(p:ℝ)⁻¹)).prod*stock (P \ ps.toFinset) H a := by
   classical
   induction ps generalizing P with
   | nil => simp [sample]

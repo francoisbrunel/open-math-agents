@@ -816,5 +816,10 @@ Additional two-sided interval information and the counting threshold
   lower_tail for independent resampling of a list of prime rows.
   Compile MoyenneConditionnelle687 with StabiliteCarree687 available
   for the exact conditional mean, coordinate bound and square_tail.
-  The separate conditional exponential bounds in compter_687.tex use
-  the classical bounded differences inequality and the linear sieve.
+  Build PrefixeConditionnel687 with ClassesImposees687 and Mertens687,
+  then ConcentrationUniforme687 with QueueCarree687. Its uniform and
+  logarithmic give exponential bounds on completion after any prescribed
+  prefix with primorial at most z, including w = Nat.log 16 z. Lean 4.33.1
+  reports propext, Classical.choice and Quot.sound for both results.
+  The deeper power-sized prefix in compter_687.tex uses the lower
+  linear sieve analytically.
