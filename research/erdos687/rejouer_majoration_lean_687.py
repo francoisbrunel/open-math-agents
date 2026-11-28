@@ -87,6 +87,63 @@ def join_tree(leaves):
     return leaves[0]
 
 
+def catalogue_bridge_863(output):
+    wheel = "Wheel863H6890"
+    (output / "ListePremiers863.lean").write_text(f"""import {wheel}
+import Mathlib.NumberTheory.PrimeCounting
+import Mathlib.Data.Nat.Prime.Factorial
+import Mathlib.Tactic
+
+namespace ListePremiers863
+private def small : List Nat := [2,3,5,7,11,13,17,19,23,29]
+private def factorial29 : Nat := 8841761993739701954543616000000
+private def flag (p : Nat) : Bool :=
+  if p ≤ 29 then small.contains p else decide (p.gcd factorial29 = 1)
+
+private theorem exact_flag {{p : ℕ}} (le : p ≤ 863) : flag p = true ↔ p.Prime := by
+  by_cases early : p ≤ 29
+  · have table : ∀ j : Fin 30, small.contains j.val = true ↔ j.val.Prime := by decide +kernel
+    simpa [flag,early] using table ⟨p,by omega⟩
+  · have factorial : factorial29 = Nat.factorial 29 := by decide +kernel
+    simp only [flag,if_neg early,decide_eq_true_eq,factorial]
+    change p.Coprime (Nat.factorial 29) ↔ _
+    constructor
+    · intro coprime
+      have h := (Nat.coprime_factorial_iff (by omega : p ≠ 1)).mp coprime
+      by_contra composite
+      have sq := Nat.minFac_sq_le_self (by omega : 0 < p) composite
+      nlinarith [show 30 ≤ p.minFac by omega]
+    · exact fun prime => prime.coprime_factorial_of_lt (by omega)
+
+set_option maxRecDepth 20000 in
+private theorem table_eq : (List.range 864).filter flag = {wheel}.primes := by decide +kernel
+
+theorem catalogue (p : ℕ) : p ∈ {wheel}.primes ↔ p ≤ 863 ∧ p.Prime := by
+  rw [← table_eq,List.mem_filter]
+  simp only [List.mem_range]
+  constructor
+  · rintro ⟨le,h⟩
+    exact ⟨by omega,(exact_flag (by omega)).mp h⟩
+  · rintro ⟨le,h⟩
+    exact ⟨by omega,(exact_flag le).mpr h⟩
+end ListePremiers863
+""", encoding="utf-8")
+    (output / "Borne863Finale.lean").write_text(f"""import {wheel}Full
+import ListePremiers863
+import Phases687
+namespace Borne863Finale
+open {wheel} Phases687
+set_option maxRecDepth 20000
+theorem bound : Erdos687.Y 863 < 6890 := by
+  apply wheel6890 ListePremiers863.catalogue
+  intro t lo hi a norm
+  obtain ⟨L,N,hL,hN,proof⟩ := certified t lo (hi.trans (by decide))
+  exact core_excludes (fun p h => ((ListePremiers863.catalogue p).mp h).2.pos) hL hN (NoyauPondere687.encoded proof) norm
+#print axioms bound
+end Borne863Finale
+""", encoding="utf-8")
+
+
 def full_replay(path, output, group_size):
     if group_size<1:
         raise ValueError("A group must contain at least one record")
@@ -136,22 +193,7 @@ def full_replay(path, output, group_size):
          join_tree([chunk+".certified" for chunk in chunks]),"#print axioms certified",f"end {wheel}"]
     write(wheel+"Full","\n".join(doc)+"\n")
     if (x,H)==(863,6890):
-        write("Borne863Finale",f"""import {wheel}Full
-import Phases687
-namespace Borne863Finale
-open {wheel} Phases687
-set_option maxRecDepth 20000
-theorem bound : Erdos687.Y 863 < 6890 := by
-  have same : primes.toFinset = (863:ℕ).primesLE := by decide +kernel
-  have hp (p : ℕ) : p ∈ primes ↔ p≤863 ∧ p.Prime := by
-    rw [← List.mem_toFinset,same,Nat.mem_primesLE]
-  apply wheel6890 hp
-  intro t lo hi a norm
-  obtain ⟨L,N,hL,hN,proof⟩ := certified t lo (hi.trans (by decide))
-  exact core_excludes (fun p h => ((hp p).mp h).2.pos) hL hN (NoyauPondere687.encoded proof) norm
-#print axioms bound
-end Borne863Finale
-""")
+        catalogue_bridge_863(output)
     return [wheel,*chunks,wheel+"Full"]
 
 

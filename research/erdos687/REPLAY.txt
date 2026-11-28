@@ -557,6 +557,11 @@ Finite upper and lower certificates for Erdős 687(i)
   Wheel863H6890.lean, Wheel863H6890Group*.lean and Wheel863H6890Full.lean.
   Each group has its own axiom report. The numeric records and all phases
   have already been checked by the independent Python integer verifier.
+  With those modules and Phases687 on LEAN_PATH, compile the generated
+  ListePremiers863.lean and Borne863Finale.lean in that order. The result
+  Borne863Finale.bound states Erdos687.Y 863 < 6890. Lean 4.33.1 reports
+  exactly propext, Classical.choice and Quot.sound for this theorem.
+  The list comparison uses trial division through 29 via the gcd with 29!.
 
 Additional two-sided interval information and the counting threshold
 
@@ -568,6 +573,13 @@ Additional two-sided interval information and the counting threshold
   covered all 510510 starts, with least integer margin 1. This stronger
   bound uses an integer certificate. The grouped Lean generator above
   currently accepts certificates that do not branch on a residue of 19.
+
+  At x = 1223, reassemble the eight binary parts of the deposited
+  Majorant1223_11850.jsonl.gz (in certificates/) in part00 to part07
+  order by concatenation. Its SHA-256 is
+  d425ba0b8f9d2afd3b1a5664ee84972479eee5030ba29efc8c040d97842b3749.
+  Run python -B verifier_majoration_687.py Majorant1223_11850.jsonl.gz --length 11850 --cutoff 1223
+  Each of the 1103 records supplies all 19 residue branches.
 
   ReferenceWeeks863.lean checks Weeks's published cover of 3557 positions.
   Couverture1223_5181.lean checks the improved cover of 5181 positions.
