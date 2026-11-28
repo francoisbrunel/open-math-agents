@@ -257,6 +257,19 @@ Quantitative survivor theorem
       lake env lean -o BorneNative687.olean BorneNative687.lean
       python /path/to/rejouer_exposant_687.py BorneExplicite687.lean --jacobsthal lean/OAI/NumberTheory/Jacobsthal
       lake env lean BorneExplicite687.lean
+
+  For the sharper progression constant, compile the following files in order
+  in the Lean 4.33.1 catalog environment with CribleOAI687 and CribleTransfert687:
+    NormalisationSelberg687.lean
+    ErreurSelberg687.lean
+    CribleFin687.lean
+    ProgressionFine687.lean
+  NormalisationSelberg687.log_le_normalization proves G(R) >= log(R+1).
+  ErreurSelberg687.cutoff_bound gives J/log(R+1) + (R harmonic(R))^2.
+  CribleFin687.asymptotic_interval yields (2+e)J/log J for any fixed e>0,
+  uniformly in the residues and in z>=J. ProgressionFine687.uniform_progression
+  gives the coefficient 9/4 on the whole band for 0<d<=1/2. All four
+  files passed the catalog kernel and their printed axioms were standard.
   Original preprint and formalization at revision adc7f1241b42e322a6451854ab7e4b4c146bf78a:
   https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-quadratic-bound-for-Jacobsthals-function-September-25-2026
   Independent upstream rebuild:

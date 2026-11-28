@@ -125,6 +125,29 @@ $0.005$, strictement inférieur à $0.01$. La conclusion suit avec
 $2\delta=1/200$. La constante multiplicative et le seuil en $x$ ne
 sont pas explicités.
 
+\paragraph{Dérivation formelle de la constante du crible supérieur.}
+Soit $R\le z$ un rayon entier, $G(R)$ la normalisation de Selberg pour
+les premiers jusqu'à $z$, et $H_R=\sum_{n\le R}1/n$. Pour des classes
+arbitraires et $J$ positions consécutives, la vérification donne
+\[
+     |S_z(J)|\le\frac{J}{\log(R+1)}+(R H_R)^2,\qquad R\ge1.
+\]
+En effet, groupons les entiers $n\le R$ par leur radical $d$.
+La somme de leurs inverses est au plus
+$\prod_{p\mid d}\sum_{e\ge1}p^{-e}=\prod_{p\mid d}1/(p-1)$,
+le terme que $d$ apporte à $G(R)$. On obtient donc $G(R)\ge H_R$.
+Pour borner le reste, les masses diagonales absolues $u_\ell$ du crible
+optimisé vérifient $\sum u_\ell=1$ et sont nulles pour $\ell>R$.
+L'inversion de Möbius donne
+$|\lambda_d|\le d\sum_{d\mid\ell}u_\ell$. En sommant d'abord sur $d$,
+on trouve $\sum_d|\lambda_d|\le\sum_\ell u_\ell\sigma(\ell)\le R H_R$,
+car $\sigma(\ell)=\ell\sum_{d\mid\ell}1/d$. Le terme d'erreur du
+crible est au plus le carré de cette somme. Pour $\varepsilon>0$, le
+choix $R=\lfloor J^{1/(2+\varepsilon/2)}\rfloor$ donne, uniformément
+pour $z\ge J$ et $J$ assez grand,
+$|S_z(J)|\le (2+\varepsilon)J/\log J$. La preuve Lean utilise la
+diagonalisation de Selberg du projet cité en \cite{survivors}.
+
 \paragraph{Une limite de la majoration par progression.}
 Pour un entier $M$ et $t$ premiers distincts $p_1,\ldots,p_t>z\ge M$,
 posons $u=t\pi(M)<M$. Dans l'intervalle $[1,M\max_i p_i]$, il existe
