@@ -470,6 +470,23 @@ Almost-covered intervals
 
 Numerical commands
 
+  The inverse comparison also passed the native Lean 4.34.1 kernel without
+  an external upper-bound hypothesis. Compile BorneNative687 to an olean,
+  then compile InverseNatif687.lean. Its erdos687_inverse_almost_cover
+  reports only propext, Classical.choice and Quot.sound. The artifact's
+  SHA-256 is 99a603cd26996fd248aeefe2ffe2b0523e7208339f01fcdfe44d988aa928de5f.
+  If f(H) is the least cutoff for full coverage, the explicit cutoff
+  floor(f(H)/(1+floor(log f(H)))) is o(f(H)) and permits o(H/log H)
+  missed positions. The open target in the catalog requires full coverage.
+
+  ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
+  argument and its exponent consequence in Lean 4.33.1. If Y(x) is
+  O(x^(1+e)) for every e>0, each reduced class b modulo q contains a
+  prime at most 4 q^(2+epsilon) for every fixed epsilon>0 and all large q.
+  This is a conditional consequence. For the general Kanold implication
+  see Z. E. Brady, Sieves and Iteration Rules (2017), section 1.1,
+  Proposition 2, https://www.notzeb.com/phd-thesis.pdf .
+
   python -B certificat_183.py
   python -B recherche_687.py 71 --holes 1
   python -B recherche_687.py 47 73

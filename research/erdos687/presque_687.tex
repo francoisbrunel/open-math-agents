@@ -173,6 +173,10 @@ give the finite and limiting truncation estimates.
 as an explicit input. \texttt{Troncature687.inverse\_of\_quadratic}
 specializes the result to the stated logarithmic cutoff with Iwaniec's
 quadratic estimate as its explicit Lean hypothesis.
+In the native Lean 4.34.1 environment the theorem
+\texttt{erdos687\_inverse\_almost\_cover} discharges this hypothesis
+using \texttt{erdos687\_log\_saving}. Its complete axiom report is
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
 
 \begin{thebibliography}{9}
 \bibitem{iwaniec} H. Iwaniec, \emph{On the problem of Jacobsthal},
