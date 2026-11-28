@@ -708,6 +708,45 @@ Il s'ensuit que $\mathcal C>1/20$. Ce calcul emploie la majoration
 affinée de la queue dans la remarque 6.4. La vérification Lean de
 $2+1/50$ ci-dessus n'emploie pas cette remarque.
 
+\paragraph{Une majoration centrée de la dernière intégrale donne $\eta=2/25$.}
+Dans la preuve de (6.18), écrivons $T=\sum_{j=1}^m x_j$, $c=x_m$,
+$a=x_{m-2}$ et $b=x_{m-1}$ dans le simplexe ordonné décroissant,
+$m\ge4$. Après abandon du terme pair de signe négatif, le coefficient
+à intégrer est $((T+c)^3-(T-c+a-b)^3)/(12c)$. Comme
+$T-c+a-b\ge T-c\ge0$, il est majoré par
+\[
+  \frac{(T+c)^3-(T-c)^3}{12c}
+  =\frac{T^2}{2}+\frac{c^2}{6}
+  \le \frac{m^2+1/3}{2}\left(\frac{T}{m}\right)^2.
+\]
+Cela conserve la symétrie et remplace $(m+1)^2$ par $m^2+1/3$
+dans chaque terme de (6.18). Pour $\lambda=\log 2$, posons
+\[
+ J(t)=\frac{517}{432}-\frac{17}{12}t+\frac23t^2,\qquad
+ u_m(t)=\frac{m^2+1/3}{2m!}t^{m-2}
+             \left(1+\frac{3t/2-1}{m}\right).
+\]
+La formule du second moment dans la remarque 6.4 donne alors
+$I\ge J(\lambda)-\sum_{m\ge4}u_m(\lambda)$.
+Prenons $v=693147180559946/10^{15}$, pour lequel la remarque établit
+$0.69<\lambda<v$. Chaque $u_m$ est croissant sur cet intervalle et
+$J$ décroît. Pour $m\ge13$, le facteur en parenthèses décroît avec
+$m$, et
+\[
+ \frac{u_{m+1}(v)}{u_m(v)}\le
+ \frac{v}{m+1}\frac{(m+1)^2+1/3}{m^2+1/3}
+ \le v\,\frac{m+1}{m^2}\le \frac{14v}{169}.
+\]
+Un calcul rationnel donne
+\[
+ J(v)-\sum_{m=4}^{12}u_m(v)-\frac{u_{13}(v)}{1-14v/169}
+ >\frac{32781119}{10^8}.
+\]
+Ainsi $\mathcal C>0.08105$ par $M_g<36/5$, et le transfert précédent
+donne sur papier $Y(x)\ll x^2/(\log x)^{2+2/25}$. Cette amélioration
+porte sur une puissance du logarithme. L'écart entre les puissances de
+$x$ dans les deux bornes générales subsiste.
+
 \paragraph{Ce qui bloque une augmentation du petit seuil dans cette preuve.}
 Une façon d'essayer de gagner davantage est de prendre
 $w=(\log z)^{1+\varepsilon}$, $\varepsilon>0$ fixé, et d'adapter la
