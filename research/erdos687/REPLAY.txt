@@ -830,3 +830,8 @@ Additional two-sided interval information and the counting threshold
   theorem of calculus. The 4.33.1 kernel checks balance, saturation and
   sieve_gap. The first-prime stock law is derived from the classical
   interval sieve in compter_687.tex, with the range and error specified.
+  MotifsPremiers687 imports Mathlib only. Lean 4.33.1 verifies
+  exact_progression, lower, lower_from_full and sum_cells. In particular,
+  the lower sieve for exact prime-hit patterns can use excluded modulus 1.
+  CentreDemiEntier687 imports DilatationCarree687. Lean 4.33.1 verifies
+  stock, square and no_full_cover for odd rows aligned at a half-integer.

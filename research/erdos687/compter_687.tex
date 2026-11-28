@@ -294,25 +294,112 @@ tends to zero. When finitely many fixed cutoffs are used these
 conclusions hold simultaneously. The argument allows $o(H/\log x)$
 uncovered positions, which contribute directly to the counting identity.
 
-There is a genuine change in the number of repeated hits at
-$\alpha=1/2$. For each fixed $\alpha<1/2$, and every assignment, a
-positive proportion on the scale $H/\log x$ of duplicate hits remains
-when counting all hits on $S_\alpha$ with multiplicity beyond the first.
-To see this, choose four constants
-$\alpha<a_1<a_2<b_1<b_2<1/2$. Count pairs with
-$x^{a_1}<p\le x^{a_2}$, $x^{b_1}<q\le x^{b_2}$ for which $n$ hits
-both rows and has no hit at any prime less than $p$. No assignment
-can count a position more than $m(n)-1$ times this way: the first
-prime is determined and only the second can vary.
-The two classes pick one progression modulo $pq$. Its indices form
-an interval of length $H/(pq)+O(1)$, sieved by primes below $p$.
-The sieve parameter exceeds $2$ by a fixed amount since
-$3a_2+b_2<2$. The lower linear sieve thus gives at least
-$cH/(pq\log x)$ positions, with $c>0$ independent of the choices.
-The reciprocal sums over both bands tend to positive constants.
-This proves the asserted lower bound even for assignments which
-leave holes. For each fixed $\alpha>1/2$ a nearly complete cover
-instead has $o(H/\log x)$ repeats as proved above.
+There is a change in the number of multiply hit \emph{positions} at
+$\alpha=1/2$. For each fixed $0<\alpha<1/2$ and every assignment,
+at least $c_\alpha H/\log x$ distinct members of $S_\alpha$ have
+two or more later hits. More generally, fix disjoint exponent bands
+$(a_j,b_j]$, $1\le j\le h$, with positive lower endpoints,
+$b_j\le\beta<1$, and $\sum_j b_j+2\beta<2$. Then at least
+$cH/\log x$ distinct positions have \emph{exactly} one hitting prime
+in each band and no other hitting prime through $x^\beta$.
+Here the bands refer to $\log p/\log x$ and $c>0$ may depend on them.
+Choose a prime $p_j$ in each band. Their selected classes pick one
+progression modulo $d=\prod p_j$. Its indices form an interval of
+length $N=H/d+O(1)$. On it sieve by all primes up to $x^\beta$
+except those dividing $d$, using Iwaniec's lower corollary with
+excluded modulus $d$. Its bracket error is
+$O(\log\log(3d)/\log N)=o(1)$ uniformly. The sieve parameter
+exceeds $2$ by a fixed amount by the exponent hypothesis, and the
+excluded Euler product is at least the ordinary product. Thus each
+tuple contributes at least $c'H/(d\log x)$ positions. Distinct tuples
+give disjoint sets, since the complete hit pattern up to $x^\beta$
+recovers the tuple. The prime reciprocal sum in each fixed band
+tends to $\log(b_j/a_j)>0$.
+For two hits take two disjoint bands between $\alpha$ and any
+$\beta\in(\alpha,1/2)$. For each fixed $\alpha\ge1/2$, $\alpha<1$, a nearly
+complete cover instead has $o(H/\log x)$ repeats. The endpoint
+$\alpha=1/2$ follows by the same squeeze: $F(u)=2e^\gamma/u$
+still holds at $u=3$ and $F$ is continuous there.
+
+\paragraph{The limiting repeat count.}
+For every fixed $0<\alpha<1$ a nearly complete cover has the following
+more precise limit for $D_\alpha=\sum_{n\in S_\alpha}(m(n)-1)_+$:
+\[
+ \frac{D_\alpha\log x}{H}\longrightarrow
+ e^{-\gamma}\int_\alpha^1\!\int_\alpha^v
+       f\!\left(\frac{2-v-t}{t}\right)\frac{dt}{t^2}\frac{dv}{v}.
+\]
+Use $f(u)=0$ for $u\le2$. For the lower bound pair each position's
+least hitting prime $p>x^\alpha$ with every later hitting prime
+$q>p$. This counts each duplicate exactly once. For fixed
+$p=x^t,q=x^v$ the indices in their common progression are sieved
+by all primes less than $p$. The lower sieve gives the displayed
+integral as a lower limit by partial summation. One may first restrict
+to $(2-v-t)/t\ge2+\varepsilon$, so the floor errors are uniformly
+negligible; on the omitted strip the limiting integrand tends
+uniformly to zero by continuity. The term for $p=q$ is omitted
+and gives no mass in the limiting double integral.
+
+For the matching upper limit use $D_\alpha=\sum_q N_q-|S_\alpha|$
+for covers, adding the number of holes for nearly complete covers.
+Apply the upper interval sieve through $x^\alpha$ in each $q$-row
+and the stock law just proved. The resulting upper constant is
+\[
+ e^{-\gamma}\int_\alpha^1 \frac{F((2-v)/\alpha)}{\alpha}\frac{dv}{v}
+     - C(\alpha).
+\]
+The derivative identity $(sF(s))'=f(s-1)$ gives, for each $v$,
+\[
+ \frac{F((2-v)/\alpha)}{\alpha}-\frac{F((2-v)/v)}v
+     =\int_\alpha^v f((2-v-t)/t)\frac{dt}{t^2}.
+\]
+Integrating in $v$ and using the least-prime formula for $C(\alpha)$
+identifies the two constants. The integral is positive for
+$\alpha<1/2$ and vanishes for $\alpha\ge1/2$.
+
+In the iterated limit, first taking the cover sequence to infinity and
+then $\alpha=1/2-h$ with $h\downarrow0$, the repeat constant is
+$(128/3)h^3+O(h^4)$. In the double integral set $t=1/2-y$, $v=t+w$.
+Its support is $0\le y\le h$, $0\le w\le4y$ for small $h$. The argument
+of $f$ is $2+(4y-w)/t$. The explicit formula at $2$ gives
+$e^{-\gamma}f(2+\xi)=\xi+O(\xi^2)$. Including the denominators $t^2v$
+leaves $16(4y-w)+O(h^2)$ on this triangle. Integration gives the claim.
+
+\paragraph{A uniform estimate at the transition.}
+There is a direct lower estimate when the split moves with the
+interval length, with no assumption on the number of holes. Fix a
+positive integer $h$, let $H\to\infty$, and put $T=H^{1/(h+2)}$.
+For $w\to\infty$, $w=o(\log H)$, set $z=T e^{-w}$ and $Z=T e^{-w/2}$.
+Inside $(z,Z]$ choose $h$ disjoint prime bands of equal logarithmic
+width $w/(2h)$. For every assignment, the number of distinct positions
+with one hit in each band and no other hit at primes through $Z$ is
+\[
+                   \gg_h \frac{H w^{h+1}}{(\log H)^{h+2}} .
+\]
+Choose one prime per band and write $d$ for their product. Their
+common row contains a consecutive progression of at least
+$M=\lfloor H/d\rfloor$ indices. Each other prime through $Z$
+excludes exactly one index class. Add artificial excluded index
+classes at the selected primes themselves. The surviving indices
+still give positions with precisely the prescribed hits, and this
+ordinary interval sieve has excluded modulus $1$, independently of
+$d$. Since $d\le Z^h$, we have
+$\log(M/Z^2)\ge(h+2)w/2-o(1)$. Also
+$\log M/\log Z=2+O_h(w/\log H)$. Iwaniec's interval lower bound
+near the square, recalled by
+\href{https://arxiv.org/pdf/2010.01211}{Granville, p.~3},
+gives $\gg_h (H/d)w/(\log H)^2$ positions per tuple. Each band has
+prime reciprocal mass $\gg_h w/\log H$ by partial summation of the
+prime number theorem. Tuples yield disjoint sets. This proves the
+inequality uniformly over assignments. The same proof gives
+$\gg_h H/(\log H)^{h+2}$ for a sufficiently large fixed $w=w_h$.
+For two hits the moving range yields $H w^3/(\log H)^4$ distinct
+doubly hit positions surviving through $H^{1/4}e^{-w}$, at the
+fourth-root boundary identified by the repeat law.
+Lean verifies the exact finite change of variables, the lower
+bound under the artificially enlarged index sieve, and the disjoint
+sum in \texttt{MotifsPremiers687}. The uniform analytic estimate here
+uses the cited interval theorem and the prime number theorem.
 
 \paragraph{A test using the additive large sieve.}
 Here is one quadratic test of the global profile. Fix $a\in(1/2,1)$
