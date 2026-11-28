@@ -92,6 +92,77 @@ controls the proportion of full covers. The absolute count still has
 the factor $A$. The finite divisor expansion and the variance and count
 bounds are in \texttt{Variance687.lean}.
 
+\section*{Small-prime choices admitting an adaptive completion}
+Fix $m\ge144$, $z=k^m$, $x=k^{m+1}$ and $H=z^2$. Choose independently
+one uniform residue for each $p\le z$. Let $E$ be the event that
+\emph{some} assignment at the primes $z<p\le x$ completes the cover.
+Write $X$ for the number of survivors at $z$ and
+$V(t)=\prod_{p\le t}(1-1/p)$. For sufficiently large $k$,
+the square-window deletion estimate gives $X\le(24/m)H/\log z$ on $E$.
+As $V(z)\ge1/(3\log z)$, this is at most half the mean $HV(z)$.
+The variance estimate above implies
+\[
+   \Pr(E)\le \frac{4}{HV(z)}\le\frac{12\log z}{z^2}.
+\]
+The same estimate holds on $[0,H)$ by translating all residues.
+Lean 4.33.1 checks the uniform second-moment bound on this event in
+\texttt{ProfilsProlongeables687.rare}.
+
+A deterministic normalization also applies to an optimal cover. For a
+set $P$ of prescribed prime rows and arbitrary residues $b_p$, put
+$D=\prod_{p\in P}p$. The Chinese remainder theorem supplies $0\le t<D$
+with $t\equiv a_p-b_p\bmod p$ for every $p\in P$ in an optimal assignment
+$a$. Translate every row by $-t$ and keep the interval
+$[1,Y(x)-(D-1)]$, interpreted as empty if the upper endpoint is too
+small. All its positions remain covered and every prescribed row now
+agrees with $b_p$. In particular, for $x\ge1$ one can prescribe
+\emph{all} primes through $\lfloor\log_{16}x\rfloor$ and retain a cover
+of length $Y(x)-\lfloor\sqrt x\rfloor$, since $D\le4^{\lfloor\log_{16}x\rfloor}$.
+Lean verifies \texttt{ClassesImposees687.logarithmic\_prefix} for every
+prescription. This permits, for example, testing only zero residues at
+these primes when an additive cost of $\lfloor\sqrt x\rfloor$ is acceptable.
+
+An analytic argument gives a stronger conditional estimate. Prescribe
+arbitrarily every class through $w=\lfloor\log_{16}z\rfloor$ and choose
+independent uniform classes on $(w,z]$. Write $D=\prod_{p\le w}p$.
+Since $D\le4^w\le\sqrt z$, complete periods of length $D$ yield at least
+$(H-D)V(w)$ survivors of the prescribed classes. Each of these survives
+the random choices with probability $V(z)/V(w)$. Thus the conditional
+mean of $X$ exceeds $H/(6\log z)$ eventually. For $m\ge288$, the event
+$E$ entails a downward deviation of at least $H/(12\log z)$.
+By the square-window stability estimate, changing just the class at
+$p\in(w,z]$ affects $X$ by at most $68H/(p\log z)$.
+The \href{https://doi.org/10.1017/CBO9781107359949.008}{bounded differences
+inequality of McDiarmid} gives, uniformly in the prescribed prefix,
+\[
+  \Pr(E\mid (a_p)_{p\le w})
+  \le \exp\!\left(-\frac{1}{72\cdot68^2
+                       \sum_{w<p\le z}1/p^2}\right).
+\]
+Summing dyadically using $\pi(2t)\le16t/\log t$ gives
+$\sum_{p>w}p^{-2}\le32/(w\log w)$ for $w\ge2$. The bound is therefore
+$\exp(-c\log z\log\log z)$ for some absolute $c>0$ and all sufficiently
+large $k$. This last estimate is an analytic deduction. The number of
+possible assignments to the middle primes still exceeds the reciprocal
+of the displayed bound, so exceptional profiles can persist.
+
+The same calculation permits deeper conditioning. For fixed $0<a<1$,
+put $w=\lfloor z^a\rfloor$. The Chinese remainder theorem converts any
+prescribed prefix into a translated interval sieved by the zero classes.
+The lower linear sieve at parameter $2/a>2$ therefore gives at least
+$c_a H V(w)$ survivors, uniformly in the prefix, for a constant $c_a>0$.
+One may use a fixed sieve parameter strictly between $2$ and $2/a$ to
+absorb the integer cutoff. See the interval bound in
+\href{https://arxiv.org/abs/2010.01211}{Granville, formula (1)}.
+The conditional mean is at least $c_a H V(z)$. Taking $m\ge144/c_a$
+puts the threshold for completion below half that mean. The same
+bounded differences argument gives
+\[
+    \Pr(E\mid (a_p)_{p\le w})\le \exp(-c'_a z^a\log z)
+\]
+for all sufficiently large $k$, with $c'_a>0$. Here $a$ and $m$ must
+be fixed before $k$ tends to infinity.
+
 \section*{Two limits of weighted interval estimates}
 Suppose small-prime classes have already been fixed. Put nonnegative
 weights on the remaining positions, with total $W>0$. For a remaining

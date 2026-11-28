@@ -793,3 +793,13 @@ Additional two-sided interval information and the counting threshold
   Pr(U=0) <= 1/(H V) for a uniform choice of residues, where
   V = product_{p in P}(1-1/p). The underlying divisor expansion for
   pairs of positions is Variance687.pair_choices.
+  ProfilsProlongeables687 imports Variance687, DensiteCarree687 and
+  Mertens687 on the catalogue toolchain. Its rare bounds the fraction of
+  small-prime prefixes admitting any completion by 12 log(z)/z^2 at
+  z=k^m, H=z^2, x=k^(m+1) for each fixed m >= 144 and large k.
+  ClassesImposees687 uses the catalogue and Mathlib's Chinese remainder
+  theorem. Its logarithmic_prefix lets one prescribe every class at
+  primes through Nat.log 16 x at a cost of at most Nat.sqrt x positions.
+  Both kernel audits list propext, Classical.choice and Quot.sound.
+  The separate conditional exponential bounds in compter_687.tex use
+  the classical bounded differences inequality and the linear sieve.
