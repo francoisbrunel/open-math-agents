@@ -6,7 +6,7 @@ all the small prime classes passing through a common point of the window. -/
 namespace CentreCarre687
 open Filter Transfert687
 
-private theorem pi_lower {n : ℕ} (hn : (128:ℝ) ≤ n) :
+theorem pi_lower {n : ℕ} (hn : (128:ℝ) ≤ n) :
     (n:ℝ)/(4*Real.log n) ≤ Nat.primeCounting n := by
   have pos := Real.log_pos (show (1:ℝ) < n by linarith)
   have hr := Real.sqrt_pos.mpr (show (0:ℝ) < n+1 by positivity)

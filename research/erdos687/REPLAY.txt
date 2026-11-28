@@ -540,6 +540,12 @@ Numerical commands
   [1,z^2]. This gives at least z^2/(64 log z) survivors for z >= 512.
   no_aligned_cover eliminates the resulting profiles at every fixed
   m > 1536, allowing all choices at the remaining primes.
+  StabiliteCarree687 imports CentreCarre687. Its theorem stability
+  bounds changes in the survivor count by 68*z^2/log(z) times the
+  sum of reciprocals of the primes whose rows change. Swap assignments
+  for the reverse inequality. Theorem separation combines this with
+  aligned_stock and thin_of_cover. At m=3072 every complete cover
+  must differ from every local center by reciprocal mass >= 1/8704.
 
   ProgressionPremiere687.lean checks the finite Jacobsthal–least-prime
   argument and its exponent consequence in Lean 4.33.1. If Y(x) is
@@ -734,6 +740,9 @@ Additional two-sided interval information and the counting threshold
   to 5229 positions. Its first and last adjacent offsets (0 and 5230)
   are coprime to the primorial. Replay the command above with 5229
   substituted for 5217 and compile Borne1223_5229 for the catalogue result.
+  Couverture1223_5231.json extends this finite lower bound to 5231.
+  Use 5231 in the same generation command and compile Borne1223_5231.
+  Direct residue checks also leave both adjacent offsets, 0 and 5232, uncovered.
 
   Distribution687.threshold_comparison and Distribution687.twice_from_moment
   relate the scale of Y to counts of assignments or a finite central

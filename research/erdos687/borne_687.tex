@@ -339,6 +339,32 @@ $k^{m+1}$ ne peut couvrir l'intervalle pour $k$ suffisamment grand.
 Le représentant commun intervient dans l'hypothèse. Le théorème chinois
 seul ne donne pas un représentant qui appartienne à l'intervalle.
 
+On peut aussi changer certaines classes. Pour deux choix $a,c$, posons
+$E=\{p\le z:\ p\ {\rm premier},\ a_p\not\equiv c_p\bmod p\}$
+et $M=\sum_{p\in E}1/p$. Si $z\ge1024$, alors
+\[
+ \bigl|\,|S_z(a)|-|S_z(c)|\,\bigr|
+ \le 68\,\frac{z^2}{\log z}\,M ,
+\]
+où $S_z(a)$ désigne les survivants dans $[1,z^2]$.
+En effet, chaque entier de $S_z(a)\setminus S_z(c)$ appartient à la
+nouvelle classe d'au moins un $p\in E$. Dans une telle classe on écrit
+$n=pj+r$, avec $0\le r<p$. Les indices $0\le j<J=\lfloor z^2/p\rfloor+1$
+évitent une classe pour chaque premier $q\le z$ distinct de $p$, par
+inversion de $p$ modulo $q$. Chaque indice évite aussi au moins l'une
+des classes $0,1$ modulo $p$. Les deux cribles ainsi complétés ont
+chacun au plus $17J/\log J$ survivants, car $J\ge z\ge1024$ et
+$\lfloor J^{1/8}\rfloor\le z$. Comme $J\le2z^2/p$, la somme sur $E$
+donne l'inégalité dans un sens, puis on échange $a,c$.
+
+Pour $m=3072$ fixé, $z=k^m$ et $k$ suffisamment grand, un recouvrement
+complet jusqu'à $k^{m+1}$ doit donc satisfaire, pour chaque $1\le b\le z^2$,
+\[
+ \sum_{\substack{p\le z\ {\rm premier}\\a_p\not\equiv b\bmod p}}\frac1p
+ \ge \frac{1/64-24/3072}{68}=\frac1{8704}.
+\]
+Cette condition permet un nombre variable de classes exceptionnelles.
+
 Soient $a>0$, $K>0$, $C>0$ fixés et
 $H=\lfloor x(\log x)^a\rfloor$. Supposons qu'il existe pour une
 infinité de $x$ des classes recouvrant $[1,H]$ et un entier $b$ avec
