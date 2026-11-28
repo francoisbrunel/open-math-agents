@@ -18,13 +18,9 @@ private theorem neg_add (v : ℕ) {p : ℕ} (hp : 0<p) : negClass v p+v ≡ 0 [M
     _ = p := Nat.sub_add_cancel (Nat.mod_lt v hp).le
     _ ≡ 0 [MOD p] := Nat.modEq_zero_iff_dvd.mpr dvd_rfl
 
-/-- A common shift realizes all prescribed classes, even if the original
-cover was optimal. The product is one when no rows are prescribed. -/
-theorem prescribe {x H : ℕ} (cov : Green46.IsCoveredByResidues x H)
-    (P : Finset ℕ) (pr : ∀ p ∈ P, p.Prime) (b : ℕ → ℕ) :
-    fixedCover x (H-((∏ p ∈ P,p)-1)) P b := by
+theorem common_shift (P : Finset ℕ) (pr : ∀ p ∈ P, p.Prime) (a b : ℕ → ℕ) :
+    ∃ d < ∏ p ∈ P,p, ∀ p ∈ P, b p+d ≡ a p [MOD p] := by
   classical
-  obtain ⟨a,all⟩ := cov
   let diff (p : ℕ) := a p+negClass (b p) p
   have nz : ∀ p∈P, id p ≠ 0 := fun p hp => (pr p hp).ne_zero
   have pair : Set.Pairwise (P : Set ℕ) (Function.onFun Nat.Coprime id) :=
@@ -32,17 +28,27 @@ theorem prescribe {x H : ℕ} (cov : Green46.IsCoveredByResidues x H)
   let t := Nat.chineseRemainderOfFinset diff id P nz pair
   let d := t.val
   have small : d < ∏ p ∈ P,p := Nat.chineseRemainderOfFinset_lt_prod diff id nz pair
+  refine ⟨d,small,?_⟩
+  intro p hp
+  have hit : d ≡ diff p [MOD p] := t.property p hp
+  calc
+    _ ≡ b p+diff p [MOD p] := hit.add_left _
+    _ = a p+(negClass (b p) p+b p) := by dsimp [diff]; omega
+    _ ≡ a p [MOD p] := by simpa using (neg_add (b p) (pr p hp).pos).add_left (a p)
+
+/-- A common shift realizes all prescribed classes, even if the original
+cover was optimal. The product is one when no rows are prescribed. -/
+theorem prescribe {x H : ℕ} (cov : Green46.IsCoveredByResidues x H)
+    (P : Finset ℕ) (pr : ∀ p ∈ P, p.Prime) (b : ℕ → ℕ) :
+    fixedCover x (H-((∏ p ∈ P,p)-1)) P b := by
+  obtain ⟨a,all⟩ := cov
+  obtain ⟨d,small,toA⟩ := common_shift P pr a b
   let c (p : ℕ) := a p+negClass d p
   have back {p : ℕ} (hp : 0<p) : c p+d ≡ a p [MOD p] := by
     simpa only [c,Nat.add_assoc,Nat.add_zero] using (neg_add d hp).add_left (a p)
   refine ⟨c,?_,?_⟩
   · intro p hp
-    have hit : d ≡ diff p [MOD p] := t.property p hp
-    have toA : b p+d ≡ a p [MOD p] := calc
-      _ ≡ b p+diff p [MOD p] := hit.add_left _
-      _ = a p+(negClass (b p) p+b p) := by dsimp [diff]; omega
-      _ ≡ a p [MOD p] := by simpa using (neg_add (b p) (pr p hp).pos).add_left (a p)
-    exact Nat.ModEq.add_right_cancel' d ((back (pr p hp).pos).trans toA.symm)
+    exact Nat.ModEq.add_right_cancel' d ((back (pr p hp).pos).trans (toA p hp).symm)
   · intro i hi
     obtain ⟨lo,up⟩ := Finset.mem_Icc.mp hi
     obtain ⟨p,px,prime,hit⟩ := all (i+d) (Finset.mem_Icc.mpr ⟨by omega,by omega⟩)

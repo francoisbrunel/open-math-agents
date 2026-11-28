@@ -801,5 +801,16 @@ Additional two-sided interval information and the counting threshold
   theorem. Its logarithmic_prefix lets one prescribe every class at
   primes through Nat.log 16 x at a cost of at most Nat.sqrt x positions.
   Both kernel audits list propext, Classical.choice and Quot.sound.
+  Import ClassesImposees687 to compile ProfilsCoherents687. Its
+  upper_of_nonmeagre gives a uniform upper bound on Y from separate
+  eventual estimates on a nonmeagre set of infinite assignments.
+  Its near_optimal_residual allows any diverging additive error and
+  any sequence of cutoffs, with the same assignment at infinitely
+  many of those cutoffs. The three audited declarations use only the
+  usual axioms.
+  ConcentrationClasses687 proves the bounded-differences estimate
+  lower_tail for independent resampling of a list of prime rows.
+  Compile MoyenneConditionnelle687 with StabiliteCarree687 available
+  for the exact conditional mean, coordinate bound and square_tail.
   The separate conditional exponential bounds in compter_687.tex use
   the classical bounded differences inequality and the linear sieve.

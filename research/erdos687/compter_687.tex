@@ -163,6 +163,42 @@ bounded differences argument gives
 for all sufficiently large $k$, with $c'_a>0$. Here $a$ and $m$ must
 be fixed before $k$ tends to infinity.
 
+\section*{Coherent assignments and uniform upper bounds}
+The upper-bound question admits a deterministic reformulation for
+infinite assignments. Give $\mathbb N^{\mathbb N}$ its product topology,
+where each coordinate is discrete. A basic open set prescribes finitely
+many coordinates. For any cutoff sequence $u_n$ and integer scale $h_n$,
+let $G$ consist of the assignments $a$ for which there exist $M,N$ such
+that, for every $n\ge N$, the rows of $a$ up to $u_n$ fail to cover
+$[1,Mh_n+1]$. Both $M$ and $N$ may depend on $a$. If $G$ is nonmeagre,
+there exist fixed $M,N,D$ such that
+\[
+                      Y(u_n)\le M h_n+D\qquad(n\ge N).
+\]
+Indeed, for fixed $M,N$ the indicated set is closed, since a cover at
+any given $n$ depends on only finitely many coordinates. The countable
+union over $M,N$ can be nonmeagre only if one closed set contains a
+basic open set. Fixing all rows through some $K$ refines that open set.
+At every $n$, the CRT normalization places a cover of length at least
+$Y(u_n)-(\prod_{p\le K}p-1)$ inside it. The asserted uniform estimate
+follows with $D=\prod_{p\le K}p$. In particular a sequence of upper
+bounds proved with assignment-dependent constants on a nonmeagre set
+suffices for a global asymptotic upper estimate whenever $h_n\ge1$
+eventually.
+
+Conversely, for any $e_n\to\infty$, the assignments reaching
+$Y(u_n)-e_n$ infinitely often form a residual set. For each $N$ the
+set reaching this threshold at some $n\ge N$ is open. In a prescribed
+basic open set the CRT cost is fixed, and some $n\ge N$ has $e_n$ larger
+than that cost. This proves density. Intersect these dense open sets
+over $N$. Thus the same infinite choice of residues can recur
+arbitrarily close to maximality along an infinite subsequence.
+An estimate holding with probability one can still leave a meagre
+set of good assignments, so the category hypothesis needs its own
+argument.
+Lean 4.33.1 verifies both \texttt{ProfilsCoherents687.upper\_of\_nonmeagre}
+and \texttt{ProfilsCoherents687.near\_optimal\_residual}.
+
 \section*{Two limits of weighted interval estimates}
 Suppose small-prime classes have already been fixed. Put nonnegative
 weights on the remaining positions, with total $W>0$. For a remaining
