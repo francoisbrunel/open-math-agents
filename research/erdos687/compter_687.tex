@@ -189,6 +189,9 @@ Indeed all survivors have the same parity. Distinct survivors in the
 same class modulo a prime $p>z$ must differ by at least $2p$. Each
 remaining prime can therefore remove at most one, while $B$ primes
 can always handle any $B$ survivors individually.
+Lean 4.33.1 checks this equivalence and the finite two-sided
+Chebyshev bound in \texttt{SeuilDemi687.singleton\_iff} and
+\texttt{SeuilDemi687.opposite\_side}.
 
 Put $H_x=B/V$. Mertens' theorem and the prime number theorem give
 $H_x/x\to e^\gamma(1-\theta)$. For each fixed multiple of $x$,
@@ -244,6 +247,71 @@ fixed $k$. Borel--Cantelli does not require independence across
 cutoffs. The known superlinear lower bound on the unrestricted maximum
 therefore requires exceptional prefixes even when all the later rows
 may be chosen after inspecting the prefix.
+
+\paragraph{Allowing many more adversarial rows.}
+Let $z=z(x)\le x$ with $\log z/\log x\to1$. For independent uniform
+classes through $z$, every fixed
+$b>\exp(-e^{-\gamma}/2)$ satisfies, for every fixed $D>0$,
+\[
+ \Pr\{\text{some choices above }z\text{ complete }[1,x(\log x)^b]\}
+       \ll_{b,D}x^{-D}
+\]
+for sufficiently large $x$ (the threshold can depend on the cutoff
+sequence). This applies even to $z=x\exp(-\sqrt{\log x})$.
+
+Write $L=\log x$, $H=\lfloor x L^b\rfloor$, and
+$M=\lceil H/p\rceil$ for a remaining prime $p$. For all such $p$,
+$L^b(1+o(1))\le M=x^{o(1)}<z$. The indices in each residue class
+of $p$ form an interval with at most $M$ elements. Its survivors
+through $M$ are at most $(2+o(1))M/\log M$ by the upper interval
+sieve at $\sqrt M$. Conditional on the rows up to $M$, any specified
+$k$ of these indices jointly escape the rows $M<q\le z$ with
+probability $\prod_{M<q\le z}(1-k/q)$, because the indices are
+distinct modulo each such $q$ and multiplication by $p$ is invertible.
+This is at most $(C\log M/\log z)^k$ by Bernoulli's inequality and
+Mertens' product. Thus for the load $N_{p,r}$ surviving in any one
+class, the union bound over $k$-subsets gives
+\[
+                    \Pr\{N_{p,r}\ge k\}\le (C'M/(kL))^k .
+\]
+The exact finite factorial-moment identity and the counting upper
+bound for this thinning step are checked in
+\texttt{Dilution687.factorial} and \texttt{Dilution687.upper\_tail}.
+When $k$ exceeds the size of the initial surviving set the probability
+is zero. The constants are uniform in the class and its prime.
+
+For $L\le M\le L^{3/2}$ take $k=\lceil C_D L/\log L\rceil$.
+For $M>L^{3/2}$ take $k=\lceil C_D(L+M/L)\rceil$. In each case the
+last display is at most $x^{-D-3}$ for large enough $C_D$. A union
+bound covers all fewer than $x^2$ prime--class pairs. On the resulting
+event, the intermediate range contributes $O_D(H/(L\log L))$ positions
+altogether, since $p\ll H/L$ and there are $O(H/L^2)$ such primes.
+The $L$ term on the last range contributes $O_D(H/L^{3/2})$ since
+$p\ll H/L^{3/2}$. Its $M/L$ term contributes
+$O_D((H/L)\sum_{z<p\le x}1/p)=o(H/L)$.
+
+For the remaining rows $M<L$, use the deterministic capacity
+$(2+o(1))M/\log M$. Partial summation of the prime number theorem on
+$H/L<p\le x$, where $\log p\sim L$, bounds their total by
+\[
+  \left(2\max(0,\log(1/b))+o(1)\right)H/L .
+\]
+For $b<1$ the integral is
+$L^{-1}\int_{H/L}^x dt/(t\log(H/t))
+ =L^{-1}(\log(1/b)+o(1))$. Floors in $M$ produce a uniformly
+vanishing relative change, since $\min M\to\infty$. For $b\ge1$
+the small-$M$ range contributes $o(H/L)$.
+
+Meanwhile the mean initial stock is $(e^{-\gamma}+o(1))H/L$.
+By the fixed even moment bounds of Montgomery and Soundararajan
+and $\operatorname{Var}U_H\le HV(z)$, the probability of a loss
+of any fixed positive fraction of the mean is $O_D(x^{-D})$:
+choose the fixed moment order sufficiently large, using
+$1/V(z)=O(L)$. When $2\max(0,\log(1/b))<e^{-\gamma}$ the two
+estimates preclude completion outside these exceptional sets.
+The known tilted construction reaches lengths larger than every
+$x(\log x)^b$ for $b<1$; the distinction in this argument is the
+law of the preliminary choices.
 
 \paragraph{A restriction on reducing the bias in the tilted lower construction.}
 Consider the preliminary law of

@@ -674,6 +674,25 @@ L'exposant au dénominateur devient $2+2d=2+1/50$. Le noyau Lean
 4.34.1 vérifie \texttt{BorneProduit687.upper\_one\_fiftieth} avec les
 mêmes trois axiomes.
 
+\paragraph{Ce qui bloque une augmentation du petit seuil dans cette preuve.}
+Une façon d'essayer de gagner davantage est de prendre
+$w=(\log z)^{1+\varepsilon}$, $\varepsilon>0$ fixé, et d'adapter la
+longueur de départ pour conserver le même paramètre à la racine.
+L'étape inverse de la section 8 de \cite{survivors} présente un
+obstacle précis à cette substitution. Sa démonstration de (8.12)
+partage les produits $q$ d'une boîte en fixant, entre autres,
+$q\bmod M_0$, avec $M_0=\prod_{p\le w}p$. Pour ses paramètres,
+$\log M_0=o(\log Z)$, où $Z=\exp(\log z/\log\log z)$.
+Avec le seuil proposé, le théorème des nombres premiers donne
+$\log M_0\sim(\log z)^{1+\varepsilon}$. On a alors $M_0>z^2$ à
+terme. Or tous les $q$ de cette étape sont inférieurs à la longueur
+de l'intervalle, elle-même au plus $z^2$. Fixer $q\bmod M_0$
+détermine donc $q$ exactement. Chaque cellule contient au plus un
+produit, alors que l'interpolation a besoin de nombreux produits
+distincts dans la même cellule. Pour cette piste, il faudrait un
+test des petites classes qui laisse varier $q$ ou un argument inverse
+qui travaille directement sur plusieurs cellules.
+
 \begin{thebibliography}{9}
 \bibitem{survivors} OpenAI, \emph{A quadratic bound for Jacobsthal's
 function}, prépublication, 25 septembre 2026, théorèmes 1.1 et 1.2.

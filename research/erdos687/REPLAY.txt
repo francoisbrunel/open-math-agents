@@ -844,3 +844,8 @@ Additional two-sided interval information and the counting threshold
   PremierRecouvrant687 imports DispersionBande687. Lean 4.33.1 checks
   first_count and pair_count by grouping points by their least covering
   prime, counting every additional hit once.
+  SeuilDemi687 imports ProfilsProlongeables687 and Extension687.
+  Lean 4.33.1 verifies singleton_iff and opposite_side for all finite
+  inputs satisfying the parity length condition. Dilution687 imports
+  Distribution687 and the same kernel verifies factorial and upper_tail,
+  used in the optimized tail estimates in compter_687.tex.
