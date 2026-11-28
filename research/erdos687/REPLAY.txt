@@ -712,3 +712,8 @@ Additional two-sided interval information and the counting threshold
   of Rankin's lower bound. GroupesPonderes687.concentration restricts the
   use of separate weighted capacities for blocks of primes. The short
   mathematical arguments and the prior moment literature are in compter_687.tex.
+  Variance687.lean imports Distribution687. The audited theorems
+  variance_bound and cover_count_bound give Var(U) <= H V and
+  Pr(U=0) <= 1/(H V) for a uniform choice of residues, where
+  V = product_{p in P}(1-1/p). The underlying divisor expansion for
+  pairs of positions is Variance687.pair_choices.

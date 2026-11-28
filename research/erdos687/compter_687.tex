@@ -68,6 +68,30 @@ gives $Y(x)<2T(x)$. Thus an estimate for the growth of this counting
 threshold would give the order of $Y(x)$ itself. The finite formulas do
 not yet determine the growth of $T(x)$.
 
+\section*{What the second moment already gives}
+Take the uniform distribution on all assignments for a finite set of
+primes $P$. Put $A=\prod_{p\in P}p$, $V=\prod_{p\in P}(1-1/p)$, and
+let $U$ be the number of missed positions among $0,\ldots,H-1$.
+Then $\mathbb E U=HV$. For positions $i,j$, the number of assignments
+missing both is
+\[
+ \sum_{\substack{D\subseteq P\\d_D\mid i-j}}
+      \prod_{p\in P\setminus D}(p-2),\qquad d_D=\prod_{p\in D}p.
+\]
+This follows by expanding $\prod_{p\in P}(p-2+\mathbf1_{p\mid i-j})$.
+For each fixed $i$ there are at most $H/d_D+1$ choices of $j$
+in its class. Summing over $i$ and multiplying out the two products
+gives $\mathbb E U^2\le (HV)^2+HV$. Thus
+\[
+       \operatorname{Var}(U)\le HV,\qquad
+       \mathbb P(U=0)\le 1/(HV)\quad (H>0).
+\]
+The translation $i\mapsto i+1$ permutes all assignments and gives the
+same distribution on $[1,H]$. This classical second-moment estimate
+controls the proportion of full covers. The absolute count still has
+the factor $A$. The finite divisor expansion and the variance and count
+bounds are in \texttt{Variance687.lean}.
+
 \section*{Two limits of weighted interval estimates}
 Suppose small-prime classes have already been fixed. Put nonnegative
 weights on the remaining positions, with total $W>0$. For a remaining
